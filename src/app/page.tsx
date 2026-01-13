@@ -1,12 +1,16 @@
-import styles from "./page.module.css";
+import HeroSection from "@/components/home/HeroSection";
+import MainNewsGrid from "@/components/home/MainNewsGrid";
+import FadeIn from "@/components/ui/FadeIn";
 
 export default function Home() {
   return (
-    <main className="container">
-      <section style={{ padding: '4rem 0', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>News Portal Initialized</h1>
-        <p style={{ color: 'var(--text-muted)' }}>Ready to build.</p>
-      </section>
+    <main style={{ minHeight: '100vh' }}>
+      <FadeIn>
+        <HeroSection />
+      </FadeIn>
+      <FadeIn delay={0.2}>
+        <MainNewsGrid />
+      </FadeIn>
     </main>
   );
 }

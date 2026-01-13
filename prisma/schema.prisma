@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  name      String
+  text      String
+  slug      String
+  createdAt DateTime @default(now())
+}
+
+model ArticleView {
+  id       String   @id @default(cuid())
+  slug     String
+  viewedAt DateTime @default(now())
+}
+
+model Article {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  title         String
+  summary       String
+  content       String
+  category      String
+  author        String
+  image         String?
+  gallery       String? // Stored as JSON string
+  status        String   @default("draft") // draft, published, archived
+  excerpt       String?
+  imageCaption  String?
+  imageCredit   String?
+  metaTitle     String?
+  metaDesc      String?
+  tags          String? // Stored as JSON string array
+  editor        String?
+  lastUpdatedBy String?
+  publishedAt   String // Storing as string to match current format (e.g. "2 jam lalu"), can be enhanced to DateTime later
+  readTime      String
+  featured      Boolean  @default(false)
+  trendingRank  Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
