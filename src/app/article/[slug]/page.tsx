@@ -33,7 +33,7 @@ export async function generateMetadata(
         openGraph: {
             title: article.title,
             description: article.summary,
-            url: `https://serayu.vercel.app/article/${slug}`,
+            url: `https://websiteberitademo.vercel.app/article/${slug}`,
             siteName: 'Svara Serayu',
             images: [
                 {
