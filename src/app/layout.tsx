@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://serayu.vercel.app"),
+  metadataBase: new URL("https://websiteberitademo.vercel.app"),
   title: "Svara Serayu | Suara Hati Banjarnegara",
   description: "Platform media komunitas modern untuk menyuarakan potensi, budaya, dan aspirasi Banjarnegara.",
 };

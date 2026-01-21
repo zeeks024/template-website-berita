@@ -45,7 +45,7 @@ export default function ArticleDetail({ slug }: Props) {
         </div>
     );
 
-    const articleUrl = `https://serayu.vercel.app/article/${slug}`;
+    const articleUrl = `https://websiteberitademo.vercel.app/article/${slug}`;
 
     return (
         <article className="min-h-screen pb-20 bg-[#05090a]">

@@ -52,3 +52,6 @@ error.log
 
 # Dev scripts (not needed in production)
 verify-db.js
+
+.vercel
+.env*.local

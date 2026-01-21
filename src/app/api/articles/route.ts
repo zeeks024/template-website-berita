@@ -63,7 +63,11 @@ export async function POST(request: Request) {
         };
 
         return NextResponse.json(parsedArticle);
-    } catch (error) {
-        return NextResponse.json({ error: 'Failed to create article' }, { status: 500 });
+    } catch (error: any) {
+        console.error("Error creating article:", error);
+        return NextResponse.json(
+            { error: 'Failed to create article', details: error.message },
+            { status: 500 }
+        );
     }
 }
