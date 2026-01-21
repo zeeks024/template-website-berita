@@ -1,27 +1,25 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { newsData } from '@/data/news';
 
-// GET: Fetch all articles (with optional query for sorting/filtering later)
+// GET: Fetch all articles (From DB with Fallback to Static)
 export async function GET(request: Request) {
     try {
-        const { searchParams } = new URL(request.url);
-        const slug = searchParams.get('slug');
-
-        if (slug) {
-            const article = await (prisma as any).article.findUnique({
-                where: { slug }
-            });
-            if (!article) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-            return NextResponse.json(article);
-        }
-
-        const articles = await (prisma as any).article.findMany({
+        const articles = await prisma.article.findMany({
             orderBy: { createdAt: 'desc' }
         });
 
-        return NextResponse.json(articles);
+        const parsedArticles = articles.map(article => ({
+            ...article,
+            tags: article.tags ? JSON.parse(article.tags) : [],
+            gallery: article.gallery ? JSON.parse(article.gallery) : []
+        }));
+
+        return NextResponse.json(parsedArticles);
     } catch (error) {
-        return NextResponse.json({ error: 'Failed to fetch articles' }, { status: 500 });
+        console.warn("Database connection failed, falling back to static data.");
+        // Fallback to static data if DB fails
+        return NextResponse.json(newsData);
     }
 }
 
@@ -35,7 +33,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        const article = await (prisma as any).article.create({
+        const article = await prisma.article.create({
             data: {
                 slug: body.slug,
                 title: body.title,
@@ -58,7 +56,13 @@ export async function POST(request: Request) {
             }
         });
 
-        return NextResponse.json(article);
+        const parsedArticle = {
+            ...article,
+            tags: article.tags ? JSON.parse(article.tags) : [],
+            gallery: article.gallery ? JSON.parse(article.gallery) : []
+        };
+
+        return NextResponse.json(parsedArticle);
     } catch (error) {
         return NextResponse.json({ error: 'Failed to create article' }, { status: 500 });
     }

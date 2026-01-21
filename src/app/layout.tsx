@@ -1,51 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, DM_Serif_Display } from "next/font/google";
-import Header from "@/components/layout/Header";
-import { ThemeProvider } from "@/components/providers";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const dmSerif = DM_Serif_Display({
-  variable: "--font-serif",
-  weight: "400",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   metadataBase: new URL("https://serayu.vercel.app"),
-  title: "Serayu | Berita Terkini Indonesia",
-  description: "Portal berita modern dengan desain premium. Dapatkan berita terkini seputar nasional, ekonomi, teknologi, dan gaya hidup.",
-  keywords: ["berita", "indonesia", "terkini", "nasional", "ekonomi", "teknologi"],
-  authors: [{ name: "Serayu Media" }],
-  openGraph: {
-    title: "Serayu | Berita Terkini Indonesia",
-    description: "Portal berita modern dengan desain premium.",
-    url: "https://serayu.vercel.app",
-    siteName: "Serayu",
-    locale: "id_ID",
-    type: "website",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Serayu - Berita Terkini",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Serayu | Berita Terkini Indonesia",
-    description: "Portal berita modern dengan desain premium.",
-    images: ["/og-image.png"],
-  },
-  icons: {
-    icon: "/favicon.ico",
-  },
+  title: "Svara Serayu | Suara Hati Banjarnegara",
+  description: "Platform media komunitas modern untuk menyuarakan potensi, budaya, dan aspirasi Banjarnegara.",
 };
 
 export default function RootLayout({
@@ -54,23 +21,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" suppressHydrationWarning>
-      <body className={`${inter.variable} ${dmSerif.variable}`} suppressHydrationWarning>
-        <ThemeProvider>
-          <Header />
-          {children}
-          {/* Simple Footer */}
-          <footer style={{ marginTop: '4rem', padding: '3rem 0 2rem', borderTop: '1px solid var(--glass-border)', textAlign: 'center', color: 'var(--text-muted)' }}>
-            <div className="container" style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-              <a href="/tentang-kami" style={{ textDecoration: 'none', color: 'inherit' }}>Tentang Kami</a>
-              <a href="/redaksi" style={{ textDecoration: 'none', color: 'inherit' }}>Redaksi</a>
-              <a href="/pedoman-media-siber" style={{ textDecoration: 'none', color: 'inherit' }}>Pedoman Media Siber</a>
-              <a href="/kebijakan-privasi" style={{ textDecoration: 'none', color: 'inherit' }}>Kebijakan Privasi</a>
-              <a href="/hubungi-kami" style={{ textDecoration: 'none', color: 'inherit' }}>Hubungi Kami</a>
-            </div>
-            <p style={{ fontSize: '0.8rem' }}>© 2026 Serayu. All rights reserved.</p>
-          </footer>
-        </ThemeProvider>
+    <html lang="id">
+      <body suppressHydrationWarning className={`${inter.variable} min-h-screen bg-[#05090a] text-[#F0F0F0] font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden`}>
+        {/* --- Ambient Background --- */}
+        <div className="fixed inset-0 pointer-events-none z-0">
+          <div className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-cyan-900/10 rounded-full blur-[120px] animate-pulse-slow"></div>
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-emerald-900/10 rounded-full blur-[120px] animate-pulse-slow delay-1000"></div>
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04]"></div>
+        </div>
+
+        <Header />
+
+        {children}
+
+        <Footer />
       </body>
     </html>
   );

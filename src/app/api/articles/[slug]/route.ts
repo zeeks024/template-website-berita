@@ -1,34 +1,43 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { getNewsBySlug } from '@/data/news';
 
 type Props = {
     params: Promise<{ slug: string }>
 }
 
-// GET: Fetch single article
+// GET: Fetch single article (DB with Fallback)
 export async function GET(
     request: Request,
     { params }: Props
 ) {
+    const { slug } = await params;
     try {
-        const { slug } = await params;
-        const article = await (prisma as any).article.findUnique({
+        const article = await prisma.article.findUnique({
             where: { slug }
         });
 
         if (!article) {
+            // Try fallback if not found in DB (might be static data only)
+            const staticArticle = getNewsBySlug(slug);
+            if (staticArticle) return NextResponse.json(staticArticle);
+
             return NextResponse.json({ error: 'Article not found' }, { status: 404 });
         }
 
-        // Parse gallery and tags if they exist
-        const responseData = {
+        // GET: Parse before returning
+        const parsedArticle = {
             ...article,
-            gallery: article.gallery ? JSON.parse(article.gallery) : [],
-            tags: article.tags ? JSON.parse(article.tags) : []
+            tags: article.tags ? JSON.parse(article.tags) : [],
+            gallery: article.gallery ? JSON.parse(article.gallery) : []
         };
 
-        return NextResponse.json(responseData);
+        return NextResponse.json(parsedArticle);
     } catch (error) {
+        console.warn("Database connection failed, falling back to static data.");
+        const staticArticle = getNewsBySlug(slug);
+        if (staticArticle) return NextResponse.json(staticArticle);
+
         return NextResponse.json({ error: 'Failed to fetch article' }, { status: 500 });
     }
 }
@@ -42,16 +51,7 @@ export async function PUT(
         const { slug } = await params;
         const body = await request.json();
 
-        // Check if article exists
-        const existing = await (prisma as any).article.findUnique({
-            where: { slug }
-        });
-
-        if (!existing) {
-            return NextResponse.json({ error: 'Article not found' }, { status: 404 });
-        }
-
-        const updated = await (prisma as any).article.update({
+        const updated = await prisma.article.update({
             where: { slug },
             data: {
                 title: body.title,
@@ -74,7 +74,14 @@ export async function PUT(
             }
         });
 
-        return NextResponse.json(updated);
+        // Parse response for consistency
+        const parsedUpdated = {
+            ...updated,
+            tags: updated.tags ? JSON.parse(updated.tags) : [],
+            gallery: updated.gallery ? JSON.parse(updated.gallery) : []
+        };
+
+        return NextResponse.json(parsedUpdated);
     } catch (error) {
         return NextResponse.json({ error: 'Failed to update article' }, { status: 500 });
     }
@@ -88,7 +95,7 @@ export async function DELETE(
     try {
         const { slug } = await params;
 
-        await (prisma as any).article.delete({
+        await prisma.article.delete({
             where: { slug }
         });
 

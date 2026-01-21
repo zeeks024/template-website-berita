@@ -3,186 +3,194 @@
 import { useNews } from '@/hooks/useNews';
 import { useState } from 'react';
 import Link from 'next/link';
-
-
+import {
+    FileText, Eye, Grid, Search, Plus,
+    Edit, Trash2, ExternalLink, Filter
+} from 'lucide-react';
+import FadeIn from '@/components/ui/FadeIn';
 
 export default function AdminDashboard() {
     const { allNews, loading, deleteArticle } = useNews();
     const [searchTerm, setSearchTerm] = useState('');
-    const [filterCategory, setFilterCategory] = useState('');
-    const [filterStatus, setFilterStatus] = useState('all'); // all, published, draft, archived
+    const [filterStatus, setFilterStatus] = useState('all');
 
-    if (loading) return <div>Loading dashboard...</div>;
+    if (loading) return (
+        <div className="flex items-center justify-center h-64 text-white/40 animate-pulse">
+            Memuat data dashboard...
+        </div>
+    );
 
-    // --- Real Stats Calculation ---
+    // Stats
     const totalArticles = allNews.length;
     const totalViews = allNews.reduce((sum, item) => sum + (item.views || 0), 0);
-
-    // Calculate Top Category
     const categoryCounts: Record<string, number> = {};
     allNews.forEach(news => {
         categoryCounts[news.category] = (categoryCounts[news.category] || 0) + 1;
     });
     const topCategory = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || '-';
 
-    // --- Filtering Logic ---
+    // Filters
     const filteredNews = allNews.filter(item => {
         const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesCategory = filterCategory ? item.category === filterCategory : true;
-        const widthStatus = item.status || 'published'; // Default old articles to published
+        const widthStatus = item.status || 'published';
         const matchesStatus = filterStatus === 'all' ? true : widthStatus === filterStatus;
-
-        return matchesSearch && matchesCategory && matchesStatus;
+        return matchesSearch && matchesStatus;
     });
 
-    const categories = Array.from(new Set(allNews.map(n => n.category)));
-
     return (
-        <div>
-            <h1 style={{ marginBottom: '2rem' }}>Dashboard Redaksi</h1>
-
-            <div className="glass-panel" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(2, 132, 199, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <img src="/icons/Category.png" alt="Articles" width={24} height={24} />
-                </div>
+        <FadeIn>
+            <div className="flex items-center justify-between mb-8">
                 <div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 500 }}>Total Artikel</div>
-                    <div style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1 }}>{totalArticles}</div>
+                    <h1 className="text-3xl font-black uppercase tracking-tight text-white mb-2">Dashboard</h1>
+                    <p className="text-white/40 text-sm">Ringkasan performa konten dan manajemen artikel.</p>
+                </div>
+                <Link href="/admin/create" className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-full font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-all hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                    <Plus size={16} />
+                    Buat Artikel
+                </Link>
+            </div>
+
+            {/* Stats Cards */}
+            <div className="grid md:grid-cols-3 gap-6 mb-12">
+                <div className="p-6 rounded-[2rem] bg-[#0a1214] border border-white/5 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-500">
+                        <FileText size={100} />
+                    </div>
+                    <div className="relative z-10">
+                        <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 mb-4">
+                            <FileText size={24} />
+                        </div>
+                        <h3 className="text-4xl font-black text-white mb-1">{totalArticles}</h3>
+                        <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Total Artikel</p>
+                    </div>
+                </div>
+
+                <div className="p-6 rounded-[2rem] bg-[#0a1214] border border-white/5 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-500">
+                        <Eye size={100} />
+                    </div>
+                    <div className="relative z-10">
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-4">
+                            <Eye size={24} />
+                        </div>
+                        <h3 className="text-4xl font-black text-white mb-1">{totalViews.toLocaleString()}</h3>
+                        <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Total Pembaca</p>
+                    </div>
+                </div>
+
+                <div className="p-6 rounded-[2rem] bg-[#0a1214] border border-white/5 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-500">
+                        <Grid size={100} />
+                    </div>
+                    <div className="relative z-10">
+                        <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400 mb-4">
+                            <Grid size={24} />
+                        </div>
+                        <h3 className="text-4xl font-black text-white mb-1 capitalize truncate">{topCategory}</h3>
+                        <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Kategori Populer</p>
+                    </div>
                 </div>
             </div>
 
-            <div className="glass-panel" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(22, 163, 74, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <img src="/icons/Show.png" alt="Views" width={24} height={24} />
-                </div>
-                <div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 500 }}>Total Pembaca</div>
-                    <div style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1 }}>{totalViews.toLocaleString()}</div>
-                </div>
-            </div>
+            {/* Content Table */}
+            <div className="bg-[#0a1214] border border-white/5 rounded-[2rem] overflow-hidden">
+                <div className="p-6 border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex items-center gap-2">
+                        <h3 className="font-bold text-white">Semua Artikel</h3>
+                        <span className="px-2 py-1 bg-white/5 rounded-md text-xs font-mono text-white/40">{filteredNews.length}</span>
+                    </div>
 
-            <div className="glass-panel" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(217, 119, 6, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <img src="/icons/Bookmark.png" alt="Favorite" width={24} height={24} />
-                </div>
-                <div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 500 }}>Kategori Favorit</div>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.2 }}>{topCategory}</div>
-                </div>
-            </div>
+                    <div className="flex items-center gap-3">
+                        {/* Filter Tabs */}
+                        <div className="flex bg-black/20 p-1 rounded-xl">
+                            {['all', 'published', 'draft'].map(status => (
+                                <button
+                                    key={status}
+                                    onClick={() => setFilterStatus(status)}
+                                    className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${filterStatus === status
+                                            ? 'bg-white/10 text-white'
+                                            : 'text-white/30 hover:text-white/60'
+                                        }`}
+                                >
+                                    {status}
+                                </button>
+                            ))}
+                        </div>
 
-            {/* Recent Articles Table */}
-            <div className="glass-panel" style={{ padding: '0', overflow: 'hidden' }}>
-                <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--glass-border)', background: 'var(--bg-color)' }}>
-                    <div className="admin-controls">
-                        <h3 style={{ margin: 0, fontSize: '1.1rem', whiteSpace: 'nowrap' }}>Manajemen Berita</h3>
-
-                        <div className="admin-controls-right">
-                            {/* Status Tabs */}
-                            <div className="status-tabs" style={{ display: 'flex', background: 'var(--glass-border)', padding: '4px', borderRadius: '8px' }}>
-                                {['all', 'published', 'draft', 'archived'].map(status => (
-                                    <button
-                                        key={status}
-                                        onClick={() => setFilterStatus(status)}
-                                        style={{
-                                            padding: '6px 12px',
-                                            borderRadius: '6px',
-                                            fontSize: '13px',
-                                            fontWeight: 600,
-                                            background: filterStatus === status ? 'var(--bg-color)' : 'transparent',
-                                            color: filterStatus === status ? 'var(--text-primary)' : 'var(--text-muted)',
-                                            boxShadow: filterStatus === status ? '0 1px 2px rgba(0,0,0,0.1)' : 'none',
-                                            cursor: 'pointer',
-                                            textTransform: 'capitalize',
-                                            flexShrink: 0
-                                        }}
-                                    >
-                                        {status === 'all' ? 'Semua' : status}
-                                    </button>
-                                ))}
-                            </div>
-
-                            <select
-                                value={filterCategory}
-                                onChange={(e) => setFilterCategory(e.target.value)}
-                                className="input-field"
-                                style={{ padding: '8px', borderRadius: '6px', fontSize: '14px', maxWidth: '150px' }}
-                            >
-                                <option value="">Semua Kategori</option>
-                                {categories.map(c => <option key={c} value={c}>{c}</option>)}
-                            </select>
-
+                        {/* Search */}
+                        <div className="relative">
+                            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
                             <input
                                 type="text"
-                                placeholder="Cari judul..."
+                                placeholder="Cari..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="input-field"
-                                style={{ padding: '8px 12px', borderRadius: '6px', fontSize: '14px', width: '200px' }}
+                                className="pl-9 pr-4 py-2 bg-black/20 border border-white/5 rounded-xl text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-cyan-500/50 transition-all w-48"
                             />
-
-                            <Link href="/admin/create" className="btn-primary" style={{ padding: '8px 16px', fontSize: '14px', whiteSpace: 'nowrap', display: 'flex', justifyContent: 'center' }}>+ Artikel Baru</Link>
                         </div>
                     </div>
                 </div>
 
-                <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '700px' }}>
-                        <thead style={{ background: 'var(--bg-color)' }}>
-                            <tr style={{ textAlign: 'left', color: 'var(--text-secondary)', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                <th style={{ padding: '12px 16px', borderBottom: '1px solid var(--glass-border)' }}>Judul Artikel</th>
-                                <th style={{ padding: '12px 16px', borderBottom: '1px solid var(--glass-border)' }}>Kategori</th>
-                                <th style={{ padding: '12px 16px', borderBottom: '1px solid var(--glass-border)' }}>Statistik</th>
-                                <th style={{ padding: '12px 16px', borderBottom: '1px solid var(--glass-border)' }}>Terbit</th>
-                                <th style={{ padding: '12px 16px', borderBottom: '1px solid var(--glass-border)', textAlign: 'right' }}>Aksi</th>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                        <thead>
+                            <tr className="border-b border-white/5 text-[10px] font-black uppercase tracking-widest text-white/30 bg-black/20">
+                                <th className="p-6">Artikel</th>
+                                <th className="p-6">Kategori</th>
+                                <th className="p-6">Status</th>
+                                <th className="p-6 text-right">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="divide-y divide-white/5">
                             {filteredNews.length > 0 ? filteredNews.map(item => (
-                                <tr key={item.id} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background 0.2s' }} className="hover:bg-gray-50 dark:hover:bg-slate-800">
-                                    <td style={{ padding: '12px 16px' }}>
-                                        <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text-primary)', marginBottom: '4px' }}>{item.title}</div>
-                                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                            <span style={{
-                                                fontSize: '10px', padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase', fontWeight: 700,
-                                                background: item.status === 'draft' ? '#f59e0b' : item.status === 'archived' ? '#78716c' : '#22c55e',
-                                                color: 'white'
-                                            }}>
-                                                {item.status || 'PUBLISHED'}
-                                            </span>
-                                            <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{item.author}</span>
+                                <tr key={item.id} className="group hover:bg-white/[0.02] transition-colors">
+                                    <td className="p-6">
+                                        <div className="font-bold text-white mb-1 line-clamp-1 group-hover:text-cyan-400 transition-colors">
+                                            {item.title}
+                                        </div>
+                                        <div className="text-xs text-white/40 flex items-center gap-2">
+                                            <span>{item.author}</span> • <span>{item.publishedAt}</span>
                                         </div>
                                     </td>
-                                    <td style={{ padding: '12px 16px' }}>
-                                        <span className="glass-chip" style={{ fontSize: '11px', padding: '2px 8px' }}>{item.category}</span>
+                                    <td className="p-6">
+                                        <span className="px-2 py-1 rounded bg-white/5 border border-white/5 text-[10px] font-bold uppercase tracking-wider text-white/60">
+                                            {item.category}
+                                        </span>
                                     </td>
-                                    <td style={{ padding: '12px 16px' }}>
-                                        <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>{item.views || 0}</div>
-                                        <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Views</div>
+                                    <td className="p-6">
+                                        <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${(item.status || 'published') === 'published'
+                                                ? 'bg-emerald-500/10 text-emerald-400'
+                                                : 'bg-amber-500/10 text-amber-400'
+                                            }`}>
+                                            <span className={`w-1.5 h-1.5 rounded-full ${(item.status || 'published') === 'published' ? 'bg-emerald-400' : 'bg-amber-400'
+                                                }`}></span>
+                                            {item.status || 'Published'}
+                                        </span>
                                     </td>
-                                    <td style={{ padding: '12px 16px', fontSize: '13px', color: 'var(--text-secondary)' }}>{item.publishedAt}</td>
-                                    <td style={{ padding: '12px 16px', textAlign: 'right' }}>
-                                        <div style={{ display: 'inline-flex', gap: '6px' }}>
-                                            <Link href={`/article/${item.slug}`} target="_blank" className="btn-secondary" title="Lihat" style={{ padding: '4px 8px', display: 'flex', alignItems: 'center' }}>
-                                                <img src="/icons/Show.png" alt="View" width={16} height={16} />
+                                    <td className="p-6 text-right">
+                                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <Link href={`/article/${item.slug}`} target="_blank" className="p-2 rounded-lg hover:bg-cyan-500/20 text-white/40 hover:text-cyan-400 transition-all" title="Lihat">
+                                                <ExternalLink size={16} />
                                             </Link>
-                                            <Link href={`/admin/edit/${item.slug}`} className="btn-secondary" title="Edit" style={{ padding: '4px 8px', display: 'flex', alignItems: 'center' }}>
-                                                <img src="/icons/Edit Square.png" alt="Edit" width={16} height={16} />
+                                            <Link href={`/admin/edit/${item.slug}`} className="p-2 rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-all" title="Edit">
+                                                <Edit size={16} />
                                             </Link>
                                             <button
                                                 onClick={() => {
                                                     if (confirm(`Hapus artikel "${item.title}"?`)) deleteArticle(item.id);
                                                 }}
-                                                className="btn-secondary" title="Hapus" style={{ padding: '4px 8px', display: 'flex', alignItems: 'center', borderColor: 'var(--glass-border)' }}>
-                                                <img src="/icons/Delete.png" alt="Delete" width={16} height={16} />
+                                                className="p-2 rounded-lg hover:bg-red-500/20 text-white/40 hover:text-red-400 transition-all"
+                                                title="Hapus"
+                                            >
+                                                <Trash2 size={16} />
                                             </button>
                                         </div>
                                     </td>
                                 </tr>
                             )) : (
                                 <tr>
-                                    <td colSpan={5} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                                        Tidak ada berita yang ditemukan.
+                                    <td colSpan={4} className="p-12 text-center text-white/30">
+                                        Tidak ada artikel yang ditemukan.
                                     </td>
                                 </tr>
                             )}
@@ -190,6 +198,6 @@ export default function AdminDashboard() {
                     </table>
                 </div>
             </div>
-        </div>
+        </FadeIn>
     );
 }

@@ -94,12 +94,12 @@ export default function RichTextEditor({ value, onChange }: Props) {
     );
 
     return (
-        <div className="glass-panel" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid var(--glass-border)', background: 'var(--bg-color)' }}>
+        <div className="rich-text-editor-container" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid #e5e5e5', background: 'white' }}>
 
             {/* Toolbar - Sticky */}
             <div style={{
-                padding: '10px 14px', background: 'var(--glass-bg)',
-                borderBottom: '1px solid var(--glass-border)',
+                padding: '10px 14px', background: 'white',
+                borderBottom: '1px solid #e5e5e5',
                 display: 'flex', gap: '4px', flexWrap: 'wrap', alignItems: 'center',
                 position: 'sticky', top: 0, zIndex: 10
             }}>
@@ -213,8 +213,10 @@ export default function RichTextEditor({ value, onChange }: Props) {
                     padding: 6px 8px;
                     border-radius: 4px;
                     border: 1px solid transparent;
+                    border-radius: 4px;
+                    border: 1px solid transparent;
                     background: transparent;
-                    color: var(--text-primary);
+                    color: #333;
                     cursor: pointer;
                     display: flex;
                     align-items: center;
