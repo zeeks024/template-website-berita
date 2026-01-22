@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
+import { sendEmail } from '@/lib/email';
 
 export async function POST(request: Request) {
     try {
@@ -38,14 +39,23 @@ export async function POST(request: Request) {
             },
         });
 
-        // Send verification email (Mock)
+        // Send verification email
         const verificationLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/verify?token=${verificationToken}`;
 
-        console.log("==========================================");
-        console.log("📨 EMAIL VERIFICATION SENT");
-        console.log(`To: ${email}`);
-        console.log(`Link: ${verificationLink}`);
-        console.log("==========================================");
+        await sendEmail({
+            to: email,
+            subject: 'Verifikasi Email Derap Serayu',
+            html: `
+                <h1>Selamat Datang di Derap Serayu!</h1>
+                <p>Halo ${name},</p>
+                <p>Terima kasih telah mendaftar. Silakan klik link di bawah ini untuk memverifikasi akun Anda:</p>
+                <a href="${verificationLink}" style="padding: 10px 20px; background: #06b6d4; color: white; text-decoration: none; border-radius: 5px;">Verifikasi Akun</a>
+                <p>Atau copy link ini: ${verificationLink}</p>
+                <p>Link ini berlaku selama 24 jam.</p>
+            `
+        });
+
+        console.log(`Verification email sent to ${email}`);
 
         return NextResponse.json({
             success: true,
