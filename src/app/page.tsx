@@ -166,7 +166,11 @@ export default function HomePage() {
           <FadeIn className="space-y-8 pl-4 lg:pl-12">
             <span className="text-cyan-400 text-xs font-black uppercase tracking-[0.4em]">Inspirasi Lokal</span>
             <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-none">Wajah <br /> Banjarnegara.</h2>
-            <p className="text-white/60 text-lg max-w-md">Mengenal mereka yang berkarya dalam senyap, memberikan dampak nyata bagi lingkungan sekitar.</p>
+            <p className="text-white/60 text-lg max-w-md mb-8">Mengenal mereka yang berkarya dalam senyap, memberikan dampak nyata bagi lingkungan sekitar.</p>
+
+            <Link href="/category/sosok-inspiratif" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:text-cyan-400 transition-colors group mb-6">
+              Lihat Semua <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
 
             <div className="space-y-6 pt-8">
               {sosokArticles.slice(0, 3).map((sosok, i) => (
