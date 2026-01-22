@@ -1,29 +1,69 @@
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import prisma from '@/lib/prisma';
+import bcrypt from 'bcryptjs';
+import { SignJWT } from 'jose';
 
 export async function POST(request: Request) {
     try {
-        const { password } = await request.json();
+        const { email, password } = await request.json();
 
-        // Check against environment variable, fallback to default if not set (DEV ONLY)
-        const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'serayu2024';
-
-        if (password === ADMIN_PASSWORD) {
-            // Set cookie valid for 1 day
-            const cookieStore = await cookies();
-            cookieStore.set('admin_session', 'true', {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-                maxAge: 60 * 60 * 24, // 1 day
-                path: '/',
-            });
-
-            return NextResponse.json({ success: true });
+        if (!email || !password) {
+            return NextResponse.json({ error: 'Email and password required' }, { status: 400 });
         }
 
-        return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
+        const user = await prisma.user.findUnique({
+            where: { email },
+        });
+
+        if (!user) {
+            return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+        }
+
+        const isValid = await bcrypt.compare(password, user.password);
+
+        if (!isValid) {
+            return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+        }
+
+        if (!user.isVerified) {
+            return NextResponse.json({ error: 'Please verify your email first' }, { status: 403 });
+        }
+
+        // Create JWT
+        const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'fallback-secret-key-123');
+        const token = await new SignJWT({
+            sub: user.id,
+            email: user.email,
+            role: user.role,
+            name: user.name
+        })
+            .setProtectedHeader({ alg: 'HS256' })
+            .setExpirationTime('24h')
+            .sign(secret);
+
+        // Set Cookie
+        const response = NextResponse.json({
+            success: true,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            }
+        });
+
+        response.cookies.set('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 24, // 24 hours
+            path: '/',
+        });
+
+        return response;
+
     } catch (error) {
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        console.error('Login error:', error);
+        return NextResponse.json({ error: 'Login failed' }, { status: 500 });
     }
 }

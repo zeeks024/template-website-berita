@@ -1,18 +1,16 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Lock, ArrowRight, Mail } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { UserPlus, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import FadeIn from '@/components/ui/FadeIn';
 
-export default function LoginPage() {
-    const [formData, setFormData] = useState({ email: '', password: '' });
+export default function RegisterPage() {
+    const [formData, setFormData] = useState({ name: '', email: '', password: '' });
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const verified = searchParams.get('verified');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -20,7 +18,7 @@ export default function LoginPage() {
         setError('');
 
         try {
-            const res = await fetch('/api/auth/login', {
+            const res = await fetch('/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
@@ -29,10 +27,9 @@ export default function LoginPage() {
             const data = await res.json();
 
             if (res.ok) {
-                router.push('/admin');
-                router.refresh();
+                setSuccess(true);
             } else {
-                setError(data.error || 'Login gagal.');
+                setError(data.error || 'Pendaftaran gagal.');
             }
         } catch (err) {
             setError('Terjadi kesalahan koneksi.');
@@ -41,26 +38,47 @@ export default function LoginPage() {
         }
     };
 
+    if (success) {
+        return (
+            <main className="min-h-screen flex items-center justify-center bg-[#05090a] px-4">
+                <FadeIn className="max-w-md w-full text-center">
+                    <div className="w-20 h-20 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <UserPlus size={32} />
+                    </div>
+                    <h1 className="text-3xl font-black text-white mb-4">Cek Email Anda!</h1>
+                    <p className="text-white/60 mb-8">
+                        Kami telah mengirimkan tautan verifikasi ke <strong>{formData.email}</strong>.
+                        Silakan klik tautan tersebut untuk mengaktifkan akun Anda.
+                    </p>
+                    <Link href="/admin/login" className="text-cyan-500 font-bold hover:underline">
+                        Kembali ke Login
+                    </Link>
+                </FadeIn>
+            </main>
+        );
+    }
+
     return (
         <main className="min-h-screen flex items-center justify-center bg-[#05090a] relative overflow-hidden px-4">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none"></div>
 
             <FadeIn className="w-full max-w-md bg-[#0a1214] border border-white/10 p-8 rounded-[2rem] relative z-10 shadow-2xl">
                 <div className="flex flex-col items-center mb-8">
-                    <div className="w-16 h-16 bg-cyan-500/10 rounded-2xl flex items-center justify-center mb-4 text-cyan-500">
-                        <Lock size={32} />
-                    </div>
-                    <h1 className="text-2xl font-black uppercase tracking-tight text-white mb-2">Masuk</h1>
-                    <p className="text-white/40 text-sm text-center">Akses dashboard penulis Derap Serayu.</p>
+                    <h1 className="text-2xl font-black uppercase tracking-tight text-white mb-2">Daftar Penulis</h1>
+                    <p className="text-white/40 text-sm text-center">Bergabung dengan tim redaksi Derap Serayu.</p>
                 </div>
 
-                {verified && (
-                    <div className="mb-6 bg-green-900/20 border border-green-500/30 text-green-400 p-4 rounded-xl text-center text-sm font-bold">
-                        🎉 Email berhasil diverifikasi! Silakan login.
-                    </div>
-                )}
-
                 <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <input
+                            type="text"
+                            placeholder="Nama Lengkap"
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white placeholder:text-white/20 focus:border-cyan-500 focus:outline-none transition-all"
+                            required
+                        />
+                    </div>
                     <div>
                         <input
                             type="email"
@@ -79,11 +97,8 @@ export default function LoginPage() {
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white placeholder:text-white/20 focus:border-cyan-500 focus:outline-none transition-all"
                             required
+                            minLength={6}
                         />
-                    </div>
-
-                    <div className="flex justify-end">
-                        <Link href="/forgot-password" className="text-xs text-cyan-500 hover:text-cyan-400 font-bold">Lupa Password?</Link>
                     </div>
 
                     {error && (
@@ -97,14 +112,14 @@ export default function LoginPage() {
                         disabled={loading}
                         className="w-full bg-cyan-500 hover:bg-cyan-400 text-black py-4 rounded-xl font-black uppercase tracking-widest transition-all disabled:opacity-50 flex items-center justify-center gap-2 group"
                     >
-                        {loading ? 'Memproses...' : 'Masuk'}
+                        {loading ? 'Mendaftarkan...' : 'Daftar Sekarang'}
                         {!loading && <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />}
                     </button>
                 </form>
 
                 <div className="mt-8 text-center">
-                    <p className="text-white/40 text-sm">Belum punya akun?</p>
-                    <Link href="/register" className="text-cyan-500 font-bold hover:text-cyan-400 transition-colors">Daftar Penulis Baru</Link>
+                    <p className="text-white/40 text-sm">Sudah punya akun?</p>
+                    <Link href="/admin/login" className="text-cyan-500 font-bold hover:text-cyan-400 transition-colors">Masuk di sini</Link>
                 </div>
             </FadeIn>
         </main>
