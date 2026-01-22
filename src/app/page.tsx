@@ -77,9 +77,12 @@ export default function HomePage() {
                 >
                   Baca Selengkapnya
                 </Link>
-                <span className="text-xs font-mono text-cyan-500/60 uppercase">
-                  Banjarnegara • {ceritaArticles[0].publishedAt}
-                </span>
+                <Link
+                  href="/category/cerita"
+                  className="px-8 py-4 border border-white/20 hover:bg-white/5 text-white rounded-full font-black text-xs uppercase tracking-widest transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
+                >
+                  Lihat Semua <ArrowRight size={14} />
+                </Link>
               </div>
             </>
           ) : (
