@@ -9,6 +9,7 @@ import BookmarkButton from '@/components/ui/BookmarkButton';
 import { useEffect, useState } from 'react';
 import FadeIn from '@/components/ui/FadeIn';
 import { Clock, Calendar, User, Tag } from 'lucide-react';
+import { formatTimeAgo } from '@/lib/utils';
 
 type Props = {
     slug: string;
@@ -72,7 +73,7 @@ export default function ArticleDetail({ slug }: Props) {
                                 <User size={14} className="text-cyan-400" /> {article.author}
                             </div>
                             <div className="flex items-center gap-2">
-                                <Calendar size={14} className="text-cyan-400" /> {article.publishedAt}
+                                <Calendar size={14} className="text-cyan-400" /> {article.createdAt ? formatTimeAgo(article.createdAt) : article.publishedAt}
                             </div>
                             <div className="flex items-center gap-2">
                                 <Clock size={14} className="text-cyan-400" /> {article.readTime}

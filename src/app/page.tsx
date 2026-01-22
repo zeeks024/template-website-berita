@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import FadeIn from '@/components/ui/FadeIn';
 import SkeletonHome from '@/components/home/SkeletonHome';
 import { useNews } from '@/hooks/useNews';
+import { formatTimeAgo } from '@/lib/utils';
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
@@ -31,14 +32,20 @@ export default function HomePage() {
   }
 
   // Filter Data from Hook
-  // Sort by featured first, then newest
+  // Sort by featured first, then newest based on createdAt
   const sortedNews = [...allNews].sort((a, b) => {
     // Prioritize featured
     if (a.featured && !b.featured) return -1;
     if (!a.featured && b.featured) return 1;
     // Then date
-    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+    const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    return dateB - dateA;
   });
+
+  // ...
+
+
 
   const ceritaArticles = sortedNews.filter(n => n.category.toLowerCase() === 'cerita');
   const opiniArticles = sortedNews.filter(n => n.category.toLowerCase() === 'opini');
@@ -202,7 +209,9 @@ export default function HomePage() {
                   {sortedNews.slice(0, 4).map((item, i) => (
                     <Link key={item.id} href={`/article/${item.slug}`} className="block group relative">
                       <div className="absolute -left-[37px] top-1 w-3 h-3 bg-[#05090a] border border-white/20 rounded-full group-hover:border-cyan-500 group-hover:bg-cyan-500 transition-colors"></div>
-                      <span className="text-[10px] text-white/30 font-mono mb-1 block">{item.publishedAt}</span>
+                      <span className="text-[10px] text-white/30 font-mono mb-1 block">
+                        {formatTimeAgo(item.createdAt) || item.publishedAt}
+                      </span>
                       <h4 className="font-bold text-sm leading-snug group-hover:text-cyan-400 transition-colors line-clamp-2">{item.title}</h4>
                     </Link>
                   ))}
