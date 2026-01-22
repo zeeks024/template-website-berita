@@ -1,12 +1,13 @@
 "use client";
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { LayoutDashboard, PenTool, FolderOpen, ExternalLink, LogOut, Mountain, Menu, X } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
+    const router = useRouter();
     const [checking, setChecking] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -14,6 +15,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         // Mock auth check for now
         setChecking(false);
     }, []);
+
+    const handleLogout = async () => {
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            router.push('/admin/login');
+            router.refresh();
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
 
     // Close menu when route changes
     useEffect(() => {
@@ -97,7 +108,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </nav>
 
                 <div className="p-6 border-t border-white/5">
-                    <button className="flex items-center gap-4 px-4 py-3 w-full rounded-xl font-medium text-sm text-red-400 hover:bg-red-500/10 transition-all">
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-4 px-4 py-3 w-full rounded-xl font-medium text-sm text-red-400 hover:bg-red-500/10 transition-all"
+                    >
                         <LogOut size={20} />
                         Keluar
                     </button>
