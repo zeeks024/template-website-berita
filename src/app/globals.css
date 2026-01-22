@@ -81,17 +81,19 @@ html {
 
 @layer base {
     :root {
-        --background: 0 0% 100%;
-        --foreground: 222.2 84% 4.9%;
+        --background: 210 40% 98%;
+        /* Slightly off-white for premium feel */
+        --foreground: 222.2 47.4% 11.2%;
+        /* Deep Navy/Slate */
 
         --card: 0 0% 100%;
-        --card-foreground: 222.2 84% 4.9%;
+        --card-foreground: 222.2 47.4% 11.2%;
 
         --popover: 0 0% 100%;
-        --popover-foreground: 222.2 84% 4.9%;
+        --popover-foreground: 222.2 47.4% 11.2%;
 
-        --primary: 188 86% 53%;
-        /* Cyan 500 */
+        --primary: 192 90% 36%;
+        /* Cyan 700 - Darker for readability on light bg */
         --primary-foreground: 210 40% 98%;
 
         --secondary: 210 40% 96.1%;
