@@ -159,6 +159,39 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* --- CERITA Section --- */}
+      <section id="cerita-list" className="relative py-12">
+        <FadeIn>
+          <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
+            <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter">Cerita <span className="text-cyan-500">Rakyat</span></h2>
+            <Link href="/category/cerita" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:text-cyan-400 transition-colors group">
+              Lihat Semua <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </FadeIn>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {ceritaArticles.slice(0, 4).map((item, i) => (
+            <FadeIn key={item.id} delay={i * 100}>
+              <Link href={`/article/${item.slug}`} className="block group h-full">
+                <div className="aspect-[4/5] rounded-[2rem] overflow-hidden mb-6 relative border border-white/5">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+                  <div className="absolute bottom-6 left-6 right-6">
+                    <span className="text-[9px] font-black uppercase tracking-widest text-cyan-400 mb-2 block">Cerita</span>
+                    <h3 className="text-lg font-bold leading-tight text-white group-hover:underline decoration-cyan-500 underline-offset-4 line-clamp-2">{item.title}</h3>
+                  </div>
+                </div>
+              </Link>
+            </FadeIn>
+          ))}
+        </div>
+      </section>
+
       {/* --- SOSOK INSPIRATIF Section --- */}
       <section id="sosok" className="relative py-12">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/10 to-transparent rounded-[4rem] -z-10"></div>
