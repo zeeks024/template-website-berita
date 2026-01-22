@@ -44,6 +44,7 @@ model Article {
   readTime      String
   featured      Boolean  @default(false)
   trendingRank  Int?
+  views         Int      @default(0)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

@@ -51,8 +51,15 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Slug is required' }, { status: 400 });
         }
 
+        // 1. Record generic view analytics
         await prisma.articleView.create({
             data: { slug },
+        });
+
+        // 2. Increment view count on the Article model itself (for sorting/displaying)
+        await prisma.article.update({
+            where: { slug },
+            data: { views: { increment: 1 } }
         });
 
         return NextResponse.json({ success: true });

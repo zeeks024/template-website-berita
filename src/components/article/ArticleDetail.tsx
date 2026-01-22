@@ -8,7 +8,7 @@ import ShareButtons from '@/components/ui/ShareButtons';
 import BookmarkButton from '@/components/ui/BookmarkButton';
 import { useEffect, useState } from 'react';
 import FadeIn from '@/components/ui/FadeIn';
-import { Clock, Calendar, User, Tag } from 'lucide-react';
+import { Clock, Calendar, User, Tag, Eye } from 'lucide-react';
 import { formatTimeAgo } from '@/lib/utils';
 
 type Props = {
@@ -80,6 +80,9 @@ export default function ArticleDetail({ slug }: Props) {
                             </div>
                             <div className="flex items-center gap-2 text-cyan-200">
                                 <Tag size={14} className="text-cyan-400" /> {article.category}
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Eye size={14} className="text-cyan-400" /> {article.views || 0}
                             </div>
                         </div>
                     </FadeIn>

@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { newsData } from '@/data/news';
+import { useNews } from '@/hooks/useNews';
+import { Eye } from 'lucide-react';
 
 // Category definitions with icons and colors
 const categories = [
@@ -28,6 +29,16 @@ const getCategorySlug = (name: string) => {
 };
 
 export default function MainNewsGrid() {
+    const { allNews, loading } = useNews();
+
+    if (loading) {
+        return (
+            <div className="container py-20 text-center">
+                <div className="text-white/50 animate-pulse">Memuat berita...</div>
+            </div>
+        );
+    }
+
     return (
         <section style={{ paddingBottom: '4rem' }}>
             <div className="container">
@@ -59,7 +70,7 @@ export default function MainNewsGrid() {
 
                 {/* Each Category Section */}
                 {categories.map((cat) => {
-                    const categoryArticles = newsData.filter(
+                    const categoryArticles = allNews.filter(
                         n => n.category.toLowerCase() === cat.name.toLowerCase()
                     );
 
@@ -109,13 +120,21 @@ export default function MainNewsGrid() {
                                                 </span>
                                                 <h3 className="card-title" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{article.title}</h3>
                                                 <p className="card-excerpt" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{article.summary}</p>
-                                                <div className="card-meta" style={{ marginTop: 'auto' }}>
-                                                    <div className="card-author">
-                                                        <div className="avatar">{article.author.charAt(0)}</div>
-                                                        <span>{article.author}</span>
+                                                <div className="card-meta" style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                        <div className="card-author">
+                                                            <div className="avatar">{article.author.charAt(0)}</div>
+                                                            <span>{article.author}</span>
+                                                        </div>
+                                                        <span>•</span>
+                                                        <span>{article.readTime}</span>
                                                     </div>
-                                                    <span>•</span>
-                                                    <span>{article.readTime}</span>
+
+                                                    {/* View Count */}
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                                                        <Eye size={12} />
+                                                        <span>{article.views || 0}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </article>
