@@ -43,27 +43,16 @@ export default function MainNewsGrid() {
         <section style={{ paddingBottom: '4rem' }}>
             <div className="container">
                 {/* Quick Category Navigation */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-                    gap: '1rem',
-                    marginBottom: '4rem'
-                }}>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
                     {categories.map((cat) => (
                         <Link
                             key={cat.name}
                             href={`/category/${getCategorySlug(cat.name)}`}
-                            className="card"
-                            style={{
-                                padding: '1.5rem',
-                                textDecoration: 'none',
-                                textAlign: 'center',
-                                cursor: 'pointer'
-                            }}
+                            className="bg-card border border-border p-6 rounded-2xl text-center hover:border-primary hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
                         >
-                            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{cat.icon}</div>
-                            <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>{cat.name}</div>
-                            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{cat.description}</div>
+                            <div className="text-3xl mb-3 group-hover:scale-110 transition-transform">{cat.icon}</div>
+                            <div className="font-bold text-foreground mb-1">{cat.name}</div>
+                            <div className="text-xs text-muted-foreground">{cat.description}</div>
                         </Link>
                     ))}
                 </div>

@@ -47,19 +47,19 @@ export default function Header() {
             <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out px-4 lg:px-12 flex justify-center ${scrolled ? 'pt-4' : 'pt-6'
                 }`}>
                 <div className={`w-full max-w-[1600px] flex justify-between items-center transition-all duration-500 ${scrolled
-                    ? 'bg-[#0a1214]/80 backdrop-blur-xl border border-white/10 rounded-full px-6 py-3 shadow-2xl shadow-black/50 max-w-5xl'
+                    ? 'bg-background/80 backdrop-blur-xl border border-border rounded-full px-6 py-3 shadow-2xl shadow-black/10 dark:shadow-black/50 max-w-5xl'
                     : 'bg-transparent py-4'
                     }`}>
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group" onClick={scrollToTop}>
-                        <Mountain size={24} className="text-cyan-500" />
-                        <span className="text-xl font-bold tracking-tight uppercase text-white">
-                            Derap<span className="text-cyan-500">Serayu.</span>
+                        <Mountain size={24} className="text-primary" />
+                        <span className="text-xl font-bold tracking-tight uppercase text-foreground">
+                            Derap<span className="text-primary">Serayu.</span>
                         </span>
                     </Link>
 
                     {/* Desktop Menu */}
-                    <div className="hidden lg:flex items-center gap-8 text-[10px] font-bold uppercase tracking-widest text-white/60">
+                    <div className="hidden lg:flex items-center gap-8 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                         {categories.map(item => (
                             <Link
                                 key={item}
@@ -77,14 +77,14 @@ export default function Header() {
                         <ThemeToggle />
                         <button
                             onClick={() => setIsSearchOpen(true)}
-                            className="hidden md:flex p-2.5 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-all items-center gap-2 group"
+                            className="hidden md:flex p-2.5 rounded-full hover:bg-accent text-muted-foreground hover:text-foreground transition-all items-center gap-2 group"
                         >
                             <Search size={18} />
-                            <span className="text-[10px] bg-white/10 px-1.5 py-0.5 rounded border border-white/5 opacity-0 group-hover:opacity-100 transition-opacity">CTRL+K</span>
+                            <span className="text-[10px] bg-muted px-1.5 py-0.5 rounded border border-border opacity-0 group-hover:opacity-100 transition-opacity">CTRL+K</span>
                         </button>
                         <button
                             onClick={() => setIsMenuOpen(true)}
-                            className="px-5 py-2 bg-white text-black rounded-full font-bold text-xs uppercase tracking-wider hover:bg-cyan-400 hover:text-black transition-all flex items-center gap-2 group"
+                            className="px-5 py-2 bg-foreground text-background rounded-full font-bold text-xs uppercase tracking-wider hover:bg-primary hover:text-primary-foreground transition-all flex items-center gap-2 group"
                         >
                             Menu <Menu size={14} className="group-hover:rotate-180 transition-transform duration-500" />
                         </button>
