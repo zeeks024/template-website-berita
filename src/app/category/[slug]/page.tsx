@@ -36,11 +36,11 @@ export default function CategoryPage({ params }: Props) {
         );
     }
 
-    const decodedSlug = decodeURIComponent(slug).toLowerCase();
+    const decodedSlug = decodeURIComponent(slug).toLowerCase().replace(/-/g, ' ');
     const categoryNews = allNews.filter(
         item => item.category.toLowerCase() === decodedSlug
     );
-    const categoryTitle = getCategoryTitle(slug);
+    const categoryTitle = getCategoryTitle(decodedSlug);
 
     return (
         <main className="min-h-screen pt-32 px-6 lg:px-12 max-w-[1600px] mx-auto pb-20">
