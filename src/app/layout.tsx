@@ -21,12 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id">
-      <body suppressHydrationWarning className={`${inter.variable} min-h-screen bg-[#05090a] text-[#F0F0F0] font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden`}>
+    <html lang="id" suppressHydrationWarning>
+      <body suppressHydrationWarning className={`${inter.variable} min-h-screen bg-background text-foreground font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden`}>
         {/* --- Ambient Background --- */}
         <div className="fixed inset-0 pointer-events-none z-0">
-          <div className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-cyan-900/10 rounded-full blur-[120px] animate-pulse-slow"></div>
-          <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-emerald-900/10 rounded-full blur-[120px] animate-pulse-slow delay-1000"></div>
+          <div className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-cyan-500/10 dark:bg-cyan-900/10 rounded-full blur-[120px] animate-pulse-slow"></div>
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-emerald-500/10 dark:bg-emerald-900/10 rounded-full blur-[120px] animate-pulse-slow delay-1000"></div>
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04]"></div>
         </div>
 

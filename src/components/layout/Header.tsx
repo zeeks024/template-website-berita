@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Search, Menu, X, Mountain } from 'lucide-react';
 import SearchModal from '@/components/ui/SearchModal';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export default function Header() {
     const [scrolled, setScrolled] = useState(false);
@@ -73,6 +74,7 @@ export default function Header() {
 
                     {/* Right Actions */}
                     <div className="flex items-center gap-3">
+                        <ThemeToggle />
                         <button
                             onClick={() => setIsSearchOpen(true)}
                             className="hidden md:flex p-2.5 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-all items-center gap-2 group"
