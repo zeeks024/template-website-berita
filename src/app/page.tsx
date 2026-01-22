@@ -43,6 +43,13 @@ export default function HomePage() {
     return dateB - dateA;
   });
 
+  // Latest news purely by date (ignoring featured)
+  const latestNews = [...allNews].sort((a, b) => {
+    const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    return dateB - dateA;
+  });
+
   // ...
 
 
@@ -206,7 +213,7 @@ export default function HomePage() {
                   <h3 className="text-xl font-black uppercase tracking-tight text-white/80">Terbaru</h3>
                 </div>
                 <div className="space-y-6 relative border-l border-white/10 pl-8 ml-3">
-                  {sortedNews.slice(0, 4).map((item, i) => (
+                  {latestNews.slice(0, 4).map((item, i) => (
                     <Link key={item.id} href={`/article/${item.slug}`} className="block group relative">
                       <div className="absolute -left-[37px] top-1 w-3 h-3 bg-[#05090a] border border-white/20 rounded-full group-hover:border-cyan-500 group-hover:bg-cyan-500 transition-colors"></div>
                       <span className="text-[10px] text-white/30 font-mono mb-1 block">
