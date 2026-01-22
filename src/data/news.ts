@@ -22,6 +22,7 @@ export type NewsItem = {
   tags?: string[];
   editor?: string;
   lastUpdatedBy?: string;
+  createdAt?: string | Date;
 };
 
 export const newsData: NewsItem[] = [
