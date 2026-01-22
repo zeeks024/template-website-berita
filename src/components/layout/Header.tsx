@@ -53,7 +53,7 @@ export default function Header() {
                     <Link href="/" className="flex items-center gap-2 group" onClick={scrollToTop}>
                         <Mountain size={24} className="text-cyan-500" />
                         <span className="text-xl font-bold tracking-tight uppercase text-white">
-                            Svara<span className="text-cyan-500">Serayu.</span>
+                            Derap<span className="text-cyan-500">Serayu.</span>
                         </span>
                     </Link>
 

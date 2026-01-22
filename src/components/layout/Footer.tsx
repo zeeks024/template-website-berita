@@ -26,7 +26,7 @@ export default function Footer() {
                                 <Mountain size={20} className="text-cyan-500" />
                             </div>
                             <span className="text-2xl font-black tracking-tighter uppercase text-white">
-                                Svara<span className="text-cyan-500">Serayu.</span>
+                                Derap<span className="text-cyan-500">Serayu.</span>
                             </span>
                         </Link>
                         <p className="text-white/60 text-base leading-relaxed max-w-sm">
@@ -60,7 +60,7 @@ export default function Footer() {
                     <div className="lg:col-span-2 space-y-8">
                         <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-500">Tentang</h4>
                         <ul className="space-y-4">
-                            {['Tentang Kami', 'Redaksi', 'Pedoman Siber', 'Hubungi Kami', 'Karir'].map((item) => (
+                            {['Tentang Kami', 'Redaksi', 'Pedoman Siber', 'Hubungi Kami'].map((item) => (
                                 <li key={item}>
                                     <Link href={`/${item.toLowerCase().replace(' ', '-')}`} className="text-white/60 hover:text-white text-sm font-medium transition-colors flex items-center gap-2 group">
                                         <span className="w-1 h-1 rounded-full bg-white/20 group-hover:bg-cyan-500 transition-colors"></span>
@@ -100,7 +100,7 @@ export default function Footer() {
                             </div>
                             <div className="flex items-center gap-4">
                                 <Mail size={18} className="text-cyan-500/50 shrink-0" />
-                                <span className="font-light hover:text-cyan-400 transition-colors cursor-pointer">redaksi@svaraserayu.com</span>
+                                <span className="font-light hover:text-cyan-400 transition-colors cursor-pointer">redaksi@derapserayu.com</span>
                             </div>
                         </div>
                     </div>
@@ -109,7 +109,7 @@ export default function Footer() {
                 {/* Bottom Bar */}
                 <div className="pt-8 border-t border-white/5 flex justify-center items-center">
                     <p className="text-white/30 text-xs font-medium tracking-wide text-center">
-                        &copy; {new Date().getFullYear()} Svara Serayu. All rights reserved.
+                        &copy; {new Date().getFullYear()} Derap Serayu. All rights reserved.
                     </p>
                 </div>
             </div>

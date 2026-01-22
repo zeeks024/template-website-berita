@@ -20,7 +20,7 @@ export async function generateMetadata(
 
     if (!article) {
         return {
-            title: 'Artikel Tidak Ditemukan | Svara Serayu',
+            title: 'Artikel Tidak Ditemukan | Derap Serayu',
             description: 'Berita tidak ditemukan atau telah dihapus.',
         };
     }
@@ -28,13 +28,13 @@ export async function generateMetadata(
     const previousImages = (await parent).openGraph?.images || [];
 
     return {
-        title: `${article.title} | Svara Serayu`,
+        title: `${article.title} | Derap Serayu`,
         description: article.summary,
         openGraph: {
             title: article.title,
             description: article.summary,
             url: `https://websiteberitademo.vercel.app/article/${slug}`,
-            siteName: 'Svara Serayu',
+            siteName: 'Derap Serayu',
             images: [
                 {
                     url: article.image || '', // Using the raw image URL from DB

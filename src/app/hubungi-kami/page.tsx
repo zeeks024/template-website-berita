@@ -3,8 +3,8 @@ import FadeIn from '@/components/ui/FadeIn';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Hubungi Kami | Serayu',
-    description: 'Hubungi tim redaksi dan manajemen Serayu.',
+    title: 'Hubungi Kami | Derap Serayu',
+    description: 'Hubungi tim redaksi dan manajemen Derap Serayu.',
 };
 
 export default function ContactPage() {
@@ -32,7 +32,7 @@ export default function ContactPage() {
                             </div>
                             <h3 className="text-lg font-bold text-white mb-2">Email Redaksi</h3>
                             <p className="text-white/40 text-sm mb-4">Untuk rilis pers, liputan, dan kerjasama.</p>
-                            <a href="mailto:redaksi@serayu.id" className="text-cyan-400 font-bold hover:underline">redaksi@serayu.id</a>
+                            <a href="mailto:redaksi@derapserayu.com" className="text-cyan-400 font-bold hover:underline">redaksi@derapserayu.com</a>
                         </div>
 
                         <div className="p-8 rounded-3xl bg-[#0a1214] border border-white/5 hover:border-emerald-500/50 transition-colors group text-center">

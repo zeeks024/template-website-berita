@@ -47,7 +47,7 @@ export default function AdminLogin() {
                         <Lock size={32} />
                     </div>
                     <h1 className="text-2xl font-black uppercase tracking-tight text-white mb-2">Admin Access</h1>
-                    <p className="text-white/40 text-sm text-center">Masukkan password untuk mengakses dashboard admin Svara Serayu.</p>
+                    <p className="text-white/40 text-sm text-center">Masukkan password untuk mengakses dashboard admin Derap Serayu.</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
