@@ -118,44 +118,99 @@ export default function HomePage() {
         </FadeIn>
       </header>
 
-      {/* --- OPINI Section --- */}
+      {/* --- OPINI & TERBARU/TRENDING Section --- */}
       <section id="opini" className="border-t border-white/5 pt-16">
-        <FadeIn>
-          <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
-            <h2 className="text-4xl lg:text-5xl font-black uppercase italic tracking-tighter">Sudut <span className="text-cyan-500">Opini</span></h2>
-            <Link href="/category/opini" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:text-cyan-400 transition-colors group">
-              Lihat Semua <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
-        </FadeIn>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {opiniArticles.length > 0 ? opiniArticles.slice(0, 3).map((item, i) => (
-            <FadeIn key={item.id} delay={i * 100}>
-              <Link href={`/article/${item.slug}`} className="flex flex-col group bg-[#0a1214] border border-white/5 p-8 rounded-[2rem] hover:bg-[#0f1a1d] transition-all hover:-translate-y-2 relative overflow-hidden h-full">
-                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity transform group-hover:scale-110 duration-700">
-                  <Quote size={80} />
-                </div>
-                <MessageCircle size={32} className="text-white/20 mb-6 group-hover:text-cyan-500 transition-colors relative z-10" />
-                <h3 className="text-xl font-black uppercase leading-tight mb-4 group-hover:underline decoration-cyan-500 underline-offset-4 relative z-10 line-clamp-2">
-                  {item.title}
-                </h3>
-                <p className="text-white/50 text-sm leading-relaxed mb-6 font-serif italic relative z-10 line-clamp-3">
-                  "{item.summary}"
-                </p>
-                <div className="flex items-center justify-between border-t border-white/5 pt-6 relative z-10 mt-auto">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-cyan-900/50 flex items-center justify-center text-[10px] font-black shrink-0">
-                      {item.author.charAt(0)}
-                    </div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 truncate">{item.author}</span>
-                  </div>
-                  <span className="text-[9px] font-mono text-cyan-500/50 whitespace-nowrap">{item.readTime}</span>
-                </div>
-              </Link>
+        <div className="grid lg:grid-cols-12 gap-12">
+
+          {/* Main Column: Sudut Opini */}
+          <div className="lg:col-span-8">
+            <FadeIn>
+              <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
+                <h2 className="text-4xl lg:text-5xl font-black uppercase italic tracking-tighter">Sudut <span className="text-cyan-500">Opini</span></h2>
+                <Link href="/category/opini" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:text-cyan-400 transition-colors group">
+                  Lihat Semua <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
             </FadeIn>
-          )) : (
-            <div className="col-span-3 text-center py-12 text-white/30">Belum ada artikel opini.</div>
-          )}
+            <div className="grid md:grid-cols-2 gap-8">
+              {opiniArticles.length > 0 ? opiniArticles.slice(0, 4).map((item, i) => (
+                <FadeIn key={item.id} delay={i * 100}>
+                  <Link href={`/article/${item.slug}`} className="flex flex-col group bg-[#0a1214] border border-white/5 p-8 rounded-[2rem] hover:bg-[#0f1a1d] transition-all hover:-translate-y-2 relative overflow-hidden h-full">
+                    <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity transform group-hover:scale-110 duration-700">
+                      <Quote size={80} />
+                    </div>
+                    <MessageCircle size={32} className="text-white/20 mb-6 group-hover:text-cyan-500 transition-colors relative z-10" />
+                    <h3 className="text-xl font-black uppercase leading-tight mb-4 group-hover:underline decoration-cyan-500 underline-offset-4 relative z-10 line-clamp-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-white/50 text-sm leading-relaxed mb-6 font-serif italic relative z-10 line-clamp-3">
+                      "{item.summary}"
+                    </p>
+                    <div className="flex items-center justify-between border-t border-white/5 pt-6 relative z-10 mt-auto">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-cyan-900/50 flex items-center justify-center text-[10px] font-black shrink-0">
+                          {item.author.charAt(0)}
+                        </div>
+                        <span className="text-xs font-bold uppercase tracking-widest text-white/40 truncate">{item.author}</span>
+                      </div>
+                      <span className="text-[9px] font-mono text-cyan-500/50 whitespace-nowrap">{item.readTime}</span>
+                    </div>
+                  </Link>
+                </FadeIn>
+              )) : (
+                <div className="col-span-2 text-center py-12 text-white/30">Belum ada artikel opini.</div>
+              )}
+            </div>
+          </div>
+
+          {/* Sidebar: Trending & Terbaru */}
+          <div className="lg:col-span-4 space-y-12">
+
+            {/* Trending Widget */}
+            <FadeIn delay={200}>
+              <div className="bg-[#0a1214] border border-white/5 rounded-[2rem] p-8">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-2 h-8 bg-cyan-500"></div>
+                  <h3 className="text-xl font-black uppercase tracking-tight">Trending</h3>
+                </div>
+                <div className="space-y-6">
+                  {sortedNews
+                    .filter(n => n.trendingRank && n.trendingRank > 0)
+                    .sort((a, b) => (a.trendingRank || 99) - (b.trendingRank || 99))
+                    .slice(0, 3)
+                    .map((item, i) => (
+                      <Link key={item.id} href={`/article/${item.slug}`} className="flex gap-4 group items-start">
+                        <span className="text-4xl font-black text-white/10 group-hover:text-cyan-500/20 transition-colors leading-none -mt-2">0{i + 1}</span>
+                        <div>
+                          <span className="text-[9px] font-bold text-cyan-500 uppercase tracking-widest block mb-1">{item.category}</span>
+                          <h4 className="font-bold leading-snug group-hover:text-cyan-400 transition-colors line-clamp-2">{item.title}</h4>
+                        </div>
+                      </Link>
+                    ))}
+                </div>
+              </div>
+            </FadeIn>
+
+            {/* Terbaru Widget */}
+            <FadeIn delay={400}>
+              <div className="bg-transparent pl-2">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-2 h-8 bg-white/20"></div>
+                  <h3 className="text-xl font-black uppercase tracking-tight text-white/80">Terbaru</h3>
+                </div>
+                <div className="space-y-6 relative border-l border-white/10 pl-8 ml-3">
+                  {sortedNews.slice(0, 4).map((item, i) => (
+                    <Link key={item.id} href={`/article/${item.slug}`} className="block group relative">
+                      <div className="absolute -left-[37px] top-1 w-3 h-3 bg-[#05090a] border border-white/20 rounded-full group-hover:border-cyan-500 group-hover:bg-cyan-500 transition-colors"></div>
+                      <span className="text-[10px] text-white/30 font-mono mb-1 block">{item.publishedAt}</span>
+                      <h4 className="font-bold text-sm leading-snug group-hover:text-cyan-400 transition-colors line-clamp-2">{item.title}</h4>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
+
+          </div>
         </div>
       </section>
 
