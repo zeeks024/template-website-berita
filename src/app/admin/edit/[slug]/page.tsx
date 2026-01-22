@@ -16,7 +16,7 @@ type Props = {
 
 export default function EditArticlePage({ params }: Props) {
     const { slug } = use(params);
-    const { allNews, updateArticle, loading } = useNews();
+    const { allNews, updateArticle, loading } = useNews('all');
     const { categories } = useCategories();
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);

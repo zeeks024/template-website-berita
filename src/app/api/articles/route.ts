@@ -5,7 +5,13 @@ import { newsData } from '@/data/news';
 // GET: Fetch all articles (From DB with Fallback to Static)
 export async function GET(request: Request) {
     try {
+        const { searchParams } = new URL(request.url);
+        const status = searchParams.get('status');
+
+        const whereClause = status === 'all' ? {} : { status: 'published' };
+
         const articles = await prisma.article.findMany({
+            where: whereClause,
             orderBy: { createdAt: 'desc' }
         });
 
@@ -33,9 +39,18 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
+        // Ensure slug uniqueness
+        let uniqueSlug = body.slug;
+        let counter = 1;
+
+        while (await prisma.article.findUnique({ where: { slug: uniqueSlug } })) {
+            uniqueSlug = `${body.slug}-${counter}`;
+            counter++;
+        }
+
         const article = await prisma.article.create({
             data: {
-                slug: body.slug,
+                slug: uniqueSlug,
                 title: body.title,
                 summary: body.summary || '',
                 content: body.content || '',

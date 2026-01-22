@@ -10,7 +10,7 @@ import {
 import FadeIn from '@/components/ui/FadeIn';
 
 export default function AdminDashboard() {
-    const { allNews, loading, deleteArticle } = useNews();
+    const { allNews, loading, deleteArticle } = useNews('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
 
@@ -108,8 +108,8 @@ export default function AdminDashboard() {
                                     key={status}
                                     onClick={() => setFilterStatus(status)}
                                     className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${filterStatus === status
-                                            ? 'bg-white/10 text-white'
-                                            : 'text-white/30 hover:text-white/60'
+                                        ? 'bg-white/10 text-white'
+                                        : 'text-white/30 hover:text-white/60'
                                         }`}
                                 >
                                     {status}
@@ -159,8 +159,8 @@ export default function AdminDashboard() {
                                     </td>
                                     <td className="p-6">
                                         <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${(item.status || 'published') === 'published'
-                                                ? 'bg-emerald-500/10 text-emerald-400'
-                                                : 'bg-amber-500/10 text-amber-400'
+                                            ? 'bg-emerald-500/10 text-emerald-400'
+                                            : 'bg-amber-500/10 text-amber-400'
                                             }`}>
                                             <span className={`w-1.5 h-1.5 rounded-full ${(item.status || 'published') === 'published' ? 'bg-emerald-400' : 'bg-amber-400'
                                                 }`}></span>

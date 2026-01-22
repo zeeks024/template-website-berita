@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react';
 import { NewsItem } from '@/data/news';
 
-export function useNews() {
+export function useNews(filterStatus: string = 'published') {
     const [allNews, setAllNews] = useState<NewsItem[]>([]);
     const [loading, setLoading] = useState(true);
 
     const fetchNews = async () => {
         try {
-            const res = await fetch('/api/articles');
+            const res = await fetch(`/api/articles?status=${filterStatus}`);
             const data = await res.json();
             if (Array.isArray(data)) {
                 // Map Prisma Article to NewsItem interface if needed
