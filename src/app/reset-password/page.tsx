@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Lock } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
 
 export default function ResetPasswordPage() {
@@ -32,7 +31,7 @@ export default function ResetPasswordPage() {
                 const data = await res.json();
                 setError(data.error || 'Gagal mereset password');
             }
-        } catch (err) {
+        } catch {
             setError('Terjadi kesalahan');
         } finally {
             setLoading(false);

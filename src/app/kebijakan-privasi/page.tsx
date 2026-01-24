@@ -22,7 +22,7 @@ export default function PrivacyPage() {
 
                 <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginTop: '1.5rem' }}>2. Cookies</h3>
                 <p style={{ lineHeight: 1.8 }}>
-                    NusaDaily menggunakan "cookies" untuk menyimpan informasi tentang preferensi pengunjung dan merekam informasi pengguna tertentu pada kunjungan halaman.
+                    NusaDaily menggunakan &quot;cookies&quot; untuk menyimpan informasi tentang preferensi pengunjung dan merekam informasi pengguna tertentu pada kunjungan halaman.
                 </p>
 
                 <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginTop: '1.5rem' }}>3. Keamanan Data</h3>

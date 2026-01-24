@@ -23,6 +23,7 @@ export default function SearchModal({ isOpen, onClose }: Props) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'unset';
+            // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting query on modal close
             setQuery('');
         }
         return () => {
@@ -128,7 +129,7 @@ export default function SearchModal({ isOpen, onClose }: Props) {
                         ))
                     ) : (
                         <div className="py-12 text-center text-white/30">
-                            Tidak ada hasil untuk "{query}"
+                            Tidak ada hasil untuk &quot;{query}&quot;
                         </div>
                     )}
                 </div>

@@ -68,9 +68,15 @@ function SearchResults() {
                 <FadeIn>
                     <div className="mb-12">
                         <span className="text-cyan-500 font-bold tracking-widest uppercase text-xs mb-3 block">Search Results</span>
-                        <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">
-                            Menampilkan: <span className="text-white/60">"{query}"</span>
-                        </h1>
+                        {query ? (
+                            <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">
+                                Menampilkan: <span className="text-white/60">&quot;{query}&quot;</span>
+                            </h1>
+                        ) : (
+                            <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">
+                                Cari Artikel
+                            </h1>
+                        )}
 
                         {/* Filters Bar */}
                         <div className="bg-[#0a1214] border border-white/5 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center gap-6">
@@ -128,7 +134,29 @@ function SearchResults() {
                         </div>
                     </div>
 
-                    {filteredNews.length > 0 ? (
+                    {!query ? (
+                        <div className="text-center py-24 bg-[#0a1214] border border-white/5 rounded-3xl">
+                            <div className="w-24 h-24 mx-auto bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 rounded-full flex items-center justify-center mb-8">
+                                <SearchIcon size={48} className="text-cyan-400" />
+                            </div>
+                            <h3 className="text-3xl font-black text-white mb-4">Mulai Pencarian</h3>
+                            <p className="text-white/50 mb-8 max-w-md mx-auto leading-relaxed">
+                                Ketik kata kunci di kolom pencarian untuk menemukan artikel yang Anda cari.
+                            </p>
+                            <div className="flex flex-wrap justify-center gap-3">
+                                <span className="text-xs text-white/30 uppercase tracking-wider self-center mr-2">Populer:</span>
+                                {['Dieng', 'UMKM', 'Wisata', 'Pertanian'].map(tag => (
+                                    <Link
+                                        key={tag}
+                                        href={`/search?q=${tag.toLowerCase()}`}
+                                        className="px-4 py-2 bg-white/5 hover:bg-cyan-500/20 border border-white/10 hover:border-cyan-500/50 rounded-full text-sm text-white/70 hover:text-cyan-400 transition-all"
+                                    >
+                                        {tag}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    ) : filteredNews.length > 0 ? (
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {filteredNews.map((item, index) => (
                                 <FadeIn key={item.id} delay={index * 0.05}>
@@ -170,21 +198,34 @@ function SearchResults() {
                         </div>
                     ) : (
                         <div className="text-center py-24 bg-[#0a1214] border border-white/5 rounded-3xl">
-                            <div className="w-20 h-20 mx-auto bg-white/5 rounded-full flex items-center justify-center text-white/20 mb-6">
-                                <SearchIcon size={40} />
+                            <div className="w-24 h-24 mx-auto bg-white/5 rounded-full flex items-center justify-center mb-8">
+                                <SearchIcon size={48} className="text-white/20" />
                             </div>
-                            <h3 className="text-2xl font-bold text-white mb-2">Tidak ditemukan</h3>
-                            <p className="text-white/40 mb-8">Maaf, kami tidak menemukan artikel yang sesuai dengan kriteria anda.</p>
-                            <button
-                                onClick={() => {
-                                    setCategory('Semua');
-                                    setSort('relevance');
-                                    updateFilters('Semua', 'relevance');
-                                }}
-                                className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white font-bold text-sm uppercase tracking-wider transition-all"
-                            >
-                                Reset Filter
-                            </button>
+                            <h3 className="text-3xl font-black text-white mb-4">Tidak Ditemukan</h3>
+                            <p className="text-white/50 mb-4 max-w-md mx-auto leading-relaxed">
+                                Tidak ada artikel yang cocok dengan <span className="text-white font-semibold">&quot;{query}&quot;</span>
+                                {category !== 'Semua' && <span> dalam kategori <span className="text-cyan-400">{category}</span></span>}.
+                            </p>
+                            <p className="text-white/30 text-sm mb-8">Coba kata kunci lain atau hapus filter kategori.</p>
+                            <div className="flex flex-wrap justify-center gap-3">
+                                {category !== 'Semua' && (
+                                    <button
+                                        onClick={() => {
+                                            setCategory('Semua');
+                                            updateFilters('Semua', sort);
+                                        }}
+                                        className="px-6 py-3 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/50 rounded-full text-cyan-400 font-bold text-sm uppercase tracking-wider transition-all"
+                                    >
+                                        Hapus Filter Kategori
+                                    </button>
+                                )}
+                                <Link
+                                    href="/search"
+                                    className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white font-bold text-sm uppercase tracking-wider transition-all"
+                                >
+                                    Pencarian Baru
+                                </Link>
+                            </div>
                         </div>
                     )}
                 </FadeIn>

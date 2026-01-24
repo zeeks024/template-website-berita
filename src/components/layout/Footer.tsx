@@ -25,7 +25,7 @@ export default function Footer() {
                             <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 transition-colors">
                                 <Mountain size={20} className="text-primary" />
                             </div>
-                            <span className="text-2xl font-black tracking-tighter uppercase text-foreground">
+                            <span className="text-2xl font-serif font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
                                 Derap<span className="text-primary">Serayu.</span>
                             </span>
                         </Link>

@@ -1,10 +1,69 @@
 import prisma from '@/lib/prisma';
 import ArticleDetail from '@/components/article/ArticleDetail';
 import type { Metadata, ResolvingMetadata } from 'next';
+import { notFound } from 'next/navigation';
+import { NewsItem } from '@/types/news';
 
 type Props = {
     params: Promise<{ slug: string }>;
 };
+
+async function getArticle(slug: string): Promise<NewsItem | null> {
+    const article = await prisma.article.findUnique({
+        where: { slug },
+    });
+
+    if (!article) return null;
+
+    return {
+        id: article.id,
+        slug: article.slug,
+        title: article.title,
+        summary: article.summary,
+        content: article.content,
+        category: article.category,
+        author: article.author,
+        image: article.image || '',
+        readTime: article.readTime || '1 menit',
+        publishedAt: article.publishedAt?.toISOString() || '',
+        createdAt: article.createdAt.toISOString(),
+        views: article.views,
+        featured: article.featured,
+        trendingRank: article.trendingRank ?? undefined,
+        tags: article.tags ? JSON.parse(article.tags) : [],
+        gallery: article.gallery ? JSON.parse(article.gallery) : [],
+    };
+}
+
+async function getRelatedArticles(currentSlug: string, limit: number = 3): Promise<NewsItem[]> {
+    const articles = await prisma.article.findMany({
+        where: {
+            slug: { not: currentSlug },
+            status: 'published',
+        },
+        orderBy: { createdAt: 'desc' },
+        take: limit,
+    });
+
+    return articles.map(article => ({
+        id: article.id,
+        slug: article.slug,
+        title: article.title,
+        summary: article.summary,
+        content: article.content,
+        category: article.category,
+        author: article.author,
+        image: article.image || '',
+        readTime: article.readTime || '1 menit',
+        publishedAt: article.publishedAt?.toISOString() || '',
+        createdAt: article.createdAt.toISOString(),
+        views: article.views,
+        featured: article.featured,
+        trendingRank: article.trendingRank ?? undefined,
+        tags: article.tags ? JSON.parse(article.tags) : [],
+        gallery: article.gallery ? JSON.parse(article.gallery) : [],
+    }));
+}
 
 // Generate Metadata for SEO/Social Sharing
 export async function generateMetadata(
@@ -12,11 +71,7 @@ export async function generateMetadata(
     parent: ResolvingMetadata
 ): Promise<Metadata> {
     const { slug } = await params;
-
-    // Fetch directly from DB for server-side metadata
-    const article = await prisma.article.findUnique({
-        where: { slug },
-    });
+    const article = await getArticle(slug);
 
     if (!article) {
         return {
@@ -37,7 +92,7 @@ export async function generateMetadata(
             siteName: 'Derap Serayu',
             images: [
                 {
-                    url: article.image || '', // Using the raw image URL from DB
+                    url: article.image || '',
                     width: 1200,
                     height: 630,
                     alt: article.title,
@@ -46,7 +101,7 @@ export async function generateMetadata(
             ],
             locale: 'id_ID',
             type: 'article',
-            publishedTime: new Date(article.createdAt).toISOString(),
+            publishedTime: typeof article.createdAt === 'string' ? article.createdAt : undefined,
             authors: [article.author],
         },
         twitter: {
@@ -60,5 +115,13 @@ export async function generateMetadata(
 
 export default async function Page({ params }: Props) {
     const { slug } = await params;
-    return <ArticleDetail slug={slug} />;
+    const article = await getArticle(slug);
+
+    if (!article) {
+        notFound();
+    }
+
+    const relatedArticles = await getRelatedArticles(slug);
+
+    return <ArticleDetail article={article} relatedArticles={relatedArticles} />;
 }

@@ -10,10 +10,9 @@ export default function TimeAgo({ date }: { date: string | Date | number }) {
     const [timeString, setTimeString] = useState<string>('');
 
     useEffect(() => {
-        // Initial set
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- initial time calculation
         setTimeString(formatTimeAgo(date));
 
-        // Update every 60 seconds
         const interval = setInterval(() => {
             setTimeString(formatTimeAgo(date));
         }, 60000);

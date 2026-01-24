@@ -52,6 +52,12 @@ error.log
 
 # Dev scripts (not needed in production)
 verify-db.js
+test-email.ts
+
+# Sensitive files (NEVER commit these)
+cookies.txt
+token.txt
+*.secret
 
 .vercel
 .env*.local

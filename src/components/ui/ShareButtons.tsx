@@ -1,37 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function ShareButtons({ title, url }: { title: string, url: string }) {
-    // We need to wait for mount to access window.location if url isn't full
     const [copied, setCopied] = useState(false);
-    const [canShare, setCanShare] = useState(false);
-
-    useEffect(() => {
-        if (typeof navigator !== 'undefined' && (navigator as any).share) {
-            setCanShare(true);
-        }
-    }, []);
-
-    const handleShare = async () => {
-        if (canShare) {
-            try {
-                await navigator.share({ title, url });
-            } catch (err) {
-                // user aborted or error
-            }
-        } else {
-            copyToClipboard();
-        }
-    };
 
     const copyToClipboard = async () => {
         try {
-            // Modern API (requires HTTPS)
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 await navigator.clipboard.writeText(url);
             } else {
-                // Fallback for HTTP or older browsers
                 const textArea = document.createElement('textarea');
                 textArea.value = url;
                 textArea.style.position = 'fixed';
@@ -43,8 +21,8 @@ export default function ShareButtons({ title, url }: { title: string, url: strin
             }
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
-        } catch (err) {
-            console.error('Failed to copy:', err);
+        } catch {
+            console.error('Failed to copy');
             alert('Gagal menyalin link. Silakan salin manual.');
         }
     };

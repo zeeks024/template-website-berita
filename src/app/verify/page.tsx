@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { CheckCircle, XCircle, Loader } from 'lucide-react';
+import { XCircle, Loader } from 'lucide-react';
 import Link from 'next/link';
 
 export default function VerifyPage() {
@@ -10,23 +10,27 @@ export default function VerifyPage() {
     const token = searchParams.get('token');
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
 
+    const verifyToken = useCallback(async (verifyToken: string) => {
+        try {
+            const res = await fetch(`/api/auth/verify?token=${verifyToken}`);
+            if (res.ok) {
+                window.location.href = '/admin/login?verified=true';
+            } else {
+                setStatus('error');
+            }
+        } catch {
+            setStatus('error');
+        }
+    }, []);
+
     useEffect(() => {
         if (!token) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect -- handling missing token
             setStatus('error');
             return;
         }
-
-        fetch(`/api/auth/verify?token=${token}`)
-            .then((res) => {
-                if (res.ok) {
-                    // Ideally handled by backend redirect, but if JS fetch is used, we can handle UI state
-                    window.location.href = '/admin/login?verified=true';
-                } else {
-                    setStatus('error');
-                }
-            })
-            .catch(() => setStatus('error'));
-    }, [token]);
+        verifyToken(token);
+    }, [token, verifyToken]);
 
     return (
         <main className="min-h-screen flex items-center justify-center bg-[#05090a] text-white">

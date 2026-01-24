@@ -1,8 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  // reactCompiler: true,
+  reactCompiler: true,
 
   images: {
     remotePatterns: [
@@ -12,12 +11,18 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'source.unsplash.com', // Legacy support
+        hostname: 'source.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'grainy-gradients.vercel.app',
       },
     ],
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
+    minimumCacheTTL: 60 * 60 * 24 * 7,
   },
-  // Allow LAN access for mobile testing
-  // allowedDevOrigins: ["0.0.0.0"], // Next.js doesn't support wildcard here directly, but we can rely on hostname -I
 };
 
 export default nextConfig;

@@ -15,7 +15,7 @@ export async function GET(request: Request) {
             orderBy: { createdAt: 'desc' },
         });
         return NextResponse.json(comments);
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: 'Failed to fetch comments' }, { status: 500 });
     }
 }
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
         });
 
         return NextResponse.json(comment);
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: 'Failed to post comment' }, { status: 500 });
     }
 }

@@ -1,36 +1,156 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Serayu
 
-## Getting Started
+Portal berita dan CMS untuk wilayah Banjarnegara, dibangun dengan Next.js 16.
 
-First, run the development server:
+## Tech Stack
+
+- **Framework**: Next.js 16.1.1 (App Router)
+- **React**: 19.2.3 dengan React Compiler
+- **Database**: PostgreSQL dengan Prisma ORM
+- **Authentication**: JWT (jose) dengan bcrypt password hashing
+- **Styling**: Tailwind CSS 4
+- **UI**: Lucide React icons, Framer Motion animations
+- **Testing**: Vitest dengan Testing Library
+
+## Prerequisites
+
+- Node.js 18.x atau lebih baru
+- PostgreSQL database
+- npm atau yarn
+
+## Setup
+
+### 1. Clone & Install
+
+```bash
+git clone <repository-url>
+cd serayu
+npm install
+```
+
+### 2. Environment Variables
+
+Salin `.env.example` ke `.env` dan isi dengan konfigurasi Anda:
+
+```bash
+cp .env.example .env
+```
+
+Variabel yang diperlukan:
+
+| Variable | Deskripsi |
+|----------|-----------|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `JWT_SECRET` | Secret key untuk JWT (min 32 karakter) |
+| `NEXT_PUBLIC_SITE_URL` | URL publik situs |
+| `SMTP_*` | Konfigurasi email untuk reset password |
+
+### 3. Database Setup
+
+```bash
+# Push schema ke database
+npx prisma db push
+
+# Seed data awal (opsional)
+npx prisma db seed
+
+# Buka Prisma Studio untuk melihat data
+npx prisma studio
+```
+
+### 4. Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Deskripsi |
+|---------|-----------|
+| `npm run dev` | Development server |
+| `npm run dev:lan` | Development server (accessible dari LAN) |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run lint` | ESLint check |
+| `npm run test` | Vitest watch mode |
+| `npm run test:run` | Vitest single run |
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+serayu/
+├── prisma/
+│   ├── schema.prisma    # Database schema
+│   └── seed.ts          # Seed data
+├── src/
+│   ├── app/             # Next.js App Router
+│   │   ├── admin/       # Admin dashboard pages
+│   │   ├── api/         # API routes
+│   │   └── ...          # Public pages
+│   ├── components/      # React components
+│   ├── lib/             # Utilities & configs
+│   └── __tests__/       # Test files
+├── public/              # Static assets
+└── ...
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## API Routes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Articles
+- `GET /api/articles` - List articles (supports `?category=`, `?status=`, `?my=true`)
+- `POST /api/articles` - Create article (auth required)
+- `GET /api/articles/[slug]` - Get single article
+- `PUT /api/articles/[slug]` - Update article (auth + ownership required)
+- `DELETE /api/articles/[slug]` - Delete article (auth + ownership required)
 
-## Deploy on Vercel
+### Authentication
+- `POST /api/auth/login` - Login, returns JWT
+- `POST /api/auth/logout` - Logout
+- `GET /api/auth/me` - Get current user
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Categories
+- `GET /api/categories` - List categories
+- `POST /api/categories` - Create category (admin only)
+- `DELETE /api/categories` - Delete category (admin only)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## User Roles
+
+| Role | Permissions |
+|------|-------------|
+| `ADMIN` | Full access: manage all articles, categories, users |
+| `WRITER` | Create articles, edit/delete own articles only |
+
+## Testing
+
+```bash
+# Run all tests
+npm run test:run
+
+# Watch mode
+npm run test
+```
+
+## Deployment
+
+### Vercel (Recommended)
+
+1. Push ke GitHub
+2. Import project di [Vercel](https://vercel.com)
+3. Set environment variables
+4. Deploy
+
+### Self-hosted
+
+```bash
+npm run build
+npm run start
+```
+
+Pastikan `NODE_ENV=production` dan semua environment variables sudah diset.
+
+## License
+
+Private - All rights reserved.

@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { validateImageFile, readFileAsDataURL, fitTo16By9, cropTo16By9 } from '@/lib/imageUtils';
+import { Upload, X, Sparkles, Scissors, Loader2 } from 'lucide-react';
 
 interface Props {
     values: string[];
@@ -13,8 +14,6 @@ export default function ImageUploader({ values, onChange }: Props) {
     const [processing, setProcessing] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    // --- File Handlers ---
-
     const handleFiles = async (files: FileList | null) => {
         if (!files) return;
         setProcessing(true);
@@ -24,14 +23,12 @@ export default function ImageUploader({ values, onChange }: Props) {
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
 
-            // 1. Validation
             const error = validateImageFile(file);
             if (error) {
                 alert(`File ${file.name}: ${error}`);
                 continue;
             }
 
-            // 2. Read
             try {
                 const dataUrl = await readFileAsDataURL(file);
                 newImages.push(dataUrl);
@@ -70,8 +67,6 @@ export default function ImageUploader({ values, onChange }: Props) {
         handleFiles(e.target.files);
     };
 
-    // --- Edit Handlers ---
-
     const removeImage = (index: number) => {
         const newValues = [...values];
         newValues.splice(index, 1);
@@ -103,25 +98,19 @@ export default function ImageUploader({ values, onChange }: Props) {
 
     return (
         <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600 }}>Galeri Gambar (Max 10MB)</label>
-
-            {/* Drop Zone */}
             <div
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
                 onDragOver={handleDrag}
                 onDrop={handleDrop}
                 onClick={() => inputRef.current?.click()}
-                style={{
-                    border: `2px dashed ${dragActive ? 'var(--accent-blue)' : 'var(--glass-border)'}`,
-                    borderRadius: '12px',
-                    padding: '2rem',
-                    textAlign: 'center',
-                    cursor: 'pointer',
-                    background: dragActive ? 'rgba(59, 130, 246, 0.1)' : 'var(--glass-bg)',
-                    marginBottom: '1rem',
-                    position: 'relative'
-                }}
+                className={`
+                    border-2 border-dashed rounded-xl p-8 text-center cursor-pointer mb-4 transition-all
+                    ${dragActive 
+                        ? 'border-cyan-500 bg-cyan-500/10' 
+                        : 'border-white/10 bg-black/20 hover:border-white/20 hover:bg-black/30'
+                    }
+                `}
             >
                 <input
                     ref={inputRef}
@@ -129,52 +118,69 @@ export default function ImageUploader({ values, onChange }: Props) {
                     accept="image/*"
                     multiple
                     onChange={handleInputChange}
-                    style={{ display: 'none' }}
+                    className="hidden"
                 />
 
                 {processing ? (
-                    <span>Memproses gambar...</span>
+                    <div className="flex items-center justify-center gap-2 text-white/60">
+                        <Loader2 size={20} className="animate-spin" />
+                        <span className="text-sm">Memproses gambar...</span>
+                    </div>
                 ) : (
-                    <div style={{ color: 'var(--text-muted)' }}>
-                        <span style={{ fontSize: '1.5rem', display: 'block', marginBottom: '0.5rem' }}>📂</span>
-                        Klik atau Tarik gambar ke sini (Bisa banyak)
+                    <div className="text-white/40">
+                        <Upload size={32} className="mx-auto mb-3 opacity-50" />
+                        <p className="text-sm font-medium">Klik atau tarik gambar ke sini</p>
+                        <p className="text-xs mt-1 opacity-60">Bisa upload banyak gambar (Max 10MB)</p>
                     </div>
                 )}
             </div>
 
-            {/* Gallery Grid */}
             {values.length > 0 && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '1rem' }}>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                     {values.map((img, idx) => (
-                        <div key={idx} className="glass-panel" style={{ padding: '0.5rem', position: 'relative' }}>
-                            {/* Toolbar */}
-                            <div style={{
-                                position: 'absolute', top: 5, right: 5, zIndex: 10, display: 'flex', gap: '4px'
-                            }}>
-                                <button type="button" onClick={() => removeImage(idx)} style={{ background: 'red', color: 'white', border: 'none', borderRadius: '4px', width: '24px', height: '24px', cursor: 'pointer' }}>×</button>
-                            </div>
-
-                            {/* Image Preview */}
-                            <div style={{
-                                height: '100px', backgroundColor: '#000', borderRadius: '6px', marginBottom: '0.5rem',
-                                backgroundImage: `url(${img})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center'
-                            }}></div>
-
-                            {/* Edit Controls */}
-                            <div style={{ display: 'flex', gap: '4px' }}>
-                                <button type="button" onClick={() => applyEdit(idx, 'fit')} className="btn-secondary" style={{ fontSize: '10px', flex: 1, padding: '4px' }}>
-                                    ✨ Blur BG
-                                </button>
-                                <button type="button" onClick={() => applyEdit(idx, 'crop')} className="btn-secondary" style={{ fontSize: '10px', flex: 1, padding: '4px' }}>
-                                    ✂ Crop
-                                </button>
-                            </div>
+                        <div 
+                            key={idx} 
+                            className="relative bg-black/30 border border-white/10 rounded-xl p-2 group"
+                        >
+                            <button
+                                type="button"
+                                onClick={() => removeImage(idx)}
+                                className="absolute top-3 right-3 z-10 w-6 h-6 bg-red-500 hover:bg-red-400 text-white rounded-full flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"
+                            >
+                                <X size={14} />
+                            </button>
 
                             {idx === 0 && (
-                                <span style={{ position: 'absolute', top: 5, left: 5, background: 'var(--accent-blue)', color: 'white', fontSize: '10px', padding: '2px 6px', borderRadius: '4px' }}>
+                                <span className="absolute top-3 left-3 z-10 px-2 py-0.5 bg-cyan-500 text-white text-[10px] font-bold uppercase tracking-wider rounded">
                                     Cover
                                 </span>
                             )}
+
+                            <div 
+                                className="h-24 bg-black rounded-lg mb-2 bg-contain bg-no-repeat bg-center"
+                                style={{ backgroundImage: `url(${img})` }}
+                            />
+
+                            <div className="flex gap-1">
+                                <button
+                                    type="button"
+                                    onClick={() => applyEdit(idx, 'fit')}
+                                    disabled={processing}
+                                    className="flex-1 px-2 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[10px] font-medium text-white/60 hover:text-white transition-all flex items-center justify-center gap-1 disabled:opacity-50"
+                                >
+                                    <Sparkles size={10} />
+                                    Blur BG
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => applyEdit(idx, 'crop')}
+                                    disabled={processing}
+                                    className="flex-1 px-2 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[10px] font-medium text-white/60 hover:text-white transition-all flex items-center justify-center gap-1 disabled:opacity-50"
+                                >
+                                    <Scissors size={10} />
+                                    Crop
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>

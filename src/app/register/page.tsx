@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { UserPlus, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import FadeIn from '@/components/ui/FadeIn';
@@ -31,7 +30,7 @@ export default function RegisterPage() {
             } else {
                 setError(data.error || 'Pendaftaran gagal.');
             }
-        } catch (err) {
+        } catch {
             setError('Terjadi kesalahan koneksi.');
         } finally {
             setLoading(false);

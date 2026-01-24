@@ -3,9 +3,9 @@
 import { useNews } from '@/hooks/useNews';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft, Clock, User, ArrowRight, Folder } from 'lucide-react';
+import { ArrowLeft, Clock, User, Folder } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
-import { use, useEffect, useState } from 'react';
+import { use } from 'react';
 
 type Props = {
     params: Promise<{ slug: string }>;

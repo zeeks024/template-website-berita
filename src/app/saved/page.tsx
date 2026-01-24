@@ -4,20 +4,26 @@ import { useBookmarks } from '@/hooks/useBookmarks';
 import { useNews } from '@/hooks/useNews';
 import Link from 'next/link';
 import Image from 'next/image';
-import BookmarkButton from '@/components/ui/BookmarkButton';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import FadeIn from '@/components/ui/FadeIn';
 import { Bookmark, ArrowRight, Trash2 } from 'lucide-react';
+
+interface SavedArticle {
+    id: string;
+    slug: string;
+    title: string;
+    image: string;
+    category: string;
+    publishedAt: string;
+}
 
 export default function SavedPage() {
     const { bookmarks, isInitialized, toggleBookmark } = useBookmarks();
     const { allNews } = useNews();
-    const [savedArticles, setSavedArticles] = useState<any[]>([]);
 
-    useEffect(() => {
-        if (isInitialized && allNews.length > 0) {
-            setSavedArticles(allNews.filter(item => bookmarks.includes(item.id)));
-        }
+    const savedArticles = useMemo<SavedArticle[]>(() => {
+        if (!isInitialized || allNews.length === 0) return [];
+        return allNews.filter(item => bookmarks.includes(item.id));
     }, [bookmarks, isInitialized, allNews]);
 
     if (!isInitialized) return (
