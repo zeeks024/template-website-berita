@@ -1,18 +1,27 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { newsData } from '@/data/news';
+import { getCurrentUser, requireAuth } from '@/lib/auth';
 
-// GET: Fetch all articles (From DB with Fallback to Static)
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
         const status = searchParams.get('status');
+        const myArticles = searchParams.get('my') === 'true';
 
-        const whereClause = status === 'all' ? {} : { status: 'published' };
+        let whereClause: Record<string, unknown> = status === 'all' ? {} : { status: 'published' };
+
+        if (myArticles) {
+            const user = await getCurrentUser();
+            if (user) {
+                whereClause = { ...whereClause, authorId: user.userId };
+            }
+        }
 
         const articles = await prisma.article.findMany({
             where: whereClause,
-            orderBy: { createdAt: 'desc' }
+            orderBy: { createdAt: 'desc' },
+            include: { authorUser: { select: { id: true, name: true } } }
         });
 
         const parsedArticles = articles.map(article => ({
@@ -22,24 +31,21 @@ export async function GET(request: Request) {
         }));
 
         return NextResponse.json(parsedArticles);
-    } catch (error) {
-        console.warn("Database connection failed, falling back to static data.");
-        // Fallback to static data if DB fails
+    } catch {
         return NextResponse.json(newsData);
     }
 }
 
-// POST: Create a new article (Admin)
 export async function POST(request: Request) {
     try {
+        const user = await requireAuth();
+        
         const body = await request.json();
 
-        // Basic validation
         if (!body.title || !body.slug) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        // Ensure slug uniqueness
         let uniqueSlug = body.slug;
         let counter = 1;
 
@@ -55,7 +61,8 @@ export async function POST(request: Request) {
                 summary: body.summary || '',
                 content: body.content || '',
                 category: body.category || 'Umum',
-                author: body.author || 'Redaksi',
+                author: user.name,
+                authorId: user.userId,
                 image: body.image || '',
                 gallery: body.gallery ? JSON.stringify(body.gallery) : undefined,
                 status: body.status || 'draft',
@@ -65,7 +72,7 @@ export async function POST(request: Request) {
                 metaTitle: body.metaTitle || '',
                 metaDesc: body.metaDesc || '',
                 tags: body.tags ? JSON.stringify(body.tags) : undefined,
-                publishedAt: body.publishedAt || 'Baru saja',
+                publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
                 readTime: body.readTime || '3 menit',
                 featured: body.featured || false
             }
@@ -78,10 +85,13 @@ export async function POST(request: Request) {
         };
 
         return NextResponse.json(parsedArticle);
-    } catch (error: any) {
-        console.error("Error creating article:", error);
+    } catch (error: unknown) {
+        if (error instanceof Error && error.message === 'UNAUTHORIZED') {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         return NextResponse.json(
-            { error: 'Failed to create article', details: error.message },
+            { error: 'Failed to create article', details: errorMessage },
             { status: 500 }
         );
     }

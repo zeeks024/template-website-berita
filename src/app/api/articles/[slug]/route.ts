@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getNewsBySlug } from '@/data/news';
+import { getCurrentUser } from '@/lib/auth';
 
 type Props = {
     params: Promise<{ slug: string }>
 }
 
-// GET: Fetch single article (DB with Fallback)
 export async function GET(
     request: Request,
     { params }: Props
@@ -18,14 +18,12 @@ export async function GET(
         });
 
         if (!article) {
-            // Try fallback if not found in DB (might be static data only)
             const staticArticle = getNewsBySlug(slug);
             if (staticArticle) return NextResponse.json(staticArticle);
 
             return NextResponse.json({ error: 'Article not found' }, { status: 404 });
         }
 
-        // GET: Parse before returning
         const parsedArticle = {
             ...article,
             tags: article.tags ? JSON.parse(article.tags) : [],
@@ -33,8 +31,7 @@ export async function GET(
         };
 
         return NextResponse.json(parsedArticle);
-    } catch (error) {
-        console.warn("Database connection failed, falling back to static data.");
+    } catch {
         const staticArticle = getNewsBySlug(slug);
         if (staticArticle) return NextResponse.json(staticArticle);
 
@@ -42,14 +39,27 @@ export async function GET(
     }
 }
 
-// PUT: Update article
 export async function PUT(
     request: Request,
     { params }: Props
 ) {
     try {
+        const user = await getCurrentUser();
+        if (!user) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
         const { slug } = await params;
         const body = await request.json();
+
+        const article = await prisma.article.findUnique({ where: { slug } });
+        if (!article) {
+            return NextResponse.json({ error: 'Article not found' }, { status: 404 });
+        }
+
+        if (user.role !== 'ADMIN' && article.authorId !== user.userId) {
+            return NextResponse.json({ error: 'Forbidden: You can only edit your own articles' }, { status: 403 });
+        }
 
         const updated = await prisma.article.update({
             where: { slug },
@@ -69,12 +79,12 @@ export async function PUT(
                 metaDesc: body.metaDesc,
                 tags: body.tags ? JSON.stringify(body.tags) : undefined,
                 readTime: body.readTime,
-                publishedAt: body.publishedAt,
+                featured: body.featured !== undefined ? body.featured : undefined,
+                publishedAt: body.publishedAt ? new Date(body.publishedAt) : undefined,
                 updatedAt: new Date()
             }
         });
 
-        // Parse response for consistency
         const parsedUpdated = {
             ...updated,
             tags: updated.tags ? JSON.parse(updated.tags) : [],
@@ -82,25 +92,38 @@ export async function PUT(
         };
 
         return NextResponse.json(parsedUpdated);
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: 'Failed to update article' }, { status: 500 });
     }
 }
 
-// DELETE: Remove article
 export async function DELETE(
     request: Request,
     { params }: Props
 ) {
     try {
+        const user = await getCurrentUser();
+        if (!user) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
         const { slug } = await params;
+
+        const article = await prisma.article.findUnique({ where: { slug } });
+        if (!article) {
+            return NextResponse.json({ error: 'Article not found' }, { status: 404 });
+        }
+
+        if (user.role !== 'ADMIN' && article.authorId !== user.userId) {
+            return NextResponse.json({ error: 'Forbidden: You can only delete your own articles' }, { status: 403 });
+        }
 
         await prisma.article.delete({
             where: { slug }
         });
 
         return NextResponse.json({ success: true });
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: 'Failed to delete article' }, { status: 500 });
     }
 }

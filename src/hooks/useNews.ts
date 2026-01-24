@@ -1,19 +1,21 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { NewsItem } from '@/data/news';
+import { useState, useEffect, useCallback } from 'react';
+import { NewsItem } from '@/types/news';
 
-export function useNews(filterStatus: string = 'published') {
+export function useNews(filterStatus: string = 'published', myArticlesOnly: boolean = false) {
     const [allNews, setAllNews] = useState<NewsItem[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchNews = async () => {
+    const fetchNews = useCallback(async () => {
         try {
-            const res = await fetch(`/api/articles?status=${filterStatus}`);
+            const params = new URLSearchParams({ status: filterStatus });
+            if (myArticlesOnly) {
+                params.set('my', 'true');
+            }
+            const res = await fetch(`/api/articles?${params.toString()}`);
             const data = await res.json();
             if (Array.isArray(data)) {
-                // Map Prisma Article to NewsItem interface if needed
-                // Currently they match closely enough, but handling 'content' vs not having it in list might be optimization later
                 setAllNews(data as NewsItem[]);
             }
         } catch (error) {
@@ -21,11 +23,11 @@ export function useNews(filterStatus: string = 'published') {
         } finally {
             setLoading(false);
         }
-    };
+    }, [filterStatus, myArticlesOnly]);
 
     useEffect(() => {
         fetchNews();
-    }, []);
+    }, [fetchNews]);
 
     // Placeholder functions for compatibility - enabled later for Admin
     const addArticle = async (article: NewsItem) => {
@@ -74,8 +76,7 @@ export function useNews(filterStatus: string = 'published') {
         }
     };
 
-    // Use the API route we created earlier for tracking views
-    const incrementView = (slug: string) => { };
+    const incrementView = () => { };
 
     return { allNews, loading, addArticle, updateArticle, deleteArticle, incrementView };
 }
