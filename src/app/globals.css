@@ -2,6 +2,50 @@
 
 /* ===== SERAYU V2: CYAN/DARK THEME ===== */
 
+/* ===== ACCESSIBILITY: Font Size Scaling ===== */
+html.font-normal {
+    font-size: 16px;
+}
+
+html.font-large {
+    font-size: 19.2px; /* +20% */
+}
+
+html.font-xlarge {
+    font-size: 22.4px; /* +40% */
+}
+
+/* ===== ACCESSIBILITY: High Contrast Mode ===== */
+html.high-contrast {
+    --muted-foreground: 215 20% 30%; /* Darker for better contrast */
+}
+
+html.dark.high-contrast {
+    --muted-foreground: 215 20% 80%; /* Lighter for better contrast */
+}
+
+html.high-contrast img {
+    filter: contrast(1.1);
+}
+
+/* ===== ACCESSIBILITY: Focus Indicators ===== */
+*:focus-visible {
+    outline: 3px solid hsl(186 80% 60%);
+    outline-offset: 2px;
+}
+
+/* ===== ACCESSIBILITY: Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
 /* Selection */
 ::selection {
     background-color: rgba(6, 182, 212, 0.3);
@@ -81,69 +125,80 @@ html {
 
 @layer base {
     :root {
-        --background: 210 40% 98%;
-        /* Slightly off-white for premium feel */
-        --foreground: 222.2 47.4% 11.2%;
-        /* Deep Navy/Slate */
+        --background: 210 20% 98%;
+        /* Cool White */
+        --foreground: 220 40% 10%;
+        /* Deep Charcoal */
 
         --card: 0 0% 100%;
-        --card-foreground: 222.2 47.4% 11.2%;
+        --card-foreground: 220 40% 10%;
 
         --popover: 0 0% 100%;
-        --popover-foreground: 222.2 47.4% 11.2%;
+        --popover-foreground: 220 40% 10%;
 
-        --primary: 192 90% 36%;
-        /* Cyan 700 - Darker for readability on light bg */
+        --primary: 190 90% 35%;
+        /* Cyan 700 - Elegant Teal */
         --primary-foreground: 210 40% 98%;
 
-        --secondary: 210 40% 96.1%;
-        --secondary-foreground: 222.2 47.4% 11.2%;
+        --secondary: 210 20% 96%;
+        --secondary-foreground: 220 40% 10%;
 
-        --muted: 210 40% 96.1%;
-        --muted-foreground: 215.4 16.3% 46.9%;
+        --muted: 210 20% 96%;
+        --muted-foreground: 215 20% 50%;
 
-        --accent: 210 40% 96.1%;
-        --accent-foreground: 222.2 47.4% 11.2%;
+        --accent: 190 80% 96%;
+        --accent-foreground: 190 90% 35%;
 
         --destructive: 0 84.2% 60.2%;
         --destructive-foreground: 210 40% 98%;
 
         --border: 214.3 31.8% 91.4%;
         --input: 214.3 31.8% 91.4%;
-        --ring: 188 86% 53%;
+        --ring: 190 90% 35%;
 
-        --radius: 0.5rem;
+        --radius: 0.75rem;
     }
 
     .dark {
-        --background: 195 33% 3%;
-        /* #05090a converted approx to HSL */
+        --background: 200 50% 3%;
+        /* Deep Abyss Blue */
         --foreground: 210 40% 98%;
 
-        --card: 195 29% 6%;
-        /* #0a1214 approx */
+        --card: 200 40% 6%;
+        /* Darker than BG for depth */
         --card-foreground: 210 40% 98%;
 
-        --popover: 195 29% 6%;
+        --popover: 200 40% 6%;
         --popover-foreground: 210 40% 98%;
 
-        --primary: 188 86% 53%;
-        --primary-foreground: 222.2 47.4% 11.2%;
+        --primary: 186 80% 60%;
+        /* Bright Cyan/Teal */
+        --primary-foreground: 200 50% 3%;
 
-        --secondary: 217.2 32.6% 17.5%;
+        --secondary: 200 30% 12%;
         --secondary-foreground: 210 40% 98%;
 
-        --muted: 217.2 32.6% 17.5%;
-        --muted-foreground: 215 20.2% 65.1%;
+        --muted: 200 30% 12%;
+        --muted-foreground: 215 20% 65%;
 
-        --accent: 217.2 32.6% 17.5%;
-        --accent-foreground: 210 40% 98%;
+        --accent: 186 80% 60%;
+        --accent-foreground: 200 50% 3%;
 
         --destructive: 0 62.8% 30.6%;
         --destructive-foreground: 210 40% 98%;
 
-        --border: 217.2 32.6% 17.5%;
-        --input: 217.2 32.6% 17.5%;
-        --ring: 188 86% 53%;
+        --border: 200 30% 12%;
+        --input: 200 30% 12%;
+        --ring: 186 80% 60%;
+    }
+}
+
+@layer utilities {
+    .font-serif {
+        font-family: var(--font-serif), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    }
+    
+    .text-balance {
+        text-wrap: balance;
     }
 }
