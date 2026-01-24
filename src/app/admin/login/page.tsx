@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Lock, ArrowRight, Mail } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { Lock, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import FadeIn from '@/components/ui/FadeIn';
 
@@ -10,7 +10,6 @@ export default function LoginPage() {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
     const searchParams = useSearchParams();
     const verified = searchParams.get('verified');
 
@@ -29,12 +28,11 @@ export default function LoginPage() {
             const data = await res.json();
 
             if (res.ok) {
-                router.push('/admin');
-                router.refresh();
+                window.location.href = '/admin';
             } else {
                 setError(data.error || 'Login gagal.');
             }
-        } catch (err) {
+        } catch {
             setError('Terjadi kesalahan koneksi.');
         } finally {
             setLoading(false);

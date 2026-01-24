@@ -5,12 +5,17 @@ import { useState } from 'react';
 import Link from 'next/link';
 import {
     FileText, Eye, Grid, Search, Plus,
-    Edit, Trash2, ExternalLink, Filter
+    Edit, Trash2, ExternalLink, PenTool, 
+    FolderOpen, BarChart3, Clock, Activity, Users
 } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
+import { useUser } from './UserContext';
+import { Card, StatCard, Badge, QuickActions } from '@/components/admin/ui';
 
 export default function AdminDashboard() {
-    const { allNews, loading, deleteArticle } = useNews('all');
+    const user = useUser();
+    const isAdmin = user.role === 'ADMIN';
+    const { allNews, loading, deleteArticle } = useNews('all', !isAdmin);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
 
@@ -20,16 +25,30 @@ export default function AdminDashboard() {
         </div>
     );
 
-    // Stats
     const totalArticles = allNews.length;
     const totalViews = allNews.reduce((sum, item) => sum + (item.views || 0), 0);
+    const draftCount = allNews.filter(n => n.status === 'draft').length;
+    
     const categoryCounts: Record<string, number> = {};
     allNews.forEach(news => {
         categoryCounts[news.category] = (categoryCounts[news.category] || 0) + 1;
     });
     const topCategory = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || '-';
 
-    // Filters
+    const adminActions = [
+        { icon: <PenTool size={24} />, label: 'Tulis Artikel', href: '/admin/create', color: 'cyan' },
+        { icon: <FolderOpen size={24} />, label: 'Kategori', href: '/admin/categories', color: 'purple' },
+        { icon: <Users size={24} />, label: 'Kelola Users', href: '/admin/users', color: 'amber' },
+        { icon: <ExternalLink size={24} />, label: 'Lihat Website', href: '/', color: 'emerald' },
+    ];
+
+    const writerActions = [
+        { icon: <PenTool size={24} />, label: 'Tulis Artikel', href: '/admin/create', color: 'cyan' },
+        { icon: <FileText size={24} />, label: 'Artikel Saya', href: '/admin', color: 'emerald' },
+        { icon: <Clock size={24} />, label: 'Draft', href: '/admin?status=draft', color: 'amber' },
+        { icon: <ExternalLink size={24} />, label: 'Lihat Website', href: '/', color: 'purple' },
+    ];
+
     const filteredNews = allNews.filter(item => {
         const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
         const widthStatus = item.status || 'published';
@@ -41,8 +60,14 @@ export default function AdminDashboard() {
         <FadeIn>
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h1 className="text-3xl font-black uppercase tracking-tight text-white mb-2">Dashboard</h1>
-                    <p className="text-white/40 text-sm">Ringkasan performa konten dan manajemen artikel.</p>
+                    <h1 className="text-3xl font-black uppercase tracking-tight text-white mb-2">
+                        Selamat Datang, {user.name || 'User'}!
+                    </h1>
+                    <p className="text-white/40 text-sm">
+                        {isAdmin 
+                            ? 'Kelola portal berita dan pantau performa konten.' 
+                            : `Kamu memiliki ${draftCount} artikel draft yang perlu diselesaikan.`}
+                    </p>
                 </div>
                 <Link href="/admin/create" className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-full font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-all hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]">
                     <Plus size={16} />
@@ -50,58 +75,71 @@ export default function AdminDashboard() {
                 </Link>
             </div>
 
-            {/* Stats Cards */}
-            <div className="grid md:grid-cols-3 gap-6 mb-12">
-                <div className="p-6 rounded-[2rem] bg-[#0a1214] border border-white/5 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-500">
-                        <FileText size={100} />
-                    </div>
-                    <div className="relative z-10">
-                        <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 mb-4">
-                            <FileText size={24} />
-                        </div>
-                        <h3 className="text-4xl font-black text-white mb-1">{totalArticles}</h3>
-                        <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Total Artikel</p>
-                    </div>
-                </div>
-
-                <div className="p-6 rounded-[2rem] bg-[#0a1214] border border-white/5 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-500">
-                        <Eye size={100} />
-                    </div>
-                    <div className="relative z-10">
-                        <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-4">
-                            <Eye size={24} />
-                        </div>
-                        <h3 className="text-4xl font-black text-white mb-1">{totalViews.toLocaleString()}</h3>
-                        <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Total Pembaca</p>
-                    </div>
-                </div>
-
-                <div className="p-6 rounded-[2rem] bg-[#0a1214] border border-white/5 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-500">
-                        <Grid size={100} />
-                    </div>
-                    <div className="relative z-10">
-                        <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400 mb-4">
-                            <Grid size={24} />
-                        </div>
-                        <h3 className="text-4xl font-black text-white mb-1 capitalize truncate">{topCategory}</h3>
-                        <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Kategori Populer</p>
-                    </div>
-                </div>
+            <div className="mb-8">
+                <QuickActions actions={isAdmin ? adminActions : writerActions} />
             </div>
 
-            {/* Content Table */}
-            <div className="bg-[#0a1214] border border-white/5 rounded-[2rem] overflow-hidden">
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+                <StatCard 
+                    icon={<FileText size={24} />}
+                    iconColor="cyan"
+                    value={totalArticles}
+                    label="Total Artikel"
+                    trend={{ value: 12, isUp: true }}
+                />
+                <StatCard 
+                    icon={<Eye size={24} />}
+                    iconColor="emerald"
+                    value={totalViews.toLocaleString()}
+                    label="Total Pembaca"
+                    trend={{ value: 5, isUp: true }}
+                />
+                <StatCard 
+                    icon={<Grid size={24} />}
+                    iconColor="purple"
+                    value={topCategory}
+                    label="Kategori Populer"
+                />
+            </div>
+
+            <Card className="mb-8">
+                <div className="flex items-center justify-between mb-6">
+                    <h3 className="font-bold text-white uppercase tracking-wider text-sm flex items-center gap-2">
+                        <Activity size={16} className="text-cyan-400" />
+                        Aktivitas Terbaru
+                    </h3>
+                </div>
+                <div className="space-y-1">
+                    {allNews.slice(0, 5).map(article => (
+                        <div key={article.id} className="flex items-center justify-between py-3 border-b border-white/5 last:border-0 hover:bg-white/5 px-3 -mx-3 rounded-lg transition-colors">
+                            <div className="flex items-center gap-4">
+                                <Badge variant={(article.status || 'published') === 'published' ? 'success' : 'warning'} dot>
+                                    {article.status || 'Published'}
+                                </Badge>
+                                <span className="text-white font-medium text-sm truncate max-w-xs md:max-w-md">{article.title}</span>
+                            </div>
+                            <span className="text-white/30 text-xs font-mono">{article.publishedAt}</span>
+                        </div>
+                    ))}
+                    {allNews.length === 0 && (
+                        <div className="text-white/30 text-sm text-center py-4">Belum ada aktivitas.</div>
+                    )}
+                </div>
+            </Card>
+
+            <Card className="p-0 overflow-hidden">
                 <div className="p-6 border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
-                        <h3 className="font-bold text-white">Semua Artikel</h3>
-                        <span className="px-2 py-1 bg-white/5 rounded-md text-xs font-mono text-white/40">{filteredNews.length}</span>
+                        <FileText size={16} className="text-cyan-400" />
+                        <h3 className="font-bold text-white uppercase tracking-wider text-sm">
+                            {isAdmin ? 'Semua Artikel' : 'Artikel Saya'}
+                        </h3>
+                        <span className="px-2 py-1 bg-white/5 rounded-md text-xs font-mono text-white/40">
+                            {filteredNews.length}
+                        </span>
                     </div>
 
                     <div className="flex items-center gap-3">
-                        {/* Filter Tabs */}
                         <div className="flex bg-black/20 p-1 rounded-xl">
                             {['all', 'published', 'draft'].map(status => (
                                 <button
@@ -117,7 +155,6 @@ export default function AdminDashboard() {
                             ))}
                         </div>
 
-                        {/* Search */}
                         <div className="relative">
                             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
                             <input
@@ -158,17 +195,12 @@ export default function AdminDashboard() {
                                         </span>
                                     </td>
                                     <td className="p-6">
-                                        <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${(item.status || 'published') === 'published'
-                                            ? 'bg-emerald-500/10 text-emerald-400'
-                                            : 'bg-amber-500/10 text-amber-400'
-                                            }`}>
-                                            <span className={`w-1.5 h-1.5 rounded-full ${(item.status || 'published') === 'published' ? 'bg-emerald-400' : 'bg-amber-400'
-                                                }`}></span>
+                                        <Badge variant={(item.status || 'published') === 'published' ? 'success' : 'warning'} dot>
                                             {item.status || 'Published'}
-                                        </span>
+                                        </Badge>
                                     </td>
                                     <td className="p-6 text-right">
-                                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="flex items-center justify-end gap-2">
                                             <Link href={`/article/${item.slug}`} target="_blank" className="p-2 rounded-lg hover:bg-cyan-500/20 text-white/40 hover:text-cyan-400 transition-all" title="Lihat">
                                                 <ExternalLink size={16} />
                                             </Link>
@@ -197,7 +229,7 @@ export default function AdminDashboard() {
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </Card>
         </FadeIn>
     );
 }
