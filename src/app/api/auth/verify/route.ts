@@ -22,14 +22,13 @@ export async function GET(request: Request) {
             where: { id: user.id },
             data: {
                 isVerified: true,
-                verificationToken: null, // Consume token
+                verificationToken: null,
             },
         });
 
-        // Redirect to login with success message
-        return NextResponse.redirect(new URL('/login?verified=true', request.url));
+        return NextResponse.json({ success: true, message: 'Email verified successfully' });
 
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: 'Verification failed' }, { status: 500 });
     }
 }

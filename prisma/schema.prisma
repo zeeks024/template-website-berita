@@ -22,31 +22,33 @@ model ArticleView {
 }
 
 model Article {
-  id            String   @id @default(cuid())
-  slug          String   @unique
+  id            String    @id @default(cuid())
+  slug          String    @unique
   title         String
   summary       String
   content       String
   category      String
   author        String
+  authorId      String?
+  authorUser    User?     @relation(fields: [authorId], references: [id])
   image         String?
-  gallery       String? // Stored as JSON string
-  status        String   @default("draft") // draft, published, archived
+  gallery       String?
+  status        String    @default("draft")
   excerpt       String?
   imageCaption  String?
   imageCredit   String?
   metaTitle     String?
   metaDesc      String?
-  tags          String? // Stored as JSON string array
+  tags          String?
   editor        String?
   lastUpdatedBy String?
-  publishedAt   String // Storing as string to match current format (e.g. "2 jam lalu"), can be enhanced to DateTime later
+  publishedAt   DateTime?
   readTime      String
-  featured      Boolean  @default(false)
+  featured      Boolean   @default(false)
   trendingRank  Int?
-  views         Int      @default(0)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  views         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 enum Role {
@@ -64,6 +66,7 @@ model User {
   verificationToken String?
   resetToken        String?
   resetTokenExpiry  DateTime?
+  articles          Article[]
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 }

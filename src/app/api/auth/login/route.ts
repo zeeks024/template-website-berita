@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { SignJWT } from 'jose';
+import { getEncodedSecret, AUTH_CONFIG } from '@/lib/auth-config';
 
 export async function POST(request: Request) {
     try {
@@ -29,8 +30,8 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Please verify your email first' }, { status: 403 });
         }
 
-        // Create JWT
-        const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'fallback-secret-key-123');
+        // Create JWT using centralized config
+        const secret = getEncodedSecret();
         const token = await new SignJWT({
             sub: user.id,
             email: user.email,
@@ -52,13 +53,7 @@ export async function POST(request: Request) {
             }
         });
 
-        response.cookies.set('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 60 * 60 * 24, // 24 hours
-            path: '/',
-        });
+        response.cookies.set(AUTH_CONFIG.cookieName, token, AUTH_CONFIG.cookieOptions);
 
         return response;
 

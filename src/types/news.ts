@@ -1,0 +1,26 @@
+export type NewsItem = {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  content: string;
+  category: string;
+  author: string;
+  publishedAt: string;
+  readTime: string;
+  image: string;
+  gallery?: string[];
+  views?: number;
+  featured?: boolean;
+  trendingRank?: number;
+  status?: 'draft' | 'published' | 'archived';
+  excerpt?: string;
+  imageCaption?: string;
+  imageCredit?: string;
+  metaTitle?: string;
+  metaDesc?: string;
+  tags?: string[];
+  editor?: string;
+  lastUpdatedBy?: string;
+  createdAt?: string | Date;
+};
