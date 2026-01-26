@@ -106,14 +106,25 @@ export default function AdminSidebar({
                 </nav>
 
                 <div className="p-6 border-t border-border">
-                    <div className="mb-4 px-4 py-2 bg-muted rounded-lg">
-                        <p className="text-xs text-muted-foreground">Logged in as</p>
-                        <p className="text-sm font-medium text-foreground truncate">{user.name}</p>
-                        <span className={`inline-block mt-1 px-2 py-0.5 rounded text-2xs font-bold uppercase tracking-wider ${
-                            isAdmin ? 'bg-cyan-500/20 text-cyan-400' : 'bg-emerald-500/20 text-emerald-400'
-                        }`}>
-                            {isAdmin ? 'Admin' : 'Penulis'}
-                        </span>
+                    <div className="mb-4 p-4 bg-gradient-to-br from-muted to-muted/50 rounded-2xl border border-border">
+                        <div className="flex items-center gap-3">
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold ${
+                                isAdmin 
+                                    ? 'bg-gradient-to-br from-cyan-500 to-cyan-600 text-white' 
+                                    : 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white'
+                            }`}>
+                                {user.name?.charAt(0).toUpperCase() || 'U'}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-bold text-foreground truncate">{user.name}</p>
+                                <div className="flex items-center gap-2 mt-0.5">
+                                    <span className={`w-1.5 h-1.5 rounded-full ${isAdmin ? 'bg-cyan-400' : 'bg-emerald-400'}`} />
+                                    <span className="text-2xs font-medium text-muted-foreground uppercase tracking-wider">
+                                        {isAdmin ? 'Administrator' : 'Penulis'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <button
                         onClick={handleLogout}
