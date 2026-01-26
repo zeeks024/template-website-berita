@@ -31,10 +31,6 @@ export default function HeroSection({ articles }: HeroSectionProps) {
                 <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
                     
                     <div className="w-full lg:w-5/12 text-center lg:text-left space-y-8 z-10">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-50 dark:bg-cyan-900/20 border border-cyan-100 dark:border-cyan-800/50 text-cyan-700 dark:text-cyan-300 text-sm font-medium animate-in fade-in slide-in-from-bottom-4 duration-700">
-                            <span>🌊</span>
-                            <span className="tracking-wide">Media Komunitas Banjarnegara</span>
-                        </div>
                         
                         <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-foreground leading-[1.1] animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
                             Cerita dari <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-emerald-600 dark:from-cyan-400 dark:to-emerald-400">Serayu.</span>

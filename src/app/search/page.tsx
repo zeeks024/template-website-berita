@@ -135,7 +135,7 @@ function SearchResults() {
                     </div>
 
                     {!query ? (
-                        <div className="text-center py-24 bg-[#0a1214] border border-white/5 rounded-3xl">
+                        <div className="text-center py-24 bg-admin-surface border border-white/5 rounded-3xl">
                             <div className="w-24 h-24 mx-auto bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 rounded-full flex items-center justify-center mb-8">
                                 <SearchIcon size={48} className="text-cyan-400" />
                             </div>
@@ -160,9 +160,9 @@ function SearchResults() {
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {filteredNews.map((item, index) => (
                                 <FadeIn key={item.id} delay={index * 0.05}>
-                                    <Link href={`/article/${item.slug}`} className="group block h-full bg-[#0a1214] border border-white/5 rounded-3xl overflow-hidden hover:border-white/20 transition-all duration-500 hover:transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-900/20">
+                                    <Link href={`/article/${item.slug}`} className="group block h-full bg-admin-surface border border-white/5 rounded-3xl overflow-hidden hover:border-white/20 transition-all duration-500 hover:transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-900/20">
                                         <div className="relative aspect-[16/9] overflow-hidden">
-                                            <div className="absolute inset-0 bg-gradient-to-t from-[#0a1214] to-transparent opacity-60 z-10" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-admin-surface to-transparent opacity-60 z-10" />
                                             <Image
                                                 src={item.image}
                                                 alt={item.title}
@@ -171,13 +171,13 @@ function SearchResults() {
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             />
                                             <div className="absolute top-4 left-4 z-20">
-                                                <span className="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-bold uppercase tracking-wider text-white">
+                                                <span className="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/10 rounded-full text-2xs font-bold uppercase tracking-wider text-white">
                                                     {item.category}
                                                 </span>
                                             </div>
                                         </div>
                                         <div className="p-6">
-                                            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-white/40 mb-3">
+                                            <div className="flex items-center gap-2 text-2xs font-bold uppercase tracking-wider text-white/40 mb-3">
                                                 <span>{item.publishedAt}</span>
                                                 <span>•</span>
                                                 <span className="text-cyan-400">{item.readTime || '3 min'} read</span>
@@ -197,7 +197,7 @@ function SearchResults() {
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-24 bg-[#0a1214] border border-white/5 rounded-3xl">
+                        <div className="text-center py-24 bg-admin-surface border border-white/5 rounded-3xl">
                             <div className="w-24 h-24 mx-auto bg-white/5 rounded-full flex items-center justify-center mb-8">
                                 <SearchIcon size={48} className="text-white/20" />
                             </div>

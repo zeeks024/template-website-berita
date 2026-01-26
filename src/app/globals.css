@@ -190,14 +190,18 @@ html {
         --border: 200 30% 12%;
         --input: 200 30% 12%;
         --ring: 186 80% 60%;
+
+        /* Admin Dashboard Colors */
+        --admin-bg: 195 33% 2%;
+        /* #05090a - Deepest background */
+        --admin-surface: 192 27% 6%;
+        /* #0a1214 - Card/panel surfaces */
+        --admin-surface-hover: 190 24% 9%;
+        /* #0f1b1e - Hover state */
     }
 }
 
 @layer utilities {
-    .font-serif {
-        font-family: var(--font-serif), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-    }
-    
     .text-balance {
         text-wrap: balance;
     }

@@ -16,7 +16,10 @@ const getCategoryTitle = (slug: string): string => {
     const titles: Record<string, string> = {
         'opini': 'Sudut Opini',
         'cerita': 'Cerita Rakyat',
+        'sosok-inspiratif': 'Sosok Inspiratif',
         'sosok inspiratif': 'Sosok Inspiratif',
+        'sosok': 'Sosok Inspiratif',
+        'sudut-kota': 'Lensa Kota',
         'sudut kota': 'Lensa Kota',
         'potensi': 'Potensi & Unggulan',
     };
@@ -31,34 +34,44 @@ export default function CategoryPage({ params }: Props) {
     if (loading) {
         return (
             <div className="min-h-screen pt-32 px-6 flex items-center justify-center">
-                <span className="text-white/50 animate-pulse text-xs font-bold uppercase tracking-widest">Memuat Kategori...</span>
+                <span className="text-muted-foreground animate-pulse text-xs font-bold uppercase tracking-widest">Memuat Kategori...</span>
             </div>
         );
     }
 
     const decodedSlug = decodeURIComponent(slug).toLowerCase().replace(/-/g, ' ');
     const categoryNews = allNews.filter(
-        item => item.category.toLowerCase() === decodedSlug
+        item => {
+            const cat = item.category.toLowerCase();
+            // Handle variations of category names
+            if (decodedSlug === 'sosok inspiratif' || decodedSlug === 'sosok') {
+                return cat.includes('sosok');
+            }
+            if (decodedSlug === 'sudut kota') {
+                return cat.includes('sudut');
+            }
+            return cat === decodedSlug;
+        }
     );
     const categoryTitle = getCategoryTitle(decodedSlug);
 
     return (
         <main className="min-h-screen pt-32 px-6 lg:px-12 max-w-[1600px] mx-auto pb-20">
             {/* Header */}
-            <FadeIn className="mb-16 text-center lg:text-left border-b border-white/10 pb-12">
-                <Link href="/" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/40 hover:text-cyan-400 mb-6 transition-colors">
+            <FadeIn className="mb-16 text-center lg:text-left border-b border-border pb-12">
+                <Link href="/" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 mb-6 transition-colors">
                     <ArrowLeft size={12} /> Kembali ke Beranda
                 </Link>
                 <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
                     <div>
                         <span className="text-cyan-500 font-bold uppercase tracking-widest text-xs mb-2 block">Kategori</span>
-                        <h1 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-white/40">
+                        <h1 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-foreground to-muted-foreground">
                             {categoryTitle}
                         </h1>
                     </div>
                         <div className="text-right">
-                            <span className="text-4xl lg:text-6xl font-black text-white/5">{categoryNews.length.toString().padStart(2, '0')}</span>
-                            <span className="text-xs font-bold uppercase tracking-widest text-white/20 block">Artikel Tersedia</span>
+                            <span className="text-4xl lg:text-6xl font-black text-muted-foreground/20">{categoryNews.length.toString().padStart(2, '0')}</span>
+                            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground block">Artikel Tersedia</span>
                         </div>
                 </div>
             </FadeIn>
@@ -68,7 +81,7 @@ export default function CategoryPage({ params }: Props) {
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {categoryNews.map((article, index) => (
                         <FadeIn key={article.id} delay={index * 100}>
-                            <Link href={`/article/${article.slug}`} className="group block bg-[#0a1214] border border-white/5 rounded-[2rem] overflow-hidden hover:bg-[#0f1a1d] transition-all hover:-translate-y-2 h-full flex flex-col">
+                            <Link href={`/article/${article.slug}`} className="group block bg-card border border-border rounded-[2rem] overflow-hidden hover:bg-muted transition-all hover:-translate-y-2 h-full flex flex-col">
                                 <div className="aspect-[4/3] overflow-hidden relative">
                                     <Image
                                         src={article.image}
@@ -77,20 +90,20 @@ export default function CategoryPage({ params }: Props) {
                                         className="object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     />
-                                    <div className="absolute top-4 left-4 px-3 py-1 bg-black/50 backdrop-blur rounded-full border border-white/10">
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-white">{article.category}</span>
+                                    <div className="absolute top-4 left-4 px-3 py-1 bg-background/80 backdrop-blur rounded-full border border-border">
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-foreground">{article.category}</span>
                                     </div>
                                 </div>
                                 <div className="p-8 flex-1 flex flex-col">
                                     <h3 className="text-xl font-bold uppercase leading-tight mb-4 group-hover:text-cyan-400 transition-colors line-clamp-3">
                                         {article.title}
                                     </h3>
-                                    <p className="text-white/40 text-sm leading-relaxed mb-6 font-serif line-clamp-3 flex-1">
+                                    <p className="text-muted-foreground text-sm leading-relaxed mb-6 font-serif line-clamp-3 flex-1">
                                         {article.summary}
                                     </p>
 
-                                    <div className="flex items-center justify-between pt-6 border-t border-white/5 mt-auto">
-                                        <div className="flex items-center gap-2 text-white/30 text-[10px] font-black uppercase tracking-widest">
+                                    <div className="flex items-center justify-between pt-6 border-t border-border mt-auto">
+                                        <div className="flex items-center gap-2 text-muted-foreground text-[10px] font-black uppercase tracking-widest">
                                             <User size={12} />
                                             {article.author}
                                         </div>
@@ -105,12 +118,12 @@ export default function CategoryPage({ params }: Props) {
                     ))}
                 </div>
             ) : (
-                <FadeIn className="min-h-[40vh] flex flex-col items-center justify-center text-center p-12 border border-white/5 rounded-[3rem] bg-[#0a1214]">
-                    <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center mb-6 text-white/20">
+                <FadeIn className="min-h-[40vh] flex flex-col items-center justify-center text-center p-12 border border-border rounded-[3rem] bg-card">
+                    <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mb-6 text-muted-foreground">
                         <Folder size={40} />
                     </div>
-                    <h3 className="text-2xl font-bold uppercase text-white mb-2">Belum ada artikel</h3>
-                    <p className="text-white/40 max-w-md mx-auto mb-8">
+                    <h3 className="text-2xl font-bold uppercase text-foreground mb-2">Belum ada artikel</h3>
+                    <p className="text-muted-foreground max-w-md mx-auto mb-8">
                         Kategori ini sedang dalam tahap kurasi atau belum memiliki artikel yang diterbitkan.
                     </p>
                     <Link href="/" className="px-8 py-3 bg-white text-black rounded-full font-bold text-xs uppercase tracking-widest hover:bg-cyan-400 transition-colors">

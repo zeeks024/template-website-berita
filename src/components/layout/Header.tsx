@@ -1,10 +1,11 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { Search, Menu, X, Mountain } from 'lucide-react';
+import { Search, Menu, X } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import AccessibilityMenu from '@/components/ui/AccessibilityMenu';
 
@@ -57,10 +58,17 @@ export default function Header() {
                     : 'bg-transparent py-4'
                     }`}>
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2 group" onClick={scrollToTop}>
-                        <Mountain size={24} className="text-cyan-600 dark:text-cyan-400" />
+                    <Link href="/" className="flex items-center gap-2.5 group" onClick={scrollToTop}>
+                        <Image 
+                            src="/icon.png" 
+                            alt="Derap Serayu" 
+                            width={36} 
+                            height={36} 
+                            className="h-9 w-9 object-contain"
+                            priority
+                        />
                         <span className="text-xl font-serif font-bold tracking-tight text-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
-                            Derap<span className="text-cyan-600 dark:text-cyan-400">Serayu.</span>
+                            Derap<span className="text-cyan-600 dark:text-cyan-400">Serayu</span>
                         </span>
                     </Link>
 
@@ -129,7 +137,7 @@ export default function Header() {
                             <div className="flex items-center justify-between text-xs text-muted-foreground">
                                 <span>DerapSerayu</span>
                                 <span className="flex items-center gap-1">
-                                    <Mountain size={12} className="text-cyan-600 dark:text-cyan-400" />
+                                    <Image src="/icon.png" alt="" width={12} height={12} className="opacity-70" />
                                     Banjarnegara
                                 </span>
                             </div>

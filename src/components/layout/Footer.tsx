@@ -1,8 +1,9 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Mountain, Instagram, Twitter, Facebook, Youtube, Mail, ArrowRight, MapPin, Phone } from 'lucide-react';
+import { Instagram, Twitter, Facebook, Youtube, Mail, ArrowRight, MapPin, Phone } from 'lucide-react';
 
 export default function Footer() {
     const pathname = usePathname();
@@ -22,11 +23,15 @@ export default function Footer() {
                     {/* Column 1: Brand (4 cols) */}
                     <div className="lg:col-span-4 space-y-8">
                         <Link href="/" className="inline-flex items-center gap-3 group">
-                            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 transition-colors">
-                                <Mountain size={20} className="text-primary" />
-                            </div>
+                            <Image 
+                                src="/icon.png" 
+                                alt="Derap Serayu" 
+                                width={40} 
+                                height={40} 
+                                className="w-10 h-10 object-contain"
+                            />
                             <span className="text-2xl font-serif font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
-                                Derap<span className="text-primary">Serayu.</span>
+                                Derap<span className="text-primary">Serayu</span>
                             </span>
                         </Link>
                         <p className="text-muted-foreground text-base leading-relaxed max-w-sm">

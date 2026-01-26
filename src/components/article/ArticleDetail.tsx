@@ -155,7 +155,7 @@ export default function ArticleDetail({ article, relatedArticles }: Props) {
                                             />
                                         </div>
                                         <div>
-                                            <span className="text-[9px] font-black uppercase text-cyan-600 dark:text-cyan-400 mb-1 block">{item.category}</span>
+                                            <span className="text-3xs font-black uppercase text-cyan-600 dark:text-cyan-400 mb-1 block">{item.category}</span>
                                             <h4 className="font-bold text-sm leading-tight text-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors line-clamp-2">{item.title}</h4>
                                         </div>
                                     </div>

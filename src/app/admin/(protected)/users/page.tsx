@@ -177,7 +177,7 @@ export default function UsersPage() {
                                                             <p className="font-medium text-white flex items-center gap-2">
                                                                 {user.name}
                                                                 {isCurrentUser && (
-                                                                    <span className="text-[10px] px-1.5 py-0.5 bg-cyan-500/20 text-cyan-400 rounded uppercase font-bold">
+                                                                    <span className="text-2xs px-1.5 py-0.5 bg-cyan-500/20 text-cyan-400 rounded uppercase font-bold">
                                                                         Anda
                                                                     </span>
                                                                 )}

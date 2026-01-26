@@ -30,7 +30,7 @@ export default function AccessibilityMenu() {
                     >
                         <div className="p-5 space-y-5">
                             <div>
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-2">
+                                <label className="text-2xs font-bold uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-2">
                                     <Type size={12} />
                                     Ukuran Teks
                                 </label>
@@ -77,7 +77,7 @@ export default function AccessibilityMenu() {
                                     className="w-full flex items-center justify-between gap-3 group"
                                     aria-pressed={highContrast}
                                 >
-                                    <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                                    <span className="flex items-center gap-2 text-2xs font-bold uppercase tracking-widest text-muted-foreground">
                                         <Eye size={12} />
                                         Kontras Tinggi
                                     </span>

@@ -20,7 +20,7 @@ export default function AdminDashboard() {
     const [filterStatus, setFilterStatus] = useState('all');
 
     if (loading) return (
-        <div className="flex items-center justify-center h-64 text-white/40 animate-pulse">
+        <div className="flex items-center justify-center h-64 text-muted-foreground animate-pulse">
             Memuat data dashboard...
         </div>
     );
@@ -60,10 +60,10 @@ export default function AdminDashboard() {
         <FadeIn>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-3xl font-black uppercase tracking-tight text-white mb-2">
+                    <h1 className="text-3xl font-black uppercase tracking-tight text-foreground mb-2">
                         Selamat Datang, {user.name || 'User'}!
                     </h1>
-                    <p className="text-white/40 text-sm">
+                    <p className="text-muted-foreground text-sm">
                         {isAdmin 
                             ? 'Kelola portal berita dan pantau performa konten.' 
                             : `Kamu memiliki ${draftCount} artikel draft yang perlu diselesaikan.`}
@@ -104,50 +104,50 @@ export default function AdminDashboard() {
 
             <Card className="mb-8">
                 <div className="flex items-center justify-between mb-6">
-                    <h3 className="font-bold text-white uppercase tracking-wider text-sm flex items-center gap-2">
+                    <h3 className="font-bold text-foreground uppercase tracking-wider text-sm flex items-center gap-2">
                         <Activity size={16} className="text-cyan-400" />
                         Aktivitas Terbaru
                     </h3>
                 </div>
                 <div className="space-y-1">
                     {allNews.slice(0, 5).map(article => (
-                        <div key={article.id} className="flex items-center justify-between py-3 border-b border-white/5 last:border-0 hover:bg-white/5 px-3 -mx-3 rounded-lg transition-colors">
+                        <div key={article.id} className="flex items-center justify-between py-3 border-b border-border last:border-0 hover:bg-muted px-3 -mx-3 rounded-lg transition-colors">
                             <div className="flex items-center gap-4">
                                 <Badge variant={(article.status || 'published') === 'published' ? 'success' : 'warning'} dot>
                                     {article.status || 'Published'}
                                 </Badge>
-                                <span className="text-white font-medium text-sm truncate max-w-xs md:max-w-md">{article.title}</span>
+                                <span className="text-foreground font-medium text-sm truncate max-w-xs md:max-w-md">{article.title}</span>
                             </div>
-                            <span className="text-white/30 text-xs font-mono">{article.publishedAt}</span>
+                            <span className="text-muted-foreground text-xs font-mono">{article.publishedAt}</span>
                         </div>
                     ))}
                     {allNews.length === 0 && (
-                        <div className="text-white/30 text-sm text-center py-4">Belum ada aktivitas.</div>
+                        <div className="text-muted-foreground text-sm text-center py-4">Belum ada aktivitas.</div>
                     )}
                 </div>
             </Card>
 
             <Card className="p-0 overflow-hidden">
-                <div className="p-6 border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="p-6 border-b border-border flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
                         <FileText size={16} className="text-cyan-400" />
-                        <h3 className="font-bold text-white uppercase tracking-wider text-sm">
+                        <h3 className="font-bold text-foreground uppercase tracking-wider text-sm">
                             {isAdmin ? 'Semua Artikel' : 'Artikel Saya'}
                         </h3>
-                        <span className="px-2 py-1 bg-white/5 rounded-md text-xs font-mono text-white/40">
+                        <span className="px-2 py-1 bg-muted rounded-md text-xs font-mono text-muted-foreground">
                             {filteredNews.length}
                         </span>
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <div className="flex bg-black/20 p-1 rounded-xl">
+                        <div className="flex bg-muted p-1 rounded-xl">
                             {['all', 'published', 'draft'].map(status => (
                                 <button
                                     key={status}
                                     onClick={() => setFilterStatus(status)}
                                     className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${filterStatus === status
-                                        ? 'bg-white/10 text-white'
-                                        : 'text-white/30 hover:text-white/60'
+                                        ? 'bg-background text-foreground'
+                                        : 'text-muted-foreground hover:text-foreground'
                                         }`}
                                 >
                                     {status}
@@ -156,13 +156,13 @@ export default function AdminDashboard() {
                         </div>
 
                         <div className="relative">
-                            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+                            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                             <input
                                 type="text"
                                 placeholder="Cari..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="pl-9 pr-4 py-2 bg-black/20 border border-white/5 rounded-xl text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-cyan-500/50 transition-all w-48"
+                                className="pl-9 pr-4 py-2 bg-muted border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-cyan-500/50 transition-all w-48"
                             />
                         </div>
                     </div>
@@ -171,26 +171,26 @@ export default function AdminDashboard() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="border-b border-white/5 text-2xs font-black uppercase tracking-widest text-white/30 bg-black/20">
+                            <tr className="border-b border-border text-2xs font-black uppercase tracking-widest text-muted-foreground bg-muted">
                                 <th className="p-6">Artikel</th>
                                 <th className="p-6">Kategori</th>
                                 <th className="p-6">Status</th>
                                 <th className="p-6 text-right">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-white/5">
+                        <tbody className="divide-y divide-border">
                             {filteredNews.length > 0 ? filteredNews.map(item => (
-                                <tr key={item.id} className="group hover:bg-white/[0.02] transition-colors">
+                                <tr key={item.id} className="group hover:bg-muted/50 transition-colors">
                                     <td className="p-6">
-                                        <div className="font-bold text-white mb-1 line-clamp-1 group-hover:text-cyan-400 transition-colors">
+                                        <div className="font-bold text-foreground mb-1 line-clamp-1 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
                                             {item.title}
                                         </div>
-                                        <div className="text-xs text-white/40 flex items-center gap-2">
+                                        <div className="text-xs text-muted-foreground flex items-center gap-2">
                                             <span>{item.author}</span> • <span>{item.publishedAt}</span>
                                         </div>
                                     </td>
                                     <td className="p-6">
-                                        <span className="px-2 py-1 rounded bg-white/5 border border-white/5 text-2xs font-bold uppercase tracking-wider text-white/60">
+                                        <span className="px-2 py-1 rounded bg-muted border border-border text-2xs font-bold uppercase tracking-wider text-muted-foreground">
                                             {item.category}
                                         </span>
                                     </td>
@@ -201,17 +201,17 @@ export default function AdminDashboard() {
                                     </td>
                                     <td className="p-6 text-right">
                                         <div className="flex items-center justify-end gap-2">
-                                            <Link href={`/article/${item.slug}`} target="_blank" className="p-2 rounded-lg hover:bg-cyan-500/20 text-white/40 hover:text-cyan-400 transition-all" title="Lihat">
+                                            <Link href={`/article/${item.slug}`} target="_blank" className="p-2 rounded-lg hover:bg-cyan-500/20 text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 transition-all" title="Lihat">
                                                 <ExternalLink size={16} />
                                             </Link>
-                                            <Link href={`/admin/edit/${item.slug}`} className="p-2 rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-all" title="Edit">
+                                            <Link href={`/admin/edit/${item.slug}`} className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-all" title="Edit">
                                                 <Edit size={16} />
                                             </Link>
                                             <button
                                                 onClick={() => {
                                                     if (confirm(`Hapus artikel "${item.title}"?`)) deleteArticle(item.id);
                                                 }}
-                                                className="p-2 rounded-lg hover:bg-red-500/20 text-white/40 hover:text-red-400 transition-all"
+                                                className="p-2 rounded-lg hover:bg-red-500/20 text-muted-foreground hover:text-red-500 dark:hover:text-red-400 transition-all"
                                                 title="Hapus"
                                             >
                                                 <Trash2 size={16} />
@@ -221,7 +221,7 @@ export default function AdminDashboard() {
                                 </tr>
                             )) : (
                                 <tr>
-                                    <td colSpan={4} className="p-12 text-center text-white/30">
+                                    <td colSpan={4} className="p-12 text-center text-muted-foreground">
                                         Tidak ada artikel yang ditemukan.
                                     </td>
                                 </tr>

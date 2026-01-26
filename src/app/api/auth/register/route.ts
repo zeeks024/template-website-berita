@@ -40,7 +40,7 @@ export async function POST(request: Request) {
             to: email,
             subject: 'Verifikasi Email Derap Serayu',
             html: `
-                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="font-family: Inter, system-ui, sans-serif; max-width: 600px; margin: 0 auto;">
                     <h1 style="color: #06b6d4;">Selamat Datang di Derap Serayu!</h1>
                     <p>Halo ${name},</p>
                     <p>Terima kasih telah mendaftar. Silakan klik tombol di bawah ini untuk memverifikasi akun Anda:</p>

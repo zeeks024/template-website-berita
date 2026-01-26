@@ -47,8 +47,8 @@ export default function AdminSidebar({
     ];
 
     return (
-        <div className="min-h-screen bg-[#05090a] flex flex-col lg:flex-row">
-            <header className="lg:hidden border-b border-white/5 bg-[#0a1214] p-4 flex items-center justify-between sticky top-0 z-50">
+        <div className="min-h-screen bg-admin-bg flex flex-col lg:flex-row">
+            <header className="lg:hidden border-b border-white/5 bg-admin-surface p-4 flex items-center justify-between sticky top-0 z-50">
                 <Link href="/" className="flex items-center gap-2">
                     <Mountain size={20} className="text-cyan-500" />
                     <span className="font-bold tracking-tight uppercase text-white">
@@ -68,7 +68,7 @@ export default function AdminSidebar({
             )}
 
             <aside className={`
-                fixed lg:sticky top-0 h-screen w-64 bg-[#0a1214] border-r border-white/5 flex flex-col z-50 transition-transform duration-300
+                fixed lg:sticky top-0 h-screen w-64 bg-admin-surface border-r border-white/5 flex flex-col z-50 transition-transform duration-300
                 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
             `}>
                 <div className="p-8 border-b border-white/5 hidden lg:block">
@@ -78,7 +78,7 @@ export default function AdminSidebar({
                             Banjar<span className="text-cyan-500">negara.</span>
                         </span>
                     </Link>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/30 mt-2 block pl-8">
+                    <span className="text-2xs font-bold uppercase tracking-widest text-white/30 mt-2 block pl-8">
                         {isAdmin ? 'Admin Console' : 'Penulis Console'}
                     </span>
                 </div>
@@ -111,7 +111,7 @@ export default function AdminSidebar({
                     <div className="mb-4 px-4 py-2 bg-white/5 rounded-lg">
                         <p className="text-xs text-white/40">Logged in as</p>
                         <p className="text-sm font-medium text-white truncate">{user.name}</p>
-                        <span className={`inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                        <span className={`inline-block mt-1 px-2 py-0.5 rounded text-2xs font-bold uppercase tracking-wider ${
                             isAdmin ? 'bg-cyan-500/20 text-cyan-400' : 'bg-emerald-500/20 text-emerald-400'
                         }`}>
                             {isAdmin ? 'Admin' : 'Penulis'}

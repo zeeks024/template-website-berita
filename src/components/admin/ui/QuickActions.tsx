@@ -30,7 +30,7 @@ export const QuickActions = ({ actions }: QuickActionsProps) => {
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {actions.map((action, index) => (
         <Link key={index} href={action.href} className="block group">
-          <Card className="h-full flex flex-col items-center justify-center gap-3 p-6 text-center hover:scale-[1.02] hover:border-white/20 hover:bg-[#0f1b1e] transition-all duration-300 cursor-pointer">
+          <Card className="h-full flex flex-col items-center justify-center gap-3 p-6 text-center hover:scale-[1.02] hover:border-white/20 hover:bg-admin-surface-hover transition-all duration-300 cursor-pointer">
             <div className={`p-3 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors ${getColorClasses(action.color)}`}>
               {action.icon}
             </div>

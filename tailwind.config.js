@@ -10,6 +10,11 @@ module.exports = {
         extend: {
             fontFamily: {
                 sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+                serif: ['var(--font-serif)', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
+            },
+            fontSize: {
+                '2xs': ['0.625rem', { lineHeight: '0.875rem' }],
+                '3xs': ['0.5625rem', { lineHeight: '0.75rem' }],
             },
             colors: {
                 border: "hsl(var(--border))",
@@ -36,7 +41,6 @@ module.exports = {
                 accent: {
                     DEFAULT: "hsl(var(--accent))",
                     foreground: "hsl(var(--accent-foreground))",
-                    hover: '#818cf8', // Restore legacy hover color for compatibility
                 },
                 popover: {
                     DEFAULT: "hsl(var(--popover))",
@@ -46,7 +50,11 @@ module.exports = {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
-                dark: '#080808', // Keeping legacy for compatibility
+                admin: {
+                    bg: "hsl(var(--admin-bg))",
+                    surface: "hsl(var(--admin-surface))",
+                    "surface-hover": "hsl(var(--admin-surface-hover))",
+                },
             },
             borderRadius: {
                 lg: "var(--radius)",

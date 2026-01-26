@@ -72,7 +72,7 @@ export default function VisitorChart() {
                                     {val}
                                 </div>
                             </div>
-                            <div className={`text-[11px] font-medium ${isToday ? 'text-cyan-400' : 'text-white/40'}`}>
+                            <div className={`text-2xs font-medium ${isToday ? 'text-cyan-400' : 'text-white/40'}`}>
                                 {orderedDays[i]}
                             </div>
                         </div>

@@ -268,7 +268,7 @@ export default function EditArticlePage({ params }: Props) {
                 </div>
 
                 <div className="space-y-6">
-                    <Card className="sticky top-8 border-amber-500/20 bg-gradient-to-b from-[#0a1214] to-[#0a1214]/80">
+                    <Card className="sticky top-8 border-amber-500/20 bg-gradient-to-b from-admin-surface to-admin-surface/80">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
                                 <Rocket className="text-amber-400" size={20} />
@@ -290,9 +290,9 @@ export default function EditArticlePage({ params }: Props) {
                                         onChange={e => setFormData({ ...formData, status: e.target.value })}
                                         className="w-full appearance-none bg-black/30 border border-white/10 rounded-xl px-4 py-3 pr-10 text-sm text-white focus:border-cyan-500 focus:outline-none cursor-pointer transition-all"
                                     >
-                                        <option value="draft" className="bg-[#0a1214]">Draft (Konsep)</option>
-                                        <option value="published" className="bg-[#0a1214]">Terbitkan Sekarang</option>
-                                        <option value="archived" className="bg-[#0a1214]">Arsipkan</option>
+                                        <option value="draft" className="bg-admin-surface">Draft (Konsep)</option>
+                                        <option value="published" className="bg-admin-surface">Terbitkan Sekarang</option>
+                                        <option value="archived" className="bg-admin-surface">Arsipkan</option>
                                     </select>
                                     <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" />
                                 </div>
@@ -362,7 +362,7 @@ export default function EditArticlePage({ params }: Props) {
                                         value={formData.category}
                                         onChange={e => setFormData({ ...formData, category: e.target.value })}
                                     >
-                                        {categories.map(c => <option key={c} value={c} className="bg-[#0a1214]">{c}</option>)}
+                                        {categories.map(c => <option key={c} value={c} className="bg-admin-surface">{c}</option>)}
                                     </select>
                                     <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" />
                                 </div>
@@ -378,7 +378,7 @@ export default function EditArticlePage({ params }: Props) {
                                     onChange={e => setFormData({ ...formData, tags: e.target.value })}
                                     placeholder="Viral, Tokoh, Wisata..."
                                 />
-                                <p className="text-[10px] text-white/30">Pisahkan dengan koma</p>
+                                <p className="text-2xs text-white/30">Pisahkan dengan koma</p>
                             </div>
 
                             <div className="space-y-2">

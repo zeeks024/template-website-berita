@@ -151,7 +151,7 @@ export default function ImageUploader({ values, onChange }: Props) {
                             </button>
 
                             {idx === 0 && (
-                                <span className="absolute top-3 left-3 z-10 px-2 py-0.5 bg-cyan-500 text-white text-[10px] font-bold uppercase tracking-wider rounded">
+                                <span className="absolute top-3 left-3 z-10 px-2 py-0.5 bg-cyan-500 text-white text-2xs font-bold uppercase tracking-wider rounded">
                                     Cover
                                 </span>
                             )}
@@ -166,7 +166,7 @@ export default function ImageUploader({ values, onChange }: Props) {
                                     type="button"
                                     onClick={() => applyEdit(idx, 'fit')}
                                     disabled={processing}
-                                    className="flex-1 px-2 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[10px] font-medium text-white/60 hover:text-white transition-all flex items-center justify-center gap-1 disabled:opacity-50"
+                                    className="flex-1 px-2 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-2xs font-medium text-white/60 hover:text-white transition-all flex items-center justify-center gap-1 disabled:opacity-50"
                                 >
                                     <Sparkles size={10} />
                                     Blur BG
@@ -175,7 +175,7 @@ export default function ImageUploader({ values, onChange }: Props) {
                                     type="button"
                                     onClick={() => applyEdit(idx, 'crop')}
                                     disabled={processing}
-                                    className="flex-1 px-2 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[10px] font-medium text-white/60 hover:text-white transition-all flex items-center justify-center gap-1 disabled:opacity-50"
+                                    className="flex-1 px-2 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-2xs font-medium text-white/60 hover:text-white transition-all flex items-center justify-center gap-1 disabled:opacity-50"
                                 >
                                     <Scissors size={10} />
                                     Crop
