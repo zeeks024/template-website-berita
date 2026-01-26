@@ -1,9 +1,10 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
-import { LayoutDashboard, PenTool, FolderOpen, Users, ExternalLink, LogOut, Mountain, Menu, X } from 'lucide-react';
+import { LayoutDashboard, PenTool, FolderOpen, Users, ExternalLink, LogOut, Menu, X } from 'lucide-react';
 import { UserProvider, type AuthUser } from './UserContext';
 
 export default function AdminSidebar({ 
@@ -50,9 +51,9 @@ export default function AdminSidebar({
         <div className="min-h-screen bg-admin-bg flex flex-col lg:flex-row">
             <header className="lg:hidden border-b border-border bg-admin-surface p-4 flex items-center justify-between sticky top-0 z-50">
                 <Link href="/" className="flex items-center gap-2">
-                    <Mountain size={20} className="text-cyan-500" />
-                    <span className="font-bold tracking-tight uppercase text-foreground">
-                        Banjar<span className="text-cyan-500">negara.</span>
+                    <Image src="/icon.png" alt="Derap Serayu" width={28} height={28} className="h-7 w-7 object-contain" />
+                    <span className="font-serif font-bold tracking-tight text-foreground">
+                        Derap<span className="text-cyan-600 dark:text-cyan-400">Serayu</span>
                     </span>
                 </Link>
                 <button
@@ -72,13 +73,13 @@ export default function AdminSidebar({
                 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
             `}>
                 <div className="p-8 border-b border-border hidden lg:block">
-                    <Link href="/" className="flex items-center gap-2 group">
-                        <Mountain size={24} className="text-cyan-500" />
-                        <span className="text-lg font-bold tracking-tight uppercase text-foreground">
-                            Banjar<span className="text-cyan-500">negara.</span>
+                    <Link href="/" className="flex items-center gap-2.5 group">
+                        <Image src="/icon.png" alt="Derap Serayu" width={32} height={32} className="h-8 w-8 object-contain" />
+                        <span className="text-lg font-serif font-bold tracking-tight text-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                            Derap<span className="text-cyan-600 dark:text-cyan-400">Serayu</span>
                         </span>
                     </Link>
-                    <span className="text-2xs font-bold uppercase tracking-widest text-muted-foreground mt-2 block pl-8">
+                    <span className="text-2xs font-bold uppercase tracking-widest text-muted-foreground mt-2 block pl-10">
                         {isAdmin ? 'Admin Console' : 'Penulis Console'}
                     </span>
                 </div>

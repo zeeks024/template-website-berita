@@ -204,65 +204,73 @@ export default function EditArticlePage({ params }: Props) {
                     />
 
                     <Card>
-                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
-                            <PenLine size={14} className="text-cyan-500" /> 
-                            Judul Artikel
-                            <span className="text-red-400">*</span>
-                        </label>
-                        <input
-                            required
-                            type="text"
-                            value={formData.title}
-                            onChange={e => setFormData({ ...formData, title: e.target.value })}
-                            placeholder="Ketik judul yang menarik..."
-                            className="w-full bg-muted border border-border rounded-xl p-5 text-xl font-bold text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all"
-                        />
-                    </Card>
+                        <div className="space-y-6">
+                            <div>
+                                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
+                                    <PenLine size={14} className="text-cyan-500" /> 
+                                    Judul Artikel
+                                    <span className="text-red-400">*</span>
+                                </label>
+                                <input
+                                    required
+                                    type="text"
+                                    value={formData.title}
+                                    onChange={e => setFormData({ ...formData, title: e.target.value })}
+                                    placeholder="Ketik judul yang menarik..."
+                                    className="w-full bg-muted border border-border rounded-xl p-5 text-xl font-bold text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                                />
+                            </div>
 
-                    <Card>
-                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
-                            <AlignLeft size={14} className="text-cyan-500" /> 
-                            Ringkasan (Excerpt)
-                        </label>
-                        <textarea
-                            rows={3}
-                            value={formData.excerpt}
-                            onChange={e => setFormData({ ...formData, excerpt: e.target.value })}
-                            placeholder="Tulis ringkasan singkat untuk SEO dan preview..."
-                            className="w-full bg-muted border border-border rounded-xl p-5 text-base text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all resize-none"
-                        />
-                    </Card>
-
-                    <Card>
-                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
-                            <Newspaper size={14} className="text-cyan-500" /> 
-                            Konten Utama
-                            <span className="text-red-400">*</span>
-                        </label>
-                        <div className="rounded-xl overflow-hidden border border-border bg-card">
-                            <RichTextEditor value={formData.content} onChange={val => setFormData({ ...formData, content: val })} />
+                            <div>
+                                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
+                                    <AlignLeft size={14} className="text-cyan-500" /> 
+                                    Ringkasan (Excerpt)
+                                </label>
+                                <textarea
+                                    rows={3}
+                                    value={formData.excerpt}
+                                    onChange={e => setFormData({ ...formData, excerpt: e.target.value })}
+                                    placeholder="Tulis ringkasan singkat untuk SEO dan preview..."
+                                    className="w-full bg-muted border border-border rounded-xl p-5 text-base text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all resize-none"
+                                />
+                            </div>
                         </div>
                     </Card>
 
                     <Card>
-                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
-                            <ImagePlus size={14} className="text-cyan-500" /> 
-                            Media & Gambar
-                        </label>
-                        <ImageUploader values={formData.images} onChange={(vals) => setFormData({ ...formData, images: vals })} />
-                        <div className="grid md:grid-cols-2 gap-4 mt-4">
-                            <input
-                                className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none transition-all"
-                                placeholder="Caption gambar..."
-                                value={formData.imageCaption}
-                                onChange={e => setFormData({ ...formData, imageCaption: e.target.value })}
-                            />
-                            <input
-                                className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none transition-all"
-                                placeholder="Kredit foto (opsional)..."
-                                value={formData.imageCredit}
-                                onChange={e => setFormData({ ...formData, imageCredit: e.target.value })}
-                            />
+                        <div className="space-y-6">
+                            <div>
+                                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
+                                    <Newspaper size={14} className="text-cyan-500" /> 
+                                    Konten Utama
+                                    <span className="text-red-400">*</span>
+                                </label>
+                                <div className="rounded-xl overflow-hidden border border-border bg-card">
+                                    <RichTextEditor value={formData.content} onChange={val => setFormData({ ...formData, content: val })} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
+                                    <ImagePlus size={14} className="text-cyan-500" /> 
+                                    Media & Gambar
+                                </label>
+                                <ImageUploader values={formData.images} onChange={(vals) => setFormData({ ...formData, images: vals })} />
+                                <div className="grid md:grid-cols-2 gap-4 mt-4">
+                                    <input
+                                        className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none transition-all"
+                                        placeholder="Caption gambar..."
+                                        value={formData.imageCaption}
+                                        onChange={e => setFormData({ ...formData, imageCaption: e.target.value })}
+                                    />
+                                    <input
+                                        className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none transition-all"
+                                        placeholder="Kredit foto (opsional)..."
+                                        value={formData.imageCredit}
+                                        onChange={e => setFormData({ ...formData, imageCredit: e.target.value })}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </Card>
                 </div>
