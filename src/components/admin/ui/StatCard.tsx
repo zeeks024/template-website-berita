@@ -47,17 +47,17 @@ export const StatCard = ({ icon, iconColor, value, label, trend }: StatCardProps
   const colors = colorMap[iconColor] || colorMap.cyan;
 
   return (
-    <Card className="relative overflow-hidden group hover:border-white/10 transition-colors duration-300">
+    <Card className="relative overflow-hidden group hover:border-border transition-colors duration-300">
       <div className="flex items-start justify-between relative z-10">
         <div>
-          <p className="text-white/40 text-xs font-bold uppercase tracking-widest mb-1">{label}</p>
-          <h3 className="text-3xl font-black text-white tracking-tight">{value}</h3>
+          <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest mb-1">{label}</p>
+          <h3 className="text-3xl font-black text-foreground tracking-tight">{value}</h3>
           
           {trend && (
             <div className={`flex items-center gap-2 mt-2 text-sm font-medium ${trend.isUp ? 'text-emerald-400' : 'text-red-400'}`}>
               {trend.isUp ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
               <span>{trend.value}%</span>
-              <span className="text-white/20 text-xs font-normal uppercase">vs last month</span>
+              <span className="text-muted-foreground text-xs font-normal uppercase">vs last month</span>
             </div>
           )}
         </div>

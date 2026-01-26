@@ -65,7 +65,7 @@ export default function CategoryPage({ params }: Props) {
                 <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
                     <div>
                         <span className="text-cyan-500 font-bold uppercase tracking-widest text-xs mb-2 block">Kategori</span>
-                        <h1 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-foreground to-muted-foreground">
+                        <h1 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-foreground">
                             {categoryTitle}
                         </h1>
                     </div>
@@ -126,7 +126,7 @@ export default function CategoryPage({ params }: Props) {
                     <p className="text-muted-foreground max-w-md mx-auto mb-8">
                         Kategori ini sedang dalam tahap kurasi atau belum memiliki artikel yang diterbitkan.
                     </p>
-                    <Link href="/" className="px-8 py-3 bg-white text-black rounded-full font-bold text-xs uppercase tracking-widest hover:bg-cyan-400 transition-colors">
+                    <Link href="/" className="px-8 py-3 bg-foreground text-background rounded-full font-bold text-xs uppercase tracking-widest hover:bg-cyan-500 hover:text-white transition-colors">
                         Kembali ke Beranda
                     </Link>
                 </FadeIn>
