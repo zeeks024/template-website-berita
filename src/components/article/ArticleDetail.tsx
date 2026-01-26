@@ -45,7 +45,7 @@ export default function ArticleDetail({ article, relatedArticles }: Props) {
 
                 <div className="absolute bottom-0 left-0 w-full z-20 px-6 lg:px-12 pb-12 max-w-[1600px] mx-auto">
                     <FadeIn>
-                        <div className="bg-background/80 dark:bg-black/60 backdrop-blur-md rounded-2xl p-6 lg:p-8 border border-border/50">
+                        <div className="bg-white dark:bg-black/60 backdrop-blur-md rounded-2xl p-6 lg:p-8 border border-border/50 shadow-xl shadow-black/5 dark:shadow-black/30">
                             {/* Breadcrumb */}
                             <nav aria-label="Breadcrumb" className="mb-6">
                                 <ol className="flex items-center gap-2 text-xs font-medium">
