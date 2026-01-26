@@ -133,40 +133,46 @@ export default function CreateArticlePage() {
                         </div>
                     </Card>
 
-                    <Card>
-                        <div className="space-y-6">
-                            <div>
-                                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
-                                    <Newspaper size={14} className="text-cyan-500" /> 
+                    <div className="border border-border rounded-[2rem] bg-card overflow-hidden">
+                        <div className="border-b border-border px-6 py-4">
+                            <div className="flex items-center gap-2 mb-3">
+                                <Newspaper size={14} className="text-cyan-500" />
+                                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                                     Konten Utama
-                                    <span className="text-red-400">*</span>
-                                </label>
-                                <div className="rounded-xl overflow-hidden border border-border bg-card">
-                                    <RichTextEditor value={formData.content} onChange={val => setFormData({ ...formData, content: val })} />
-                                </div>
+                                </span>
+                                <span className="text-red-400">*</span>
                             </div>
+                            <div className="h-10 w-full border border-border rounded-lg bg-muted flex items-center px-4">
+                                <span className="text-sm text-muted-foreground truncate">
+                                    {formData.title || 'Judul artikel akan muncul di sini...'}
+                                </span>
+                            </div>
+                        </div>
 
-                            <div>
-                                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
-                                    <ImagePlus size={14} className="text-cyan-500" /> 
-                                    Media & Gambar
-                                </label>
-                                <ImageUploader values={formData.images} onChange={(vals) => setFormData({ ...formData, images: vals })} />
-                                <div className="grid md:grid-cols-2 gap-4 mt-4">
-                                    <input
-                                        className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none transition-all"
-                                        placeholder="Caption gambar..."
-                                        value={formData.imageCaption}
-                                        onChange={e => setFormData({ ...formData, imageCaption: e.target.value })}
-                                    />
-                                    <input
-                                        className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none transition-all"
-                                        placeholder="Kredit foto (opsional)..."
-                                        value={formData.imageCredit}
-                                        onChange={e => setFormData({ ...formData, imageCredit: e.target.value })}
-                                    />
-                                </div>
-                            </div>
+                        <div className="min-h-[420px]">
+                            <RichTextEditor value={formData.content} onChange={val => setFormData({ ...formData, content: val })} />
+                        </div>
+                    </div>
+
+                    <Card>
+                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
+                            <ImagePlus size={14} className="text-cyan-500" /> 
+                            Media & Gambar
+                        </label>
+                        <ImageUploader values={formData.images} onChange={(vals) => setFormData({ ...formData, images: vals })} />
+                        <div className="grid md:grid-cols-2 gap-4 mt-4">
+                            <input
+                                className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none transition-all"
+                                placeholder="Caption gambar..."
+                                value={formData.imageCaption}
+                                onChange={e => setFormData({ ...formData, imageCaption: e.target.value })}
+                            />
+                            <input
+                                className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none transition-all"
+                                placeholder="Kredit foto (opsional)..."
+                                value={formData.imageCredit}
+                                onChange={e => setFormData({ ...formData, imageCredit: e.target.value })}
+                            />
                         </div>
                     </Card>
                 </div>

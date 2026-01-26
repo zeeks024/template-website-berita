@@ -79,9 +79,6 @@ export default function AdminSidebar({
                             Derap<span className="text-cyan-600 dark:text-cyan-400">Serayu</span>
                         </span>
                     </Link>
-                    <span className="text-2xs font-bold uppercase tracking-widest text-muted-foreground mt-2 block pl-10">
-                        {isAdmin ? 'Admin Console' : 'Penulis Console'}
-                    </span>
                 </div>
 
                 <nav className="flex-1 p-6 space-y-2 mt-12 lg:mt-0">
