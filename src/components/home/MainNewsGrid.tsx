@@ -44,7 +44,7 @@ export default function MainNewsGrid() {
     return (
         <section className="pb-24">
             <div className="container px-4 mx-auto">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-20">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-20">
                     {categories.map((cat) => (
                         <Link
                             key={cat.name}
@@ -86,7 +86,7 @@ export default function MainNewsGrid() {
                                 </Link>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
                                 {categoryArticles.slice(0, 2).map((article) => (
                                     <Link
                                         href={`/article/${article.slug}`}
@@ -125,7 +125,7 @@ export default function MainNewsGrid() {
                                                         </div>
                                                         <div className="flex flex-col">
                                                             <span className="text-xs font-bold text-foreground">{article.author}</span>
-                                                            <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{article.readTime} baca</span>
+                                                            <span className="text-2xs text-muted-foreground uppercase tracking-wider">{article.readTime} baca</span>
                                                         </div>
                                                     </div>
 

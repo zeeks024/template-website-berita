@@ -56,10 +56,10 @@ export default function CategoryPage({ params }: Props) {
                             {categoryTitle}
                         </h1>
                     </div>
-                    <div className="text-right hidden lg:block">
-                        <span className="text-6xl font-black text-white/5">{categoryNews.length.toString().padStart(2, '0')}</span>
-                        <span className="text-xs font-bold uppercase tracking-widest text-white/20 block">Artikel Tersedia</span>
-                    </div>
+                        <div className="text-right">
+                            <span className="text-4xl lg:text-6xl font-black text-white/5">{categoryNews.length.toString().padStart(2, '0')}</span>
+                            <span className="text-xs font-bold uppercase tracking-widest text-white/20 block">Artikel Tersedia</span>
+                        </div>
                 </div>
             </FadeIn>
 

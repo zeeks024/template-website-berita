@@ -58,7 +58,7 @@ export default function AdminDashboard() {
 
     return (
         <FadeIn>
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
                 <div>
                     <h1 className="text-3xl font-black uppercase tracking-tight text-white mb-2">
                         Selamat Datang, {user.name || 'User'}!
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
                             : `Kamu memiliki ${draftCount} artikel draft yang perlu diselesaikan.`}
                     </p>
                 </div>
-                <Link href="/admin/create" className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-full font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-all hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                <Link href="/admin/create" className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-full font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-all hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] w-full sm:w-auto justify-center">
                     <Plus size={16} />
                     Buat Artikel
                 </Link>
@@ -171,7 +171,7 @@ export default function AdminDashboard() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="border-b border-white/5 text-[10px] font-black uppercase tracking-widest text-white/30 bg-black/20">
+                            <tr className="border-b border-white/5 text-2xs font-black uppercase tracking-widest text-white/30 bg-black/20">
                                 <th className="p-6">Artikel</th>
                                 <th className="p-6">Kategori</th>
                                 <th className="p-6">Status</th>
@@ -190,7 +190,7 @@ export default function AdminDashboard() {
                                         </div>
                                     </td>
                                     <td className="p-6">
-                                        <span className="px-2 py-1 rounded bg-white/5 border border-white/5 text-[10px] font-bold uppercase tracking-wider text-white/60">
+                                        <span className="px-2 py-1 rounded bg-white/5 border border-white/5 text-2xs font-bold uppercase tracking-wider text-white/60">
                                             {item.category}
                                         </span>
                                     </td>

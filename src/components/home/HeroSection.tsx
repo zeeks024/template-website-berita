@@ -91,7 +91,7 @@ export default function HeroSection({ articles }: HeroSectionProps) {
                                         </h2>
                                         <div className="flex items-center gap-4 text-sm text-white/80">
                                             <div className="flex items-center gap-2">
-                                                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-bold">
+                                                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-2xs font-bold">
                                                     {mainFeatured.author.charAt(0)}
                                                 </div>
                                                 <span>{mainFeatured.author}</span>
@@ -104,7 +104,7 @@ export default function HeroSection({ articles }: HeroSectionProps) {
                             </Link>
 
                             {otherFeatured.length > 0 && (
-                                <div className="grid grid-cols-3 gap-3 mt-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
                                     {otherFeatured.map((article) => (
                                         <Link 
                                             key={article.id} 

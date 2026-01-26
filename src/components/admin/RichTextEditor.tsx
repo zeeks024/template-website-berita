@@ -109,7 +109,7 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
 
     return (
         <div className="flex flex-col border border-gray-200 rounded-xl overflow-hidden bg-white">
-            <div className="px-3 py-2 bg-gray-50 border-b border-gray-200 flex flex-wrap items-center gap-0.5 sticky top-0 z-10">
+            <div className="px-2 sm:px-3 py-2 bg-gray-50 border-b border-gray-200 flex flex-wrap items-center gap-0.5 sticky top-0 z-10 overflow-x-auto">
                 {hasDraft && (
                     <>
                         <button

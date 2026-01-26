@@ -65,7 +65,7 @@ export default function Header() {
                     </Link>
 
                     {/* Desktop Menu */}
-                    <div className="hidden lg:flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+                    <div className="hidden lg:flex items-center gap-8 text-2xs font-bold uppercase tracking-widest text-muted-foreground">
                         {categories.map(item => (
                             <Link
                                 key={item}
@@ -87,7 +87,7 @@ export default function Header() {
                             className="hidden md:flex p-2.5 rounded-full hover:bg-accent text-muted-foreground hover:text-foreground transition-all items-center gap-2 group"
                         >
                             <Search size={18} />
-                            <span className="text-[10px] bg-muted px-1.5 py-0.5 rounded border border-border opacity-0 group-hover:opacity-100 transition-opacity">CTRL+K</span>
+                            <span className="text-2xs bg-muted px-1.5 py-0.5 rounded border border-border opacity-0 group-hover:opacity-100 transition-opacity">CTRL+K</span>
                         </button>
                         <button
                             onClick={() => setIsMenuOpen(true)}
@@ -109,7 +109,7 @@ export default function Header() {
                         className="fixed inset-0 z-40" 
                         onClick={() => setIsMenuOpen(false)}
                     />
-                    <div className="fixed top-20 right-4 lg:right-12 w-72 bg-background/80 backdrop-blur-xl border border-border rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/50 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+                    <div className="fixed top-20 right-4 lg:right-12 w-72 max-h-[80vh] bg-background/80 backdrop-blur-xl border border-border rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/50 z-50 overflow-hidden overflow-y-auto animate-in fade-in zoom-in-95 duration-200 origin-top-right">
                         <div className="p-2">
                             {categories.map((item, i) => (
                                 <Link
