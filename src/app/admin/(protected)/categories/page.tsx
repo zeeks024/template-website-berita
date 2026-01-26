@@ -43,12 +43,12 @@ export default function CategoriesPage() {
                 <Card className="mb-6">
                     <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
                         <div className="flex-1 relative">
-                            <FolderOpen size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+                            <FolderOpen size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                             <input
                                 value={newCat}
                                 onChange={e => setNewCat(e.target.value)}
                                 placeholder="Nama kategori baru..."
-                                className="w-full pl-11 pr-4 py-3 bg-black/20 border border-white/10 rounded-xl text-sm text-white placeholder:text-white/20 focus:border-cyan-500 focus:outline-none transition-colors"
+                                className="w-full pl-11 pr-4 py-3 bg-muted border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none transition-colors"
                             />
                         </div>
                         <button
@@ -63,17 +63,17 @@ export default function CategoriesPage() {
 
                 <Card className="p-0 overflow-hidden">
                     {categories.length > 0 ? (
-                        <div className="divide-y divide-white/5">
+                        <div className="divide-y divide-border">
                             {categories.map((cat) => (
                                 <div
                                     key={cat}
-                                    className="flex items-center justify-between px-6 py-4 hover:bg-white/[0.02] transition-colors group"
+                                    className="flex items-center justify-between px-6 py-4 hover:bg-muted transition-colors group"
                                 >
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400">
                                             <FolderOpen size={14} />
                                         </div>
-                                        <span className="text-white font-medium">{cat}</span>
+                                        <span className="text-foreground font-medium">{cat}</span>
                                     </div>
                                     <button
                                         onClick={() => {
@@ -88,7 +88,7 @@ export default function CategoriesPage() {
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-12 text-white/40">
+                        <div className="text-center py-12 text-muted-foreground">
                             <FolderOpen size={40} className="mx-auto mb-3 opacity-30" />
                             <p className="text-sm font-medium">Belum ada kategori.</p>
                             <p className="text-xs mt-1">Tambah kategori pertama di form atas.</p>
@@ -97,7 +97,7 @@ export default function CategoriesPage() {
                 </Card>
 
                 {categories.length > 0 && (
-                    <p className="text-center text-white/30 text-xs mt-4 font-medium uppercase tracking-wider">
+                    <p className="text-center text-muted-foreground text-xs mt-4 font-medium uppercase tracking-wider">
                         {categories.length} kategori terdaftar
                     </p>
                 )}

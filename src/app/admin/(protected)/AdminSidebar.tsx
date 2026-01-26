@@ -48,16 +48,16 @@ export default function AdminSidebar({
 
     return (
         <div className="min-h-screen bg-admin-bg flex flex-col lg:flex-row">
-            <header className="lg:hidden border-b border-white/5 bg-admin-surface p-4 flex items-center justify-between sticky top-0 z-50">
+            <header className="lg:hidden border-b border-border bg-admin-surface p-4 flex items-center justify-between sticky top-0 z-50">
                 <Link href="/" className="flex items-center gap-2">
                     <Mountain size={20} className="text-cyan-500" />
-                    <span className="font-bold tracking-tight uppercase text-white">
+                    <span className="font-bold tracking-tight uppercase text-foreground">
                         Banjar<span className="text-cyan-500">negara.</span>
                     </span>
                 </Link>
                 <button
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    className="p-2 text-white/70 hover:text-white bg-white/5 rounded-lg"
+                    className="p-2 text-muted-foreground hover:text-foreground bg-muted rounded-lg"
                 >
                     {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
@@ -68,17 +68,17 @@ export default function AdminSidebar({
             )}
 
             <aside className={`
-                fixed lg:sticky top-0 h-screen w-64 bg-admin-surface border-r border-white/5 flex flex-col z-50 transition-transform duration-300
+                fixed lg:sticky top-0 h-screen w-64 bg-admin-surface border-r border-border flex flex-col z-50 transition-transform duration-300
                 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
             `}>
-                <div className="p-8 border-b border-white/5 hidden lg:block">
+                <div className="p-8 border-b border-border hidden lg:block">
                     <Link href="/" className="flex items-center gap-2 group">
                         <Mountain size={24} className="text-cyan-500" />
-                        <span className="text-lg font-bold tracking-tight uppercase text-white">
+                        <span className="text-lg font-bold tracking-tight uppercase text-foreground">
                             Banjar<span className="text-cyan-500">negara.</span>
                         </span>
                     </Link>
-                    <span className="text-2xs font-bold uppercase tracking-widest text-white/30 mt-2 block pl-8">
+                    <span className="text-2xs font-bold uppercase tracking-widest text-muted-foreground mt-2 block pl-8">
                         {isAdmin ? 'Admin Console' : 'Penulis Console'}
                     </span>
                 </div>
@@ -92,7 +92,7 @@ export default function AdminSidebar({
                                 href={item.href}
                                 className={`flex items-center gap-4 px-4 py-3 rounded-xl font-medium text-sm transition-all ${isActive
                                     ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
-                                    : 'text-white/60 hover:bg-white/5 hover:text-white'
+                                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                                     }`}
                             >
                                 {item.icon}
@@ -101,16 +101,16 @@ export default function AdminSidebar({
                         );
                     })}
 
-                    <a href="/" target="_blank" className="flex items-center gap-4 px-4 py-3 rounded-xl font-medium text-sm text-white/60 hover:bg-white/5 hover:text-white transition-all">
+                    <a href="/" target="_blank" className="flex items-center gap-4 px-4 py-3 rounded-xl font-medium text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-all">
                         <ExternalLink size={20} />
                         Lihat Website
                     </a>
                 </nav>
 
-                <div className="p-6 border-t border-white/5">
-                    <div className="mb-4 px-4 py-2 bg-white/5 rounded-lg">
-                        <p className="text-xs text-white/40">Logged in as</p>
-                        <p className="text-sm font-medium text-white truncate">{user.name}</p>
+                <div className="p-6 border-t border-border">
+                    <div className="mb-4 px-4 py-2 bg-muted rounded-lg">
+                        <p className="text-xs text-muted-foreground">Logged in as</p>
+                        <p className="text-sm font-medium text-foreground truncate">{user.name}</p>
                         <span className={`inline-block mt-1 px-2 py-0.5 rounded text-2xs font-bold uppercase tracking-wider ${
                             isAdmin ? 'bg-cyan-500/20 text-cyan-400' : 'bg-emerald-500/20 text-emerald-400'
                         }`}>

@@ -53,7 +53,7 @@ export default function CommentSection({ slug }: { slug: string }) {
     };
 
     return (
-        <div className="mt-12 pt-8 border-t border-white/5">
+        <div className="mt-12 pt-8 border-t border-border">
             <h3 className="text-sm font-black uppercase tracking-widest text-cyan-500 mb-8 flex items-center gap-2">
                 <span className="w-1 h-1 bg-cyan-500 rounded-full animate-pulse"></span>
                 Diskusi ({comments.length})
@@ -62,14 +62,14 @@ export default function CommentSection({ slug }: { slug: string }) {
             {/* Input Form */}
             <form onSubmit={handleSubmit} className="mb-12 relative group">
                 <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent rounded-2xl -m-1 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <div className="relative bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md">
+                <div className="relative bg-muted border border-border rounded-2xl p-6 backdrop-blur-md">
                     <div className="grid gap-4">
                         <input
                             value={name}
                             onChange={e => setName(e.target.value)}
                             placeholder="Nama Anda"
                             disabled={submitting}
-                            className="bg-black/30 border border-white/5 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:border-cyan-500/50 focus:bg-cyan-900/10 focus:outline-none transition-all w-full"
+                            className="bg-muted border border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground focus:border-cyan-500/50 focus:bg-cyan-900/10 focus:outline-none transition-all w-full"
                         />
                         <textarea
                             value={text}
@@ -77,7 +77,7 @@ export default function CommentSection({ slug }: { slug: string }) {
                             placeholder="Tulis pendapat anda..."
                             rows={3}
                             disabled={submitting}
-                            className="bg-black/30 border border-white/5 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:border-cyan-500/50 focus:bg-cyan-900/10 focus:outline-none transition-all w-full resize-y min-h-[100px]"
+                            className="bg-muted border border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground focus:border-cyan-500/50 focus:bg-cyan-900/10 focus:outline-none transition-all w-full resize-y min-h-[100px]"
                         />
                         <div className="flex justify-end">
                             <button
@@ -95,25 +95,25 @@ export default function CommentSection({ slug }: { slug: string }) {
             {/* Comment List */}
             <div className="space-y-6">
                 {loading ? (
-                    <div className="text-center text-white/30 text-sm animate-pulse">Memuat komentar...</div>
+                    <div className="text-center text-muted-foreground text-sm animate-pulse">Memuat komentar...</div>
                 ) : comments.length === 0 ? (
-                    <div className="text-center py-12 border border-dashed border-white/10 rounded-2xl text-white/30 text-sm">
+                    <div className="text-center py-12 border border-dashed border-border rounded-2xl text-muted-foreground text-sm">
                         Belum ada komentar. Jadilah yang pertama!
                     </div>
                 ) : (
                     comments.map(comment => (
                         <div key={comment.id} className="flex gap-4 group">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 border border-white/10 flex items-center justify-center shrink-0 font-bold text-cyan-400 group-hover:scale-110 transition-transform duration-300">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 border border-border flex items-center justify-center shrink-0 font-bold text-cyan-400 group-hover:scale-110 transition-transform duration-300">
                                 {comment.name[0].toUpperCase()}
                             </div>
                             <div className="flex-1 space-y-2">
                                 <div className="flex items-baseline gap-3">
-                                    <span className="font-bold text-white text-sm">{comment.name}</span>
-                                    <span className="text-[10px] uppercase tracking-wider text-white/30">
+                                    <span className="font-bold text-foreground text-sm">{comment.name}</span>
+                                    <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
                                         {new Date(comment.createdAt || Date.now()).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                                     </span>
                                 </div>
-                                <p className="text-white/70 text-sm leading-relaxed bg-white/5 p-4 rounded-r-xl rounded-bl-xl border border-white/5 group-hover:border-white/10 transition-colors">
+                                <p className="text-muted-foreground text-sm leading-relaxed bg-muted p-4 rounded-r-xl rounded-bl-xl border border-border group-hover:border-border transition-colors">
                                     {comment.text}
                                 </p>
                             </div>

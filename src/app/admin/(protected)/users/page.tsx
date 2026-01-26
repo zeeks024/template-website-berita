@@ -118,7 +118,7 @@ export default function UsersPage() {
                         <button
                             onClick={fetchUsers}
                             disabled={loading}
-                            className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm text-white/70 hover:text-white transition-all flex items-center gap-2 disabled:opacity-50"
+                            className="px-4 py-2 bg-muted hover:bg-muted/80 border border-border rounded-lg text-sm text-muted-foreground hover:text-foreground transition-all flex items-center gap-2 disabled:opacity-50"
                         >
                             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
                             Refresh
@@ -138,7 +138,7 @@ export default function UsersPage() {
 
                 <Card className="p-0 overflow-hidden">
                     {loading ? (
-                        <div className="text-center py-16 text-white/40">
+                        <div className="text-center py-16 text-muted-foreground">
                             <RefreshCw size={32} className="mx-auto mb-3 animate-spin opacity-50" />
                             <p className="text-sm font-medium">Memuat data user...</p>
                         </div>
@@ -146,7 +146,7 @@ export default function UsersPage() {
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead>
-                                    <tr className="border-b border-white/5 text-left text-xs font-bold uppercase tracking-wider text-white/40">
+                                    <tr className="border-b border-border text-left text-xs font-bold uppercase tracking-wider text-muted-foreground">
                                         <th className="px-6 py-4">User</th>
                                         <th className="px-6 py-4">Role</th>
                                         <th className="px-6 py-4">Status</th>
@@ -154,7 +154,7 @@ export default function UsersPage() {
                                         <th className="px-6 py-4 text-right">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-white/5">
+                                <tbody className="divide-y divide-border">
                                     {users.map((user) => {
                                         const isCurrentUser = user.id === currentUser.userId;
                                         const isUpdating = updating === user.id;
@@ -162,7 +162,7 @@ export default function UsersPage() {
                                         return (
                                             <tr
                                                 key={user.id}
-                                                className={`hover:bg-white/[0.02] transition-colors ${isUpdating ? 'opacity-50' : ''}`}
+                                                className={`hover:bg-muted transition-colors ${isUpdating ? 'opacity-50' : ''}`}
                                             >
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-3">
@@ -174,7 +174,7 @@ export default function UsersPage() {
                                                             {user.role === 'ADMIN' ? <Shield size={18} /> : <Pen size={18} />}
                                                         </div>
                                                         <div>
-                                                            <p className="font-medium text-white flex items-center gap-2">
+                                                            <p className="font-medium text-foreground flex items-center gap-2">
                                                                 {user.name}
                                                                 {isCurrentUser && (
                                                                     <span className="text-2xs px-1.5 py-0.5 bg-cyan-500/20 text-cyan-400 rounded uppercase font-bold">
@@ -182,7 +182,7 @@ export default function UsersPage() {
                                                                     </span>
                                                                 )}
                                                             </p>
-                                                            <p className="text-xs text-white/40">{user.email}</p>
+                                                            <p className="text-xs text-muted-foreground">{user.email}</p>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -203,7 +203,7 @@ export default function UsersPage() {
                                                     </Badge>
                                                 </td>
                                                 <td className="px-6 py-4 text-center">
-                                                    <span className="text-white/60 font-medium">
+                                                    <span className="text-muted-foreground font-medium">
                                                         {user._count.articles}
                                                     </span>
                                                 </td>
@@ -250,7 +250,7 @@ export default function UsersPage() {
                             </table>
                         </div>
                     ) : (
-                        <div className="text-center py-16 text-white/40">
+                        <div className="text-center py-16 text-muted-foreground">
                             <Users size={40} className="mx-auto mb-3 opacity-30" />
                             <p className="text-sm font-medium">Tidak ada user ditemukan.</p>
                         </div>
@@ -258,7 +258,7 @@ export default function UsersPage() {
                 </Card>
 
                 {users.length > 0 && (
-                    <p className="text-center text-white/30 text-xs mt-4 font-medium uppercase tracking-wider">
+                    <p className="text-center text-muted-foreground text-xs mt-4 font-medium uppercase tracking-wider">
                         {users.length} user terdaftar
                     </p>
                 )}

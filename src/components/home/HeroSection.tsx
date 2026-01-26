@@ -3,17 +3,49 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { NewsItem } from '@/types/news';
-import { ArrowRight, Star } from 'lucide-react';
+import { ArrowRight, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface HeroSectionProps {
     articles: NewsItem[];
 }
 
 export default function HeroSection({ articles }: HeroSectionProps) {
-    // Get all featured articles (max 4), fallback to first article if none
-    const featuredArticles = articles.filter(n => n.featured).slice(0, 4);
-    const mainFeatured = featuredArticles[0] || articles[0];
-    const otherFeatured = featuredArticles.slice(1);
+    // Get all featured articles (max 5), fallback to first articles if none
+    const featuredArticles = articles.filter(n => n.featured).slice(0, 5);
+    const allFeatured = featuredArticles.length > 0 ? featuredArticles : articles.slice(0, 3);
+    
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    
+    const currentArticle = allFeatured[currentIndex] || articles[0];
+    
+    const goToNext = useCallback(() => {
+        setCurrentIndex((prev) => (prev + 1) % allFeatured.length);
+    }, [allFeatured.length]);
+    
+    const goToPrev = useCallback(() => {
+        setCurrentIndex((prev) => (prev - 1 + allFeatured.length) % allFeatured.length);
+    }, [allFeatured.length]);
+    
+    const goToSlide = (index: number) => {
+        setCurrentIndex(index);
+        setIsAutoPlaying(false);
+        // Resume autoplay after 10 seconds
+        setTimeout(() => setIsAutoPlaying(true), 10000);
+    };
+    
+    // Auto-rotate every 5 seconds
+    useEffect(() => {
+        if (!isAutoPlaying || allFeatured.length <= 1) return;
+        
+        const interval = setInterval(goToNext, 5000);
+        return () => clearInterval(interval);
+    }, [isAutoPlaying, goToNext, allFeatured.length]);
+    
+    // Legacy variables for compatibility
+    const mainFeatured = currentArticle;
+    const otherFeatured = allFeatured.filter((_, i) => i !== currentIndex).slice(0, 3);
 
     const getCategoryClass = (category: string) => {
         const cat = category.toLowerCase();
@@ -63,39 +95,89 @@ export default function HeroSection({ articles }: HeroSectionProps) {
 
                             <Link href={`/article/${mainFeatured.slug}`} className="group block relative">
                                 <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-cyan-900/5 dark:shadow-black/50 border border-white/20 dark:border-white/10 aspect-[4/3] lg:aspect-[16/9]">
-                                    <Image
-                                        src={mainFeatured.image}
-                                        alt={mainFeatured.title}
-                                        fill
-                                        priority
-                                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 50vw"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-70 transition-opacity" />
-                                    
-                                    <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 text-white">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getCategoryClass(mainFeatured.category)} bg-white/10 text-white backdrop-blur-md border border-white/20`}>
-                                                {mainFeatured.category}
-                                            </span>
-                                            <span className="text-xs font-medium text-white/80 flex items-center gap-1">
-                                                <Star size={12} className="text-amber-400 fill-amber-400" /> Pilihan Editor
-                                            </span>
+                                    {allFeatured.map((article, index) => (
+                                        <div
+                                            key={article.id}
+                                            className={`absolute inset-0 transition-all duration-700 ease-in-out ${
+                                                index === currentIndex 
+                                                    ? 'opacity-100 scale-100 z-10' 
+                                                    : 'opacity-0 scale-105 z-0'
+                                            }`}
+                                        >
+                                            <Image
+                                                src={article.image}
+                                                alt={article.title}
+                                                fill
+                                                priority={index === 0}
+                                                className="object-cover"
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 50vw"
+                                            />
                                         </div>
-                                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold mb-4 leading-tight group-hover:text-cyan-200 transition-colors">
-                                            {mainFeatured.title}
-                                        </h2>
-                                        <div className="flex items-center gap-4 text-sm text-white/80">
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-2xs font-bold">
-                                                    {mainFeatured.author.charAt(0)}
-                                                </div>
-                                                <span>{mainFeatured.author}</span>
+                                    ))}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-70 transition-opacity z-20" />
+                                    
+                                    <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 text-white z-30">
+                                        <div 
+                                            key={currentArticle.id} 
+                                            className="animate-in fade-in slide-in-from-bottom-4 duration-500"
+                                        >
+                                            <div className="flex items-center gap-3 mb-4">
+                                                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getCategoryClass(currentArticle.category)} bg-white/10 text-white backdrop-blur-md border border-white/20`}>
+                                                    {currentArticle.category}
+                                                </span>
+                                                <span className="text-xs font-medium text-white/80 flex items-center gap-1">
+                                                    <Star size={12} className="text-amber-400 fill-amber-400" /> Pilihan Editor
+                                                </span>
                                             </div>
-                                            <span>•</span>
-                                            <span>{mainFeatured.readTime} baca</span>
+                                            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold mb-4 leading-tight group-hover:text-cyan-200 transition-colors">
+                                                {currentArticle.title}
+                                            </h2>
+                                            <div className="flex items-center gap-4 text-sm text-white/80">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-2xs font-bold">
+                                                        {currentArticle.author.charAt(0)}
+                                                    </div>
+                                                    <span>{currentArticle.author}</span>
+                                                </div>
+                                                <span>•</span>
+                                                <span>{currentArticle.readTime} baca</span>
+                                            </div>
                                         </div>
                                     </div>
+                                    
+                                    {allFeatured.length > 1 && (
+                                        <>
+                                            <button
+                                                onClick={(e) => { e.preventDefault(); goToPrev(); }}
+                                                className="absolute left-4 top-1/2 -translate-y-1/2 z-40 p-2 rounded-full bg-black/30 backdrop-blur-md border border-white/20 text-white/80 hover:text-white hover:bg-black/50 transition-all opacity-0 group-hover:opacity-100"
+                                                aria-label="Previous article"
+                                            >
+                                                <ChevronLeft size={24} />
+                                            </button>
+                                            <button
+                                                onClick={(e) => { e.preventDefault(); goToNext(); }}
+                                                className="absolute right-4 top-1/2 -translate-y-1/2 z-40 p-2 rounded-full bg-black/30 backdrop-blur-md border border-white/20 text-white/80 hover:text-white hover:bg-black/50 transition-all opacity-0 group-hover:opacity-100"
+                                                aria-label="Next article"
+                                            >
+                                                <ChevronRight size={24} />
+                                            </button>
+                                            
+                                            <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 z-40 flex items-center gap-2">
+                                                {allFeatured.map((_, index) => (
+                                                    <button
+                                                        key={index}
+                                                        onClick={(e) => { e.preventDefault(); goToSlide(index); }}
+                                                        className={`transition-all duration-300 rounded-full ${
+                                                            index === currentIndex 
+                                                                ? 'w-8 h-2 bg-cyan-400' 
+                                                                : 'w-2 h-2 bg-white/40 hover:bg-white/60'
+                                                        }`}
+                                                        aria-label={`Go to slide ${index + 1}`}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </Link>
 
