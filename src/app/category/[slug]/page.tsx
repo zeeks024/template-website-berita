@@ -87,7 +87,7 @@ export default function CategoryPage({ params }: Props) {
                                         src={article.image}
                                         alt={article.title}
                                         fill
-                                        className="object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     />
                                     <div className="absolute top-4 left-4 px-3 py-1 bg-background/80 backdrop-blur rounded-full border border-border">

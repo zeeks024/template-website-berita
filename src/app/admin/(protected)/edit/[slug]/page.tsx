@@ -174,7 +174,7 @@ export default function EditArticlePage({ params }: Props) {
     };
 
     if (loading) return (
-        <div className="flex items-center justify-center h-64 text-white/40 animate-pulse">
+        <div className="flex items-center justify-center h-64 text-muted-foreground animate-pulse">
             Memuat data artikel...
         </div>
     );
