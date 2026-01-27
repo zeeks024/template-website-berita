@@ -81,9 +81,6 @@ export default async function HomePage() {
               {opiniArticles.length > 0 ? opiniArticles.slice(0, 4).map((item, i) => (
                 <FadeIn key={item.id} delay={i * 100} className="h-full">
                   <Link href={`/article/${item.slug}`} className="flex flex-col h-full group bg-card border border-border p-8 rounded-3xl hover:shadow-xl hover:shadow-cyan-900/5 dark:hover:shadow-cyan-900/10 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-                    <div className="absolute top-4 right-6 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110 duration-700">
-                      <Quote size={100} />
-                    </div>
                     
                     <div className="relative z-10 flex-1 flex flex-col">
                         <div className="mb-6 flex items-center gap-3">

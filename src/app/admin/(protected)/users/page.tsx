@@ -162,11 +162,11 @@ export default function UsersPage() {
                                         return (
                                             <tr
                                                 key={user.id}
-                                                className={`hover:bg-muted transition-colors ${isUpdating ? 'opacity-50' : ''}`}
+                                                className={`hover:bg-muted transition-all duration-200 ${isUpdating ? 'opacity-50' : ''} group`}
                                             >
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-3">
-                                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-110 ${
                                                             user.role === 'ADMIN'
                                                                 ? 'bg-purple-500/10 text-purple-400'
                                                                 : 'bg-cyan-500/10 text-cyan-400'
@@ -215,7 +215,7 @@ export default function UsersPage() {
                                                                     onClick={() => toggleRole(user)}
                                                                     disabled={isUpdating}
                                                                     title={user.role === 'ADMIN' ? 'Jadikan Writer' : 'Jadikan Admin'}
-                                                                    className="p-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 rounded-lg transition-all disabled:opacity-50"
+                                                                    className="p-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 rounded-lg transition-all duration-200 disabled:opacity-50 hover:scale-110"
                                                                 >
                                                                     <Shield size={14} />
                                                                 </button>
@@ -223,7 +223,7 @@ export default function UsersPage() {
                                                                     onClick={() => toggleVerified(user)}
                                                                     disabled={isUpdating}
                                                                     title={user.isVerified ? 'Batalkan Verifikasi' : 'Verifikasi'}
-                                                                    className={`p-2 rounded-lg transition-all disabled:opacity-50 ${
+                                                                    className={`p-2 rounded-lg transition-all duration-200 disabled:opacity-50 hover:scale-110 ${
                                                                         user.isVerified
                                                                             ? 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-400'
                                                                             : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400'
@@ -235,7 +235,7 @@ export default function UsersPage() {
                                                                     onClick={() => deleteUser(user.id, user.name)}
                                                                     disabled={isUpdating || user._count.articles > 0}
                                                                     title={user._count.articles > 0 ? 'Tidak bisa hapus user dengan artikel' : 'Hapus User'}
-                                                                    className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                                                    className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110"
                                                                 >
                                                                     <Trash2 size={14} />
                                                                 </button>

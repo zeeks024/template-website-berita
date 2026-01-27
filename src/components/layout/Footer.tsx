@@ -29,6 +29,7 @@ export default function Footer() {
                                 width={40} 
                                 height={40} 
                                 className="w-10 h-10 object-contain"
+                                unoptimized
                             />
                             <span className="text-2xl font-serif font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
                                 Derap<span className="text-primary">Serayu</span>

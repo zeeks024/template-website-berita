@@ -53,7 +53,7 @@ export default function CategoriesPage() {
                         </div>
                         <button
                             type="submit"
-                            className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-bold text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 hover:scale-[1.02]"
+                            className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-bold text-sm uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/25"
                         >
                             <Plus size={16} />
                             Tambah
@@ -67,10 +67,10 @@ export default function CategoriesPage() {
                             {categories.map((cat) => (
                                 <div
                                     key={cat}
-                                    className="flex items-center justify-between px-6 py-4 hover:bg-muted transition-colors group"
+                                    className="flex items-center justify-between px-6 py-4 hover:bg-muted transition-all duration-200 group hover:translate-x-1"
                                 >
                                     <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400">
+                                        <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 transition-transform duration-200 group-hover:scale-110">
                                             <FolderOpen size={14} />
                                         </div>
                                         <span className="text-foreground font-medium">{cat}</span>
@@ -79,7 +79,7 @@ export default function CategoriesPage() {
                                         onClick={() => {
                                             if (confirm(`Hapus kategori "${cat}"?`)) deleteCategory(cat);
                                         }}
-                                        className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 opacity-0 group-hover:opacity-100"
+                                        className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 hover:scale-105"
                                     >
                                         <Trash2 size={12} />
                                         Hapus

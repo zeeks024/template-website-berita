@@ -69,7 +69,7 @@ export default function AdminDashboard() {
                             : `Kamu memiliki ${draftCount} artikel draft yang perlu diselesaikan.`}
                     </p>
                 </div>
-                <Link href="/admin/create" className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-full font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-all hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] w-full sm:w-auto justify-center">
+                <Link href="/admin/create" className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-full font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:scale-105 w-full sm:w-auto justify-center">
                     <Plus size={16} />
                     Buat Artikel
                 </Link>
@@ -111,7 +111,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="space-y-1">
                     {allNews.slice(0, 5).map(article => (
-                        <div key={article.id} className="flex items-center justify-between py-3 border-b border-border last:border-0 hover:bg-muted px-3 -mx-3 rounded-lg transition-colors">
+                        <div key={article.id} className="flex items-center justify-between py-3 border-b border-border last:border-0 hover:bg-muted px-3 -mx-3 rounded-lg transition-all duration-200 hover:translate-x-1">
                             <div className="flex items-center gap-4">
                                 <Badge variant={(article.status || 'published') === 'published' ? 'success' : 'warning'} dot>
                                     {article.status || 'Published'}
@@ -180,9 +180,9 @@ export default function AdminDashboard() {
                         </thead>
                         <tbody className="divide-y divide-border">
                             {filteredNews.length > 0 ? filteredNews.map(item => (
-                                <tr key={item.id} className="group hover:bg-muted/50 transition-colors">
+                                <tr key={item.id} className="group hover:bg-muted/50 transition-all duration-200">
                                     <td className="p-6">
-                                        <div className="font-bold text-foreground mb-1 line-clamp-1 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                                        <div className="font-bold text-foreground mb-1 line-clamp-1 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors duration-200">
                                             {item.title}
                                         </div>
                                         <div className="text-xs text-muted-foreground flex items-center gap-2">
@@ -190,7 +190,7 @@ export default function AdminDashboard() {
                                         </div>
                                     </td>
                                     <td className="p-6">
-                                        <span className="px-2 py-1 rounded bg-muted border border-border text-2xs font-bold uppercase tracking-wider text-muted-foreground">
+                                        <span className="px-1.5 py-0.5 rounded bg-muted border border-border text-3xs font-semibold uppercase tracking-wide text-muted-foreground">
                                             {item.category}
                                         </span>
                                     </td>
@@ -201,17 +201,17 @@ export default function AdminDashboard() {
                                     </td>
                                     <td className="p-6 text-right">
                                         <div className="flex items-center justify-end gap-2">
-                                            <Link href={`/article/${item.slug}`} target="_blank" className="p-2 rounded-lg hover:bg-cyan-500/20 text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 transition-all" title="Lihat">
+                                            <Link href={`/article/${item.slug}`} target="_blank" className="p-2 rounded-lg hover:bg-cyan-500/20 text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 transition-all duration-200 hover:scale-110" title="Lihat">
                                                 <ExternalLink size={16} />
                                             </Link>
-                                            <Link href={`/admin/edit/${item.slug}`} className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-all" title="Edit">
+                                            <Link href={`/admin/edit/${item.slug}`} className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-110" title="Edit">
                                                 <Edit size={16} />
                                             </Link>
                                             <button
                                                 onClick={() => {
                                                     if (confirm(`Hapus artikel "${item.title}"?`)) deleteArticle(item.id);
                                                 }}
-                                                className="p-2 rounded-lg hover:bg-red-500/20 text-muted-foreground hover:text-red-500 dark:hover:text-red-400 transition-all"
+                                                className="p-2 rounded-lg hover:bg-red-500/20 text-muted-foreground hover:text-red-500 dark:hover:text-red-400 transition-all duration-200 hover:scale-110"
                                                 title="Hapus"
                                             >
                                                 <Trash2 size={16} />

@@ -6,13 +6,15 @@ dotenv.config();
 
 async function main() {
     console.log("Testing email config...");
-    console.log("User:", process.env.EMAIL_USER);
+    console.log("SMTP Host:", process.env.SMTP_HOST);
+    console.log("SMTP Port:", process.env.SMTP_PORT);
+    console.log("SMTP User:", process.env.SMTP_USER);
     // Hide password for security, just show length
-    console.log("Pass length:", process.env.EMAIL_PASS?.length);
+    console.log("SMTP Pass length:", process.env.SMTP_PASS?.length);
 
-    console.log("Sending test email...");
+    console.log("\nSending test email...");
     const success = await sendEmail({
-        to: process.env.EMAIL_USER || 'test@example.com', // Send to self
+        to: process.env.SMTP_USER || 'test@example.com', // Send to self
         subject: 'Test Email Derap Serayu',
         html: '<p>Ini adalah email tes untuk memastikan konfigurasi SMTP berhasil.</p>'
     });

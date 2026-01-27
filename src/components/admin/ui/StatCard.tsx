@@ -47,7 +47,7 @@ export const StatCard = ({ icon, iconColor, value, label, trend }: StatCardProps
   const colors = colorMap[iconColor] || colorMap.cyan;
 
   return (
-    <Card className="relative overflow-hidden group hover:border-border transition-colors duration-300">
+    <Card className="relative overflow-hidden group hover:border-muted-foreground/20 hover:shadow-xl transition-all duration-300">
       <div className="flex items-start justify-between relative z-10">
         <div>
           <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest mb-1">{label}</p>
@@ -62,12 +62,12 @@ export const StatCard = ({ icon, iconColor, value, label, trend }: StatCardProps
           )}
         </div>
 
-        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border ${colors.bg} ${colors.text} ${colors.border}`}>
+        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border transition-transform duration-300 group-hover:scale-110 ${colors.bg} ${colors.text} ${colors.border}`}>
           {icon}
         </div>
       </div>
 
-      <div className={`absolute -right-4 -bottom-4 opacity-0 group-hover:opacity-5 transition-opacity duration-500 transform group-hover:scale-110 ${colors.text}`}>
+      <div className={`absolute -right-4 -bottom-4 opacity-0 group-hover:opacity-5 transition-all duration-500 transform group-hover:scale-110 ${colors.text}`}>
         {React.cloneElement(icon as React.ReactElement<any>, { size: 96, strokeWidth: 1 })}
       </div>
     </Card>

@@ -108,7 +108,7 @@ export default function ImageUploader({ values, onChange }: Props) {
                     border-2 border-dashed rounded-xl p-8 text-center cursor-pointer mb-4 transition-all
                     ${dragActive 
                         ? 'border-cyan-500 bg-cyan-500/10' 
-                        : 'border-white/10 bg-black/20 hover:border-white/20 hover:bg-black/30'
+                        : 'border-border bg-muted hover:border-muted-foreground/30 hover:bg-muted/80'
                     }
                 `}
             >
@@ -122,12 +122,12 @@ export default function ImageUploader({ values, onChange }: Props) {
                 />
 
                 {processing ? (
-                    <div className="flex items-center justify-center gap-2 text-white/60">
+                    <div className="flex items-center justify-center gap-2 text-muted-foreground">
                         <Loader2 size={20} className="animate-spin" />
                         <span className="text-sm">Memproses gambar...</span>
                     </div>
                 ) : (
-                    <div className="text-white/40">
+                    <div className="text-muted-foreground">
                         <Upload size={32} className="mx-auto mb-3 opacity-50" />
                         <p className="text-sm font-medium">Klik atau tarik gambar ke sini</p>
                         <p className="text-xs mt-1 opacity-60">Bisa upload banyak gambar (Max 10MB)</p>
@@ -140,7 +140,7 @@ export default function ImageUploader({ values, onChange }: Props) {
                     {values.map((img, idx) => (
                         <div 
                             key={idx} 
-                            className="relative bg-black/30 border border-white/10 rounded-xl p-2 group"
+                            className="relative bg-muted border border-border rounded-xl p-2 group"
                         >
                             <button
                                 type="button"
@@ -157,7 +157,7 @@ export default function ImageUploader({ values, onChange }: Props) {
                             )}
 
                             <div 
-                                className="h-24 bg-black rounded-lg mb-2 bg-contain bg-no-repeat bg-center"
+                                className="h-24 bg-card rounded-lg mb-2 bg-contain bg-no-repeat bg-center"
                                 style={{ backgroundImage: `url(${img})` }}
                             />
 
@@ -166,7 +166,7 @@ export default function ImageUploader({ values, onChange }: Props) {
                                     type="button"
                                     onClick={() => applyEdit(idx, 'fit')}
                                     disabled={processing}
-                                    className="flex-1 px-2 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-2xs font-medium text-white/60 hover:text-white transition-all flex items-center justify-center gap-1 disabled:opacity-50"
+                                    className="flex-1 px-2 py-1.5 bg-muted hover:bg-muted/80 border border-border rounded-lg text-2xs font-medium text-muted-foreground hover:text-foreground transition-all flex items-center justify-center gap-1 disabled:opacity-50"
                                 >
                                     <Sparkles size={10} />
                                     Blur BG
@@ -175,7 +175,7 @@ export default function ImageUploader({ values, onChange }: Props) {
                                     type="button"
                                     onClick={() => applyEdit(idx, 'crop')}
                                     disabled={processing}
-                                    className="flex-1 px-2 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-2xs font-medium text-white/60 hover:text-white transition-all flex items-center justify-center gap-1 disabled:opacity-50"
+                                    className="flex-1 px-2 py-1.5 bg-muted hover:bg-muted/80 border border-border rounded-lg text-2xs font-medium text-muted-foreground hover:text-foreground transition-all flex items-center justify-center gap-1 disabled:opacity-50"
                                 >
                                     <Scissors size={10} />
                                     Crop

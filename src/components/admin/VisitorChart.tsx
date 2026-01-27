@@ -36,14 +36,14 @@ export default function VisitorChart() {
     if (loading) {
         return (
             <div className="w-full h-[200px] flex items-center justify-center">
-                <div className="text-white/40 text-sm animate-pulse">Memuat data...</div>
+                <div className="text-muted-foreground text-sm animate-pulse">Memuat data...</div>
             </div>
         );
     }
 
     if (totalViews === 0) {
         return (
-            <div className="w-full h-[200px] flex flex-col items-center justify-center text-white/30">
+            <div className="w-full h-[200px] flex flex-col items-center justify-center text-muted-foreground">
                 <BarChart3 size={40} className="mb-3 opacity-30" />
                 <p className="text-sm font-medium">Belum ada data pengunjung</p>
                 <p className="text-xs mt-1">Data akan muncul setelah ada kunjungan</p>
@@ -68,11 +68,11 @@ export default function VisitorChart() {
                                     }`}
                                     style={{ height: `${Math.max(h, 4)}px` }}
                                 />
-                                <div className="absolute -top-6 w-full text-center text-xs font-bold text-white">
+                                <div className="absolute -top-6 w-full text-center text-xs font-bold text-foreground">
                                     {val}
                                 </div>
                             </div>
-                            <div className={`text-2xs font-medium ${isToday ? 'text-cyan-400' : 'text-white/40'}`}>
+                            <div className={`text-2xs font-medium ${isToday ? 'text-cyan-400' : 'text-muted-foreground'}`}>
                                 {orderedDays[i]}
                             </div>
                         </div>

@@ -45,55 +45,55 @@ export default function ArticleDetail({ article, relatedArticles }: Props) {
 
                 <div className="absolute bottom-0 left-0 w-full z-20 px-6 lg:px-12 pb-12 max-w-[1600px] mx-auto">
                     <FadeIn>
-                        <div className="bg-white dark:bg-black/60 backdrop-blur-md rounded-2xl p-6 lg:p-8 border border-border/50 shadow-xl shadow-black/5 dark:shadow-black/30">
+                        <div className="bg-black/70 backdrop-blur-md rounded-2xl p-6 lg:p-8 border border-white/10 shadow-xl shadow-black/30">
                             {/* Breadcrumb */}
                             <nav aria-label="Breadcrumb" className="mb-6">
                                 <ol className="flex items-center gap-2 text-xs font-medium">
                                     <li>
-                                        <Link href="/" className="flex items-center gap-1 text-muted-foreground hover:text-cyan-500 transition-colors">
+                                        <Link href="/" className="flex items-center gap-1 text-white/60 hover:text-cyan-400 transition-colors">
                                             <Home size={14} />
                                             <span className="sr-only">Beranda</span>
                                         </Link>
                                     </li>
-                                    <li className="text-muted-foreground">
+                                    <li className="text-white/40">
                                         <ChevronRight size={14} />
                                     </li>
                                     <li>
                                         <Link 
                                             href={`/category/${article.category.toLowerCase().replace(' ', '-')}`} 
-                                            className="text-muted-foreground hover:text-cyan-500 transition-colors uppercase tracking-wider"
+                                            className="text-white/60 hover:text-cyan-400 transition-colors uppercase tracking-wider"
                                         >
                                             {article.category}
                                         </Link>
                                     </li>
-                                    <li className="text-muted-foreground">
+                                    <li className="text-white/40">
                                         <ChevronRight size={14} />
                                     </li>
-                                    <li className="text-cyan-600 dark:text-cyan-400 font-bold uppercase tracking-wider truncate max-w-[200px]">
+                                    <li className="text-cyan-400 font-bold uppercase tracking-wider truncate max-w-[200px]">
                                         Artikel
                                     </li>
                                 </ol>
                             </nav>
 
-                            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[1.1] mb-6 max-w-5xl text-foreground">
+                            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[1.1] mb-6 max-w-5xl text-white">
                                 {article.title}
                             </h1>
 
-                            <div className="flex flex-wrap items-center gap-4 lg:gap-6 text-muted-foreground text-xs font-bold uppercase tracking-widest border-t border-border pt-6 max-w-2xl">
+                            <div className="flex flex-wrap items-center gap-4 lg:gap-6 text-white/60 text-xs font-bold uppercase tracking-widest border-t border-white/10 pt-6 max-w-2xl">
                                 <div className="flex items-center gap-2">
-                                    <User size={14} className="text-cyan-500" /> {article.author}
+                                    <User size={14} className="text-cyan-400" /> {article.author}
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <Calendar size={14} className="text-cyan-500" /> {article.createdAt ? formatTimeAgo(article.createdAt) : article.publishedAt}
+                                    <Calendar size={14} className="text-cyan-400" /> {article.createdAt ? formatTimeAgo(article.createdAt) : article.publishedAt}
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <Clock size={14} className="text-cyan-500" /> {article.readTime}
+                                    <Clock size={14} className="text-cyan-400" /> {article.readTime}
                                 </div>
-                                <div className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400">
-                                    <Tag size={14} className="text-cyan-500" /> {article.category}
+                                <div className="flex items-center gap-2 text-cyan-400">
+                                    <Tag size={14} /> {article.category}
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <Eye size={14} className="text-cyan-500" /> {article.views || 0}
+                                    <Eye size={14} className="text-cyan-400" /> {article.views || 0}
                                 </div>
                             </div>
                         </div>

@@ -51,7 +51,7 @@ export default function AdminSidebar({
         <div className="min-h-screen bg-admin-bg flex flex-col lg:flex-row">
             <header className="lg:hidden border-b border-border bg-admin-surface p-4 flex items-center justify-between sticky top-0 z-50">
                 <Link href="/" className="flex items-center gap-2">
-                    <Image src="/icon.png" alt="Derap Serayu" width={28} height={28} className="h-7 w-7 object-contain" />
+                    <Image src="/icon.png" alt="Derap Serayu" width={28} height={28} className="h-7 w-7 object-contain" unoptimized />
                     <span className="font-serif font-bold tracking-tight text-foreground">
                         Derap<span className="text-cyan-600 dark:text-cyan-400">Serayu</span>
                     </span>
@@ -74,7 +74,7 @@ export default function AdminSidebar({
             `}>
                 <div className="p-8 border-b border-border hidden lg:block">
                     <Link href="/" className="flex items-center gap-2.5 group">
-                        <Image src="/icon.png" alt="Derap Serayu" width={32} height={32} className="h-8 w-8 object-contain" />
+                        <Image src="/icon.png" alt="Derap Serayu" width={32} height={32} className="h-8 w-8 object-contain" unoptimized />
                         <span className="text-lg font-serif font-bold tracking-tight text-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
                             Derap<span className="text-cyan-600 dark:text-cyan-400">Serayu</span>
                         </span>
@@ -88,27 +88,29 @@ export default function AdminSidebar({
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`flex items-center gap-4 px-4 py-3 rounded-xl font-medium text-sm transition-all ${isActive
-                                    ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
-                                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                                className={`flex items-center gap-4 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 ${isActive
+                                    ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-lg shadow-cyan-500/5'
+                                    : 'text-muted-foreground hover:bg-muted hover:text-foreground hover:translate-x-1'
                                     }`}
                             >
-                                {item.icon}
+                                <span className={`transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
+                                    {item.icon}
+                                </span>
                                 {item.label}
                             </Link>
                         );
                     })}
 
-                    <a href="/" target="_blank" className="flex items-center gap-4 px-4 py-3 rounded-xl font-medium text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-all">
+                    <a href="/" target="_blank" className="flex items-center gap-4 px-4 py-3 rounded-xl font-medium text-sm text-muted-foreground hover:bg-muted hover:text-foreground hover:translate-x-1 transition-all duration-200">
                         <ExternalLink size={20} />
                         Lihat Website
                     </a>
                 </nav>
 
                 <div className="p-6 border-t border-border">
-                    <div className="mb-4 p-4 bg-gradient-to-br from-muted to-muted/50 rounded-2xl border border-border">
+                    <div className="mb-4 p-4 bg-gradient-to-br from-muted to-muted/50 rounded-2xl border border-border hover:border-muted-foreground/20 transition-all duration-300">
                         <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold ${
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold transition-transform duration-300 hover:scale-110 ${
                                 isAdmin 
                                     ? 'bg-gradient-to-br from-cyan-500 to-cyan-600 text-white' 
                                     : 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white'
@@ -118,7 +120,7 @@ export default function AdminSidebar({
                             <div className="flex-1 min-w-0">
                                 <p className="text-sm font-bold text-foreground truncate">{user.name}</p>
                                 <div className="flex items-center gap-2 mt-0.5">
-                                    <span className={`w-1.5 h-1.5 rounded-full ${isAdmin ? 'bg-cyan-400' : 'bg-emerald-400'}`} />
+                                    <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${isAdmin ? 'bg-cyan-400' : 'bg-emerald-400'}`} />
                                     <span className="text-2xs font-medium text-muted-foreground uppercase tracking-wider">
                                         {isAdmin ? 'Administrator' : 'Penulis'}
                                     </span>
@@ -128,7 +130,7 @@ export default function AdminSidebar({
                     </div>
                     <button
                         onClick={handleLogout}
-                        className="flex items-center gap-4 px-4 py-3 w-full rounded-xl font-medium text-sm text-red-400 hover:bg-red-500/10 transition-all"
+                        className="flex items-center gap-4 px-4 py-3 w-full rounded-xl font-medium text-sm text-red-400 hover:bg-red-500/10 hover:translate-x-1 transition-all duration-200"
                     >
                         <LogOut size={20} />
                         Keluar
