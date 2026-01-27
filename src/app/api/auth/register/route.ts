@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { sendEmail } from '@/lib/email';
+import { verificationEmailTemplate } from '@/lib/email-templates';
 
 export async function POST(request: Request) {
     try {
@@ -38,17 +39,8 @@ export async function POST(request: Request) {
 
         const emailSent = await sendEmail({
             to: email,
-            subject: 'Verifikasi Email Derap Serayu',
-            html: `
-                <div style="font-family: Inter, system-ui, sans-serif; max-width: 600px; margin: 0 auto;">
-                    <h1 style="color: #06b6d4;">Selamat Datang di Derap Serayu!</h1>
-                    <p>Halo ${name},</p>
-                    <p>Terima kasih telah mendaftar. Silakan klik tombol di bawah ini untuk memverifikasi akun Anda:</p>
-                    <a href="${verificationLink}" style="display: inline-block; padding: 12px 24px; background: #06b6d4; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 16px 0;">Verifikasi Akun</a>
-                    <p style="color: #666; font-size: 14px;">Atau copy link ini: <a href="${verificationLink}">${verificationLink}</a></p>
-                    <p style="color: #999; font-size: 12px;">Link ini berlaku selama 24 jam.</p>
-                </div>
-            `
+            subject: '✉️ Verifikasi Email - Derap Serayu',
+            html: verificationEmailTemplate(name, verificationLink)
         });
 
         if (!emailSent) {
