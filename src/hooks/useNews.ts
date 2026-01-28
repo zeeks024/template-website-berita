@@ -13,7 +13,9 @@ export function useNews(filterStatus: string = 'published', myArticlesOnly: bool
             if (myArticlesOnly) {
                 params.set('my', 'true');
             }
-            const res = await fetch(`/api/articles?${params.toString()}`);
+            const res = await fetch(`/api/articles?${params.toString()}`, {
+                credentials: 'include'
+            });
             const data = await res.json();
             if (Array.isArray(data)) {
                 setAllNews(data as NewsItem[]);

@@ -9,12 +9,24 @@ export async function GET(request: Request) {
         const status = searchParams.get('status');
         const myArticles = searchParams.get('my') === 'true';
 
-        let whereClause: Record<string, unknown> = status === 'all' ? {} : { status: 'published' };
+        let whereClause: Record<string, unknown> = {};
+        
+        if (status !== 'all') {
+            whereClause.status = 'published';
+        }
 
         if (myArticles) {
             const user = await getCurrentUser();
-            if (user) {
-                whereClause = { ...whereClause, authorId: user.userId };
+            if (!user) {
+                return NextResponse.json([]);
+            }
+            whereClause.authorId = user.userId;
+        } else if (status === 'all') {
+            const user = await getCurrentUser();
+            if (!user) {
+                whereClause.status = 'published';
+            } else if (user.role !== 'ADMIN') {
+                whereClause.authorId = user.userId;
             }
         }
 

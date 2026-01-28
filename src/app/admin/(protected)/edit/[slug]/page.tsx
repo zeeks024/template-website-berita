@@ -302,11 +302,11 @@ export default function EditArticlePage({ params }: Props) {
                                     <select
                                         value={formData.status}
                                         onChange={e => setFormData({ ...formData, status: e.target.value })}
-                                        className="w-full appearance-none bg-muted border border-border rounded-xl px-4 py-3 pr-10 text-sm text-foreground focus:border-cyan-500 focus:outline-none cursor-pointer transition-all"
+                                        className="w-full appearance-none bg-muted border border-border rounded-xl px-4 py-3 pr-10 text-sm text-foreground focus:border-cyan-500 focus:outline-none cursor-pointer transition-all [&>option]:bg-[hsl(var(--admin-surface))] [&>option]:text-foreground"
                                     >
-                                        <option value="draft" className="bg-admin-surface">Draft (Konsep)</option>
-                                        <option value="published" className="bg-admin-surface">Terbitkan Sekarang</option>
-                                        <option value="archived" className="bg-admin-surface">Arsipkan</option>
+                                        <option value="draft">Draft (Konsep)</option>
+                                        <option value="published">Terbitkan Sekarang</option>
+                                        <option value="archived">Arsipkan</option>
                                     </select>
                                     <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                                 </div>
@@ -372,11 +372,11 @@ export default function EditArticlePage({ params }: Props) {
                                 </label>
                                 <div className="relative">
                                     <select
-                                        className="w-full appearance-none bg-muted border border-border rounded-xl px-4 py-3 pr-10 text-sm text-foreground focus:border-cyan-500 focus:outline-none cursor-pointer transition-all"
+                                        className="w-full appearance-none bg-muted border border-border rounded-xl px-4 py-3 pr-10 text-sm text-foreground focus:border-cyan-500 focus:outline-none cursor-pointer transition-all [&>option]:bg-[hsl(var(--admin-surface))] [&>option]:text-foreground"
                                         value={formData.category}
                                         onChange={e => setFormData({ ...formData, category: e.target.value })}
                                     >
-                                        {categories.map(c => <option key={c} value={c} className="bg-admin-surface">{c}</option>)}
+                                        {categories.map(c => <option key={c} value={c}>{c}</option>)}
                                     </select>
                                     <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                                 </div>
