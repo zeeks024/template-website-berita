@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import {
   ArrowRight, Quote, MapPin,
-  Lightbulb, ArrowUpRight, Clock
+  Lightbulb, ArrowUpRight, Clock, TrendingUp
 } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
 import HeroSection from '@/components/home/HeroSection';
@@ -12,6 +12,7 @@ import prisma from '@/lib/prisma';
 import { NewsItem } from '@/types/news';
 import ScrollToTopButton from '@/components/ui/ScrollToTopButton';
 import { getSiteSettings } from '@/lib/settings';
+import { getTrendingArticles } from '@/lib/trending';
 
 async function getArticles(): Promise<NewsItem[]> {
   try {
@@ -35,10 +36,20 @@ async function getArticles(): Promise<NewsItem[]> {
 }
 
 export default async function HomePage() {
-  const [allNews, settings] = await Promise.all([
+  const [allNews, settings, trendingRaw] = await Promise.all([
     getArticles(),
     getSiteSettings(),
+    getTrendingArticles(5),
   ]);
+
+  const trendingArticles: NewsItem[] = trendingRaw.map(article => ({
+    ...article,
+    id: article.id.toString(),
+    tags: article.tags ? JSON.parse(article.tags) : [],
+    gallery: article.gallery ? JSON.parse(article.gallery) : [],
+    publishedAt: article.publishedAt?.toISOString() || '',
+    createdAt: article.createdAt?.toISOString() || ''
+  })) as NewsItem[];
 
   const sortedNews = [...allNews].sort((a, b) => {
     if (a.featured && !b.featured) return -1;
@@ -130,13 +141,13 @@ export default async function HomePage() {
                 
                 <div className="flex items-center gap-3 mb-8 relative z-10">
                   <div className="w-1.5 h-6 bg-cyan-500 rounded-full"></div>
-                  <h3 className="text-xl font-bold uppercase tracking-tight">Trending</h3>
+                  <h3 className="text-xl font-bold uppercase tracking-tight flex items-center gap-2">
+                    <TrendingUp size={18} className="text-cyan-500" /> Trending
+                  </h3>
                 </div>
                 
                 <div className="space-y-6 relative z-10">
-                  {sortedNews
-                    .filter(n => n.trendingRank && n.trendingRank > 0)
-                    .sort((a, b) => (a.trendingRank || 99) - (b.trendingRank || 99))
+                  {(trendingArticles.length > 0 ? trendingArticles : sortedNews.slice(0, 3))
                     .slice(0, 3)
                     .map((item, i) => (
                       <Link key={item.id} href={`/article/${item.slug}`} className="flex gap-5 group items-start">
