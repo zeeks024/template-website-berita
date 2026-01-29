@@ -10,7 +10,7 @@ export default async function ProtectedLayout({
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect('/admin/login');
+    redirect('/login?redirect=/admin');
   }
 
   return <AdminSidebar user={user}>{children}</AdminSidebar>;

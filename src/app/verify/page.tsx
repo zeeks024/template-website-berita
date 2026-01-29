@@ -14,7 +14,7 @@ export default function VerifyPage() {
         try {
             const res = await fetch(`/api/auth/verify?token=${verifyToken}`);
             if (res.ok) {
-                window.location.href = '/admin/login?verified=true';
+                window.location.href = '/login?verified=true';
             } else {
                 setStatus('error');
             }

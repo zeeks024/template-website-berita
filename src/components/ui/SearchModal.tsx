@@ -71,7 +71,7 @@ export default function SearchModal({ isOpen, onClose }: Props) {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                     />
-                    <button onClick={onClose} className="p-1 hover:bg-muted rounded-full transition-colors">
+                    <button onClick={onClose} className="p-1 hover:bg-muted rounded-full transition-colors" aria-label="Tutup pencarian">
                         <X className="text-muted-foreground" size={20} />
                     </button>
                 </div>

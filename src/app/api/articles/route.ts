@@ -8,6 +8,9 @@ export async function GET(request: Request) {
         const { searchParams } = new URL(request.url);
         const status = searchParams.get('status');
         const myArticles = searchParams.get('my') === 'true';
+        const page = parseInt(searchParams.get('page') || '1', 10);
+        const limit = parseInt(searchParams.get('limit') || '10', 10);
+        const paginate = searchParams.get('paginate') === 'true';
 
         let whereClause: Record<string, unknown> = {};
         
@@ -18,7 +21,7 @@ export async function GET(request: Request) {
         if (myArticles) {
             const user = await getCurrentUser();
             if (!user) {
-                return NextResponse.json([]);
+                return NextResponse.json(paginate ? { articles: [], total: 0, page, limit, totalPages: 0 } : []);
             }
             whereClause.authorId = user.userId;
         } else if (status === 'all') {
@@ -28,6 +31,33 @@ export async function GET(request: Request) {
             } else if (user.role !== 'ADMIN') {
                 whereClause.authorId = user.userId;
             }
+        }
+
+        if (paginate) {
+            const [articles, total] = await Promise.all([
+                prisma.article.findMany({
+                    where: whereClause,
+                    orderBy: { createdAt: 'desc' },
+                    include: { authorUser: { select: { id: true, name: true } } },
+                    skip: (page - 1) * limit,
+                    take: limit
+                }),
+                prisma.article.count({ where: whereClause })
+            ]);
+
+            const parsedArticles = articles.map(article => ({
+                ...article,
+                tags: article.tags ? JSON.parse(article.tags) : [],
+                gallery: article.gallery ? JSON.parse(article.gallery) : []
+            }));
+
+            return NextResponse.json({
+                articles: parsedArticles,
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            });
         }
 
         const articles = await prisma.article.findMany({

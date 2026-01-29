@@ -9,10 +9,26 @@ datasource db {
 
 model Comment {
   id        String   @id @default(cuid())
-  name      String
   text      String
   slug      String
+  name      String?
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+
+  @@index([slug])
+  @@index([userId])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  slug      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, slug])
+  @@index([slug])
 }
 
 model ArticleView {
@@ -54,19 +70,63 @@ model Article {
 enum Role {
   ADMIN
   WRITER
+  READER
 }
 
 model User {
-  id                String    @id @default(cuid())
-  email             String    @unique
+  id                String     @id @default(cuid())
+  email             String     @unique
   password          String
   name              String
-  role              Role      @default(WRITER)
-  isVerified        Boolean   @default(false)
-  verificationToken String?
-  resetToken        String?
+  role              Role       @default(READER)
+  isVerified        Boolean    @default(false)
+  verificationToken       String?
+  verificationTokenExpiry DateTime?
+  resetToken              String?
   resetTokenExpiry  DateTime?
   articles          Article[]
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  comments          Comment[]
+  bookmarks         Bookmark[]
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+}
+
+model SiteSettings {
+  id              String   @id @default("default")
+  
+  // Hero Section
+  heroTitle       String   @default("Cerita dari Serayu.")
+  heroDescription String   @default("Mengangkat opini, cerita inspiratif, dan potensi tersembunyi dari Banjarnegara.")
+  
+  // Section Headers
+  sectionOpini    String   @default("Perspektif")
+  sectionCerita   String   @default("Kearifan Lokal")
+  sectionSosok    String   @default("Wajah Banjarnegara.")
+  sectionPotensi  String   @default("Potensi & Unggulan")
+  
+  // Stats
+  statsDesaWisata String   @default("266")
+  statsLabel      String   @default("Desa Wisata")
+  
+  // Quote
+  quoteText       String   @default("Keramik Klampok adalah warisan seni yang terus dilestarikan oleh para pengrajin lokal.")
+  quoteAuthor     String   @default("Pengrajin Keramik Klampok")
+  
+  // Contact Info
+  contactAddress  String   @default("Jl. Dipayuda No. 12, Banjarnegara")
+  contactPhone    String   @default("+62 286 123456")
+  contactEmail    String   @default("redaksi@derapserayu.id")
+  
+  // Images
+  sosokImageUrl   String?
+  
+  // Social Media
+  socialFacebook  String?
+  socialInstagram String?
+  socialTwitter   String?
+  socialYoutube   String?
+  
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

@@ -9,13 +9,14 @@ import {
     FolderOpen, BarChart3, Clock, Activity, Users
 } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
+import Pagination from '@/components/ui/Pagination';
 import { useUser } from './UserContext';
 import { Card, StatCard, Badge, QuickActions } from '@/components/admin/ui';
 
 export default function AdminDashboard() {
     const user = useUser();
     const isAdmin = user.role === 'ADMIN';
-    const { allNews, loading, deleteArticle } = useNews('all', !isAdmin);
+    const { allNews, loading, deleteArticle, pagination, setPage } = useNews('all', !isAdmin, { paginate: true, pageSize: 10 });
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
 
@@ -229,6 +230,14 @@ export default function AdminDashboard() {
                         </tbody>
                     </table>
                 </div>
+
+                <Pagination
+                    page={pagination.page}
+                    totalPages={pagination.totalPages}
+                    total={pagination.total}
+                    limit={pagination.limit}
+                    onPageChange={setPage}
+                />
             </Card>
         </FadeIn>
     );

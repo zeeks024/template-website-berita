@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
-import { LayoutDashboard, PenTool, FolderOpen, Users, ExternalLink, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, PenTool, FolderOpen, Users, ExternalLink, LogOut, Menu, X, Settings } from 'lucide-react';
 import { UserProvider, type AuthUser } from './UserContext';
 
 export default function AdminSidebar({ 
@@ -32,7 +32,7 @@ export default function AdminSidebar({
         } catch (error) {
             console.error('Logout failed:', error);
         } finally {
-            window.location.href = '/admin/login';
+            window.location.href = '/login';
         }
     };
 
@@ -44,6 +44,7 @@ export default function AdminSidebar({
         ...(isAdmin ? [
             { label: 'Kategori', href: '/admin/categories', icon: <FolderOpen size={20} /> },
             { label: 'Users', href: '/admin/users', icon: <Users size={20} /> },
+            { label: 'Pengaturan', href: '/admin/settings', icon: <Settings size={20} /> },
         ] : []),
     ];
 

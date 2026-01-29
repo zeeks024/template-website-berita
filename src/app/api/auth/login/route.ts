@@ -3,14 +3,36 @@ import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { SignJWT } from 'jose';
 import { getEncodedSecret, AUTH_CONFIG } from '@/lib/auth-config';
+import { rateLimit, getClientIP, RATE_LIMIT_CONFIGS } from '@/lib/rate-limit';
+import { loginSchema, formatZodErrors } from '@/lib/validations';
 
 export async function POST(request: Request) {
     try {
-        const { email, password } = await request.json();
-
-        if (!email || !password) {
-            return NextResponse.json({ error: 'Email and password required' }, { status: 400 });
+        const ip = getClientIP(request);
+        const rateLimitResult = rateLimit(`login:${ip}`, RATE_LIMIT_CONFIGS.login);
+        
+        if (!rateLimitResult.success) {
+            return NextResponse.json(
+                { error: `Terlalu banyak percobaan login. Coba lagi dalam ${rateLimitResult.retryAfter} detik.` },
+                { 
+                    status: 429,
+                    headers: {
+                        'Retry-After': String(rateLimitResult.retryAfter),
+                        'X-RateLimit-Remaining': '0',
+                        'X-RateLimit-Reset': String(rateLimitResult.resetTime)
+                    }
+                }
+            );
         }
+
+        const body = await request.json();
+        const parsed = loginSchema.safeParse(body);
+        
+        if (!parsed.success) {
+            return NextResponse.json({ error: formatZodErrors(parsed.error) }, { status: 400 });
+        }
+
+        const { email, password } = parsed.data;
 
         const user = await prisma.user.findUnique({
             where: { email },

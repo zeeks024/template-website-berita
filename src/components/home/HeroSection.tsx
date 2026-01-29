@@ -8,9 +8,15 @@ import { useState, useEffect, useCallback } from 'react';
 
 interface HeroSectionProps {
     articles: NewsItem[];
+    heroTitle?: string;
+    heroDescription?: string;
 }
 
-export default function HeroSection({ articles }: HeroSectionProps) {
+export default function HeroSection({ 
+    articles, 
+    heroTitle = 'Cerita dari Serayu.',
+    heroDescription = 'Mengangkat opini, cerita inspiratif, dan potensi tersembunyi dari setiap sudut Banjarnegara dengan perspektif baru.'
+}: HeroSectionProps) {
     // Get all featured articles (max 5), fallback to first articles if none
     const featuredArticles = articles.filter(n => n.featured).slice(0, 5);
     const allFeatured = featuredArticles.length > 0 ? featuredArticles : articles.slice(0, 3);
@@ -65,11 +71,15 @@ export default function HeroSection({ articles }: HeroSectionProps) {
                     <div className="w-full lg:w-5/12 text-center lg:text-left space-y-8 z-10">
                         
                         <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-foreground leading-[1.1] animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
-                            Cerita dari <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-emerald-600 dark:from-cyan-400 dark:to-emerald-400">Serayu.</span>
+                            {heroTitle.includes('Serayu') ? (
+                                <>{heroTitle.split('Serayu')[0]}<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-emerald-600 dark:from-cyan-400 dark:to-emerald-400">Serayu{heroTitle.split('Serayu')[1]}</span></>
+                            ) : (
+                                heroTitle
+                            )}
                         </h1>
                         
                         <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200 text-balance">
-                            Mengangkat opini, cerita inspiratif, dan potensi tersembunyi dari setiap sudut Banjarnegara dengan perspektif baru.
+                            {heroDescription}
                         </p>
 
                         <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">

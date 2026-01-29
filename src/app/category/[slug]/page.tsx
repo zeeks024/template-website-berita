@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, Clock, User, Folder } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
+import { SkeletonGrid } from '@/components/ui/SkeletonCard';
 import { use } from 'react';
 
 type Props = {
@@ -31,11 +32,23 @@ export default function CategoryPage({ params }: Props) {
     const { allNews, loading } = useNews();
 
     // Fallback loading state
-    if (loading) {
+if (loading) {
         return (
-            <div className="min-h-screen pt-32 px-6 flex items-center justify-center">
-                <span className="text-muted-foreground animate-pulse text-xs font-bold uppercase tracking-widest">Memuat Kategori...</span>
-            </div>
+            <main className="min-h-screen pt-32 px-6 lg:px-12 max-w-[1600px] mx-auto pb-20">
+                <div className="mb-16 border-b border-border pb-12">
+                    <div className="h-4 w-32 bg-muted rounded animate-pulse mb-6" />
+                    <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                        <div>
+                            <div className="h-3 w-20 bg-muted rounded animate-pulse mb-4" />
+                            <div className="h-12 w-64 bg-muted rounded animate-pulse" />
+                        </div>
+                        <div className="text-right">
+                            <div className="h-10 w-16 bg-muted rounded animate-pulse ml-auto" />
+                        </div>
+                    </div>
+                </div>
+                <SkeletonGrid count={6} />
+            </main>
         );
     }
 

@@ -3,13 +3,57 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { Instagram, Twitter, Facebook, Youtube, Mail, ArrowRight, MapPin, Phone } from 'lucide-react';
+
+type FooterSettings = {
+    contactAddress: string;
+    contactPhone: string;
+    contactEmail: string;
+    socialFacebook: string | null;
+    socialInstagram: string | null;
+    socialTwitter: string | null;
+    socialYoutube: string | null;
+};
+
+const DEFAULT_SETTINGS: FooterSettings = {
+    contactAddress: 'Jl. Dipayuda No. 12, Banjarnegara, Jawa Tengah 53412',
+    contactPhone: '(0286) 591234',
+    contactEmail: 'redaksi@derapserayu.com',
+    socialFacebook: null,
+    socialInstagram: null,
+    socialTwitter: null,
+    socialYoutube: null,
+};
 
 export default function Footer() {
     const pathname = usePathname();
+    const [settings, setSettings] = useState<FooterSettings>(DEFAULT_SETTINGS);
+
+    useEffect(() => {
+        fetch('/api/settings')
+            .then(res => res.ok ? res.json() : DEFAULT_SETTINGS)
+            .then(data => setSettings({
+                contactAddress: data.contactAddress || DEFAULT_SETTINGS.contactAddress,
+                contactPhone: data.contactPhone || DEFAULT_SETTINGS.contactPhone,
+                contactEmail: data.contactEmail || DEFAULT_SETTINGS.contactEmail,
+                socialFacebook: data.socialFacebook,
+                socialInstagram: data.socialInstagram,
+                socialTwitter: data.socialTwitter,
+                socialYoutube: data.socialYoutube,
+            }))
+            .catch(() => setSettings(DEFAULT_SETTINGS));
+    }, []);
 
     // Hide on admin pages
     if (pathname?.startsWith('/admin')) return null;
+
+    const socialLinks = [
+        { Icon: Instagram, url: settings.socialInstagram },
+        { Icon: Twitter, url: settings.socialTwitter },
+        { Icon: Facebook, url: settings.socialFacebook },
+        { Icon: Youtube, url: settings.socialYoutube },
+    ];
 
     return (
         <footer className="bg-background border-t border-border pt-24 pb-12 relative overflow-hidden z-10">
@@ -38,9 +82,15 @@ export default function Footer() {
                         <p className="text-muted-foreground text-base leading-relaxed max-w-sm">
                             Suara dari jantung Banjarnegara. Mengabarkan kebenaran, mengangkat potensi, dan merayakan keberagaman budaya lokal dengan jurnalisme yang mendalam.
                         </p>
-                        <div className="flex gap-3">
-                            {[Instagram, Twitter, Facebook, Youtube].map((Icon, i) => (
-                                <a key={i} href="#" className="w-10 h-10 rounded-full bg-muted border border-border flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 transform hover:-translate-y-1">
+<div className="flex gap-3">
+                            {socialLinks.map(({ Icon, url }, i) => (
+                                <a 
+                                    key={i} 
+                                    href={url || '#'} 
+                                    target={url ? '_blank' : undefined}
+                                    rel={url ? 'noopener noreferrer' : undefined}
+                                    className="w-10 h-10 rounded-full bg-muted border border-border flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 transform hover:-translate-y-1"
+                                >
                                     <Icon size={18} />
                                 </a>
                             ))}
@@ -95,18 +145,18 @@ export default function Footer() {
                             </form>
                         </div>
 
-                        <div className="flex flex-col gap-4 text-sm text-muted-foreground pt-8 border-t border-border">
+<div className="flex flex-col gap-4 text-sm text-muted-foreground pt-8 border-t border-border">
                             <div className="flex items-start gap-4">
                                 <MapPin size={18} className="text-primary/50 mt-1 shrink-0" />
-                                <span className="font-light">Jl. Dipayuda No. 12, Banjarnegara,<br />Jawa Tengah 53412</span>
+                                <span className="font-light">{settings.contactAddress}</span>
                             </div>
                             <div className="flex items-center gap-4">
                                 <Phone size={18} className="text-primary/50 shrink-0" />
-                                <span className="font-light hover:text-primary transition-colors cursor-pointer">(0286) 591234</span>
+                                <span className="font-light hover:text-primary transition-colors cursor-pointer">{settings.contactPhone}</span>
                             </div>
                             <div className="flex items-center gap-4">
                                 <Mail size={18} className="text-primary/50 shrink-0" />
-                                <span className="font-light hover:text-primary transition-colors cursor-pointer">redaksi@derapserayu.com</span>
+                                <span className="font-light hover:text-primary transition-colors cursor-pointer">{settings.contactEmail}</span>
                             </div>
                         </div>
                     </div>

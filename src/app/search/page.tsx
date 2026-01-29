@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Suspense, useState, useMemo } from 'react';
 import FadeIn from '@/components/ui/FadeIn';
+import { SkeletonGrid } from '@/components/ui/SkeletonCard';
 import { Search as SearchIcon, Filter, SlidersHorizontal, ArrowRight } from 'lucide-react';
 
 const CATEGORIES = ['Semua', 'Teknologi', 'Ekonomi', 'Nusantara', 'Daerah', 'Kesehatan', 'Opini', 'Cerita', 'Sosok Inspiratif', 'Sudut Kota', 'Potensi'];
@@ -237,8 +238,15 @@ function SearchResults() {
 export default function SearchPage() {
     return (
         <Suspense fallback={
-            <div className="min-h-screen pt-32 flex justify-center text-muted-foreground font-bold uppercase tracking-widest text-xs">
-                Memuat pencarian...
+            <div className="min-h-screen pt-32 pb-24 px-6">
+                <div className="max-w-7xl mx-auto">
+                    <div className="mb-12">
+                        <div className="h-3 w-24 bg-muted rounded animate-pulse mb-4" />
+                        <div className="h-10 w-72 bg-muted rounded animate-pulse mb-6" />
+                        <div className="bg-card border border-border rounded-2xl p-4 h-16 animate-pulse" />
+                    </div>
+                    <SkeletonGrid count={6} />
+                </div>
             </div>
         }>
             <SearchResults />

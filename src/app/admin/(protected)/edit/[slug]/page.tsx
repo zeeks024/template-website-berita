@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, use, useMemo, useEffect } from 'react';
+import { useState, use, useMemo, useEffect, useCallback } from 'react';
 import { useNews } from '@/hooks/useNews';
 import { useCategories } from '@/hooks/useCategories';
+import { useAutosave } from '@/hooks/useAutosave';
 import { useRouter } from 'next/navigation';
 import { useUser } from '../../UserContext';
 import Link from 'next/link';
@@ -13,10 +14,12 @@ import {
     Save, X, Rocket, Settings2, PenLine, 
     AlignLeft, Newspaper, ImagePlus, Hash,
     FolderOpen, ChevronDown, ArrowLeft, Sparkles,
-    Globe, Edit3, Star
+    Globe, Edit3, Star,
+    Cloud, CheckCircle, CloudOff, Eye
 } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
 import { Card, SectionHeader, Badge } from '@/components/admin/ui';
+import ArticlePreviewModal from '@/components/admin/ArticlePreviewModal';
 
 type Props = {
     params: Promise<{ slug: string }>;
@@ -78,6 +81,7 @@ export default function EditArticlePage({ params }: Props) {
     const isAdmin = user.role === 'ADMIN';
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formInitialized, setFormInitialized] = useState(false);
+    const [showPreview, setShowPreview] = useState(false);
 
     const foundArticle = useMemo(() => {
         if (loading || allNews.length === 0) return null;
@@ -129,6 +133,18 @@ export default function EditArticlePage({ params }: Props) {
 
     const [formData, setFormData] = useState<FormData>(initialFormData);
 
+    const handleRestore = useCallback((data: FormData) => {
+        setFormData(data);
+    }, []);
+
+    const { status: autosaveStatus, lastSaved, clear: clearAutosave } = useAutosave({
+        key: `article_edit_${slug}`,
+        data: formData,
+        enabled: formInitialized && (formData.title.length > 0 || formData.content.length > 0),
+        debounceMs: 2000,
+        onRestore: handleRestore
+    });
+
     useEffect(() => {
         if (foundArticle && !formInitialized) {
             setFormData(initialFormData);
@@ -166,7 +182,7 @@ export default function EditArticlePage({ params }: Props) {
         setIsSubmitting(false);
 
         if (success) {
-            localStorage.removeItem('editor_autosave_temp');
+            clearAutosave();
             router.push('/admin');
         } else {
             alert('Gagal menyimpan perubahan.');
@@ -188,6 +204,26 @@ export default function EditArticlePage({ params }: Props) {
                         subtitle="Perbarui konten artikel yang sudah ada."
                         action={
                             <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                    {autosaveStatus === 'saving' && (
+                                        <>
+                                            <Cloud size={14} className="animate-pulse text-amber-500" />
+                                            <span>Menyimpan...</span>
+                                        </>
+                                    )}
+                                    {autosaveStatus === 'saved' && (
+                                        <>
+                                            <CheckCircle size={14} className="text-emerald-500" />
+                                            <span>Tersimpan</span>
+                                        </>
+                                    )}
+                                    {autosaveStatus === 'idle' && lastSaved && (
+                                        <>
+                                            <CloudOff size={14} />
+                                            <span>Draft lokal</span>
+                                        </>
+                                    )}
+                                </div>
                                 <Badge variant="warning" dot>
                                     <Edit3 size={12} className="mr-1" />
                                     Mode Edit
@@ -337,6 +373,15 @@ export default function EditArticlePage({ params }: Props) {
 
                         <div className="flex flex-col gap-3">
                             <button
+                                type="button"
+                                onClick={() => setShowPreview(true)}
+                                disabled={!formData.title && !formData.content}
+                                className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <Eye size={16} />
+                                Preview
+                            </button>
+                            <button
                                 type="submit"
                                 disabled={isSubmitting}
                                 className="w-full py-3.5 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white rounded-xl font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40"
@@ -443,6 +488,13 @@ export default function EditArticlePage({ params }: Props) {
                     </Card>
                 </div>
             </form>
+
+            {showPreview && (
+                <ArticlePreviewModal
+                    data={formData}
+                    onClose={() => setShowPreview(false)}
+                />
+            )}
         </FadeIn>
     );
 }

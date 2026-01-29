@@ -11,6 +11,7 @@ import Image from 'next/image';
 import prisma from '@/lib/prisma';
 import { NewsItem } from '@/types/news';
 import ScrollToTopButton from '@/components/ui/ScrollToTopButton';
+import { getSiteSettings } from '@/lib/settings';
 
 async function getArticles(): Promise<NewsItem[]> {
   try {
@@ -34,7 +35,10 @@ async function getArticles(): Promise<NewsItem[]> {
 }
 
 export default async function HomePage() {
-  const allNews = await getArticles();
+  const [allNews, settings] = await Promise.all([
+    getArticles(),
+    getSiteSettings(),
+  ]);
 
   const sortedNews = [...allNews].sort((a, b) => {
     if (a.featured && !b.featured) return -1;
@@ -59,7 +63,11 @@ export default async function HomePage() {
   return (
     <main className="relative z-10 pt-20 pb-12 space-y-24 md:space-y-32 overflow-hidden">
       
-      <HeroSection articles={allNews} />
+      <HeroSection 
+        articles={allNews} 
+        heroTitle={settings.heroTitle}
+        heroDescription={settings.heroDescription}
+      />
 
       <section id="opini" className="container px-4 mx-auto">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
@@ -68,7 +76,7 @@ export default async function HomePage() {
             <FadeIn>
               <div className="flex items-end justify-between mb-8 md:mb-12 border-b border-border pb-4">
                 <div className="space-y-2">
-                    <span className="text-cyan-600 dark:text-cyan-400 font-bold tracking-widest text-xs uppercase">Perspektif</span>
+                    <span className="text-cyan-600 dark:text-cyan-400 font-bold tracking-widest text-xs uppercase">{settings.sectionOpini}</span>
                     <h2 className="text-3xl md:text-5xl font-serif font-bold text-foreground">Sudut <span className="text-cyan-600 dark:text-cyan-400 italic">Opini</span></h2>
                 </div>
                 <Link href="/category/opini" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors group mb-2">
@@ -172,7 +180,7 @@ export default async function HomePage() {
             <FadeIn>
             <div className="flex items-end justify-between mb-16 flex-wrap gap-4">
                 <div className="space-y-2">
-                    <span className="text-cyan-600 dark:text-cyan-400 font-bold tracking-widest text-xs uppercase">Kearifan Lokal</span>
+                    <span className="text-cyan-600 dark:text-cyan-400 font-bold tracking-widest text-xs uppercase">{settings.sectionCerita}</span>
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground">Cerita <span className="text-cyan-600 dark:text-cyan-400 italic">Rakyat</span></h2>
                 </div>
                 <Link href="/category/cerita" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors group">
@@ -215,7 +223,7 @@ export default async function HomePage() {
             <FadeIn className="space-y-10">
                 <div className="space-y-4">
                     <span className="inline-block px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-xs font-bold uppercase tracking-widest border border-cyan-200 dark:border-cyan-800">Inspirasi Lokal</span>
-                    <h2 className="text-5xl lg:text-7xl font-serif font-bold leading-[0.9]">Wajah <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600">Banjarnegara.</span></h2>
+                    <h2 className="text-5xl lg:text-7xl font-serif font-bold leading-[0.9]">{settings.sectionSosok.replace('.', '')}<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600">.</span></h2>
                     <p className="text-muted-foreground text-lg lg:text-xl max-w-md leading-relaxed">Mengenal mereka yang berkarya dalam senyap, memberikan dampak nyata bagi lingkungan sekitar.</p>
                 </div>
 
@@ -248,7 +256,7 @@ export default async function HomePage() {
             <FadeIn delay={200} className="relative h-[600px] rounded-[3rem] overflow-hidden hidden lg:block group shadow-2xl shadow-cyan-900/10">
                 <div className="absolute inset-0 bg-cyan-900/20 group-hover:bg-transparent transition-all z-10 duration-700"></div>
                 <Image
-                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1976&auto=format&fit=crop"
+                src={settings.sosokImageUrl || "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1976&auto=format&fit=crop"}
                 fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-105"
                 alt="Potret tokoh inspiratif Banjarnegara"
@@ -346,22 +354,22 @@ export default async function HomePage() {
             <div className="w-16 h-16 rounded-full bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Lightbulb size={32} className="text-cyan-600 dark:text-cyan-400" />
             </div>
-            <h4 className="text-5xl font-black text-foreground mb-2">266</h4>
-            <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest">Desa Wisata</p>
+            <h4 className="text-5xl font-black text-foreground mb-2">{settings.statsDesaWisata}</h4>
+            <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest">{settings.statsLabel}</p>
           </FadeIn>
 
           <FadeIn delay={200} className="lg:col-span-1 bg-cyan-50 dark:bg-cyan-950/30 border border-cyan-100 dark:border-cyan-900/50 text-foreground rounded-[2.5rem] p-8 flex flex-col justify-between min-h-[200px]">
             <Quote size={40} className="text-cyan-500/30" />
-            <p className="text-lg font-serif italic leading-tight text-cyan-900 dark:text-cyan-100">&quot;Keramik Klampok adalah warisan seni yang tak ternilai harganya.&quot;</p>
+            <p className="text-lg font-serif italic leading-tight text-cyan-900 dark:text-cyan-100">&quot;{settings.quoteText}&quot;</p>
           </FadeIn>
 
           <FadeIn delay={300} className="sm:col-span-2 lg:col-span-2 bg-foreground text-background rounded-[2.5rem] p-8 lg:p-10 flex flex-col sm:flex-row items-center justify-between relative overflow-hidden group min-h-[200px] gap-4">
             <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/20 rounded-full blur-[80px] -mr-16 -mt-16 opacity-50"></div>
             <div className="relative z-10 max-w-md">
-              <h4 className="text-2xl font-bold uppercase italic mb-2">Punya Produk Unggulan?</h4>
-              <p className="text-background/70 text-sm">Daftarkan UMKM Anda di database daerah untuk jangkauan pasar yang lebih luas.</p>
+              <h4 className="text-2xl font-bold uppercase italic mb-2">Ingin Usahamu Diliput?</h4>
+              <p className="text-background/70 text-sm">Hubungi redaksi untuk peliputan potensi dan produk unggulan daerah.</p>
             </div>
-            <Link href="/admin/create" className="w-16 h-16 rounded-full bg-background text-foreground flex items-center justify-center group-hover:rotate-45 transition-transform duration-500 hover:bg-cyan-500 hover:text-white shrink-0 ml-6 shadow-xl">
+            <Link href="/hubungi-kami" className="w-16 h-16 rounded-full bg-background text-foreground flex items-center justify-center group-hover:rotate-45 transition-transform duration-500 hover:bg-cyan-500 hover:text-white shrink-0 ml-6 shadow-xl">
               <ArrowUpRight size={28} />
             </Link>
           </FadeIn>

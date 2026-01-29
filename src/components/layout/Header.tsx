@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { Search, Menu, X } from 'lucide-react';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
-import AccessibilityMenu from '@/components/ui/AccessibilityMenu';
+import { Search, Menu, X, LogIn, LogOut, User, Bookmark, ChevronDown } from 'lucide-react';
+import SettingsMenu from '@/components/ui/SettingsMenu';
+import { useAuth } from '@/hooks/useAuth';
 
 const SearchModal = dynamic(() => import('@/components/ui/SearchModal'), {
     ssr: false,
@@ -18,6 +18,9 @@ export default function Header() {
     const [scrolled, setScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    
+    const { user, isLoading: loading, logout } = useAuth();
 
     const pathname = usePathname();
 
@@ -74,7 +77,7 @@ export default function Header() {
                     </Link>
 
                     {/* Desktop Menu */}
-                    <div className="hidden lg:flex items-center gap-8 text-2xs font-bold uppercase tracking-widest text-muted-foreground">
+                    <div className="hidden lg:flex items-center gap-6 text-xs font-semibold tracking-wide text-muted-foreground">
                         {categories.map(item => (
                             <Link
                                 key={item}
@@ -88,12 +91,75 @@ export default function Header() {
                     </div>
 
                     {/* Right Actions */}
-                    <div className="flex items-center gap-3">
-                        <AccessibilityMenu />
-                        <ThemeToggle />
+                    <div className="flex items-center gap-2">
+                        <SettingsMenu />
+                        
+                        {!loading && (
+                            user ? (
+                                <div className="relative hidden sm:block">
+                                    <button
+                                        onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                                        className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full hover:bg-accent transition-colors border border-transparent hover:border-border"
+                                    >
+                                        <div className="w-8 h-8 rounded-full bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center text-cyan-700 dark:text-cyan-300 font-bold text-sm border border-cyan-200 dark:border-cyan-800">
+                                            {user.name?.charAt(0).toUpperCase() || 'U'}
+                                        </div>
+                                        <span className="text-sm font-medium max-w-[100px] truncate">
+                                            {user.name?.split(' ')[0]}
+                                        </span>
+                                        <ChevronDown size={14} className={`text-muted-foreground transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
+                                    </button>
+
+                                    {isUserMenuOpen && (
+                                        <>
+                                            <div 
+                                                className="fixed inset-0 z-40" 
+                                                onClick={() => setIsUserMenuOpen(false)}
+                                            />
+                                            <div className="absolute top-full right-0 mt-2 w-64 bg-background/95 backdrop-blur-xl border border-border rounded-xl shadow-xl shadow-black/10 dark:shadow-black/50 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+                                                <div className="p-4 border-b border-border bg-muted/30">
+                                                    <p className="font-medium truncate">{user.name}</p>
+                                                    <p className="text-xs text-muted-foreground uppercase tracking-wider mt-1 font-bold">{user.role}</p>
+                                                </div>
+                                                <div className="p-2">
+                                                    <Link 
+                                                        href="/saved" 
+                                                        onClick={() => setIsUserMenuOpen(false)}
+                                                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted transition-colors text-sm group"
+                                                    >
+                                                        <Bookmark size={16} className="text-muted-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors" />
+                                                        Tersimpan
+                                                    </Link>
+                                                    <button 
+                                                        onClick={() => {
+                                                            logout();
+                                                            setIsUserMenuOpen(false);
+                                                        }}
+                                                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/10 text-red-600 dark:text-red-400 transition-colors text-sm mt-1"
+                                                    >
+                                                        <LogOut size={16} />
+                                                        Keluar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            ) : (
+                                <Link
+                                    href="/login"
+                                    className="hidden sm:flex p-2.5 rounded-full hover:bg-accent text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 transition-all"
+                                    title="Masuk"
+                                >
+                                    <User size={18} />
+                                </Link>
+                            )
+                        )}
+
                         <button
                             onClick={() => setIsSearchOpen(true)}
                             className="hidden md:flex p-2.5 rounded-full hover:bg-accent text-muted-foreground hover:text-foreground transition-all items-center gap-2 group"
+                            aria-label="Buka pencarian (Ctrl+K)"
                         >
                             <Search size={18} />
                             <span className="text-2xs bg-muted px-1.5 py-0.5 rounded border border-border opacity-0 group-hover:opacity-100 transition-opacity">CTRL+K</span>
@@ -101,6 +167,7 @@ export default function Header() {
                         <button
                             onClick={() => setIsMenuOpen(true)}
                             className="px-5 py-2 bg-foreground text-background rounded-full font-bold text-xs uppercase tracking-wider hover:bg-cyan-600 dark:hover:bg-cyan-500 hover:text-white transition-all flex items-center gap-2 group"
+                            aria-label="Buka menu navigasi"
                         >
                             Menu <Menu size={14} className="group-hover:rotate-180 transition-transform duration-500" />
                         </button>
@@ -120,6 +187,49 @@ export default function Header() {
                     />
                     <div className="fixed top-20 right-4 lg:right-12 w-72 max-h-[80vh] bg-background/80 backdrop-blur-xl border border-border rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/50 z-50 overflow-hidden overflow-y-auto animate-in fade-in zoom-in-95 duration-200 origin-top-right">
                         <div className="p-2">
+                            {!loading && (
+                                user ? (
+                                    <div className="mb-2 pb-2 border-b border-border px-4 py-2">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <div className="w-10 h-10 rounded-full bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center text-cyan-700 dark:text-cyan-300 font-bold border border-cyan-200 dark:border-cyan-800">
+                                                {user.name?.charAt(0).toUpperCase() || 'U'}
+                                            </div>
+                                            <div className="overflow-hidden">
+                                                <p className="font-medium truncate text-sm">{user.name}</p>
+                                                <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">{user.role}</p>
+                                            </div>
+                                        </div>
+                                        <Link 
+                                            href="/saved"
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="flex items-center gap-3 py-2 text-sm text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                                        >
+                                            <Bookmark size={16} />
+                                            Tersimpan
+                                        </Link>
+                                        <button 
+                                            onClick={() => {
+                                                logout();
+                                                setIsMenuOpen(false);
+                                            }}
+                                            className="flex items-center gap-3 py-2 text-sm text-red-600 dark:text-red-400 hover:text-red-700 transition-colors w-full"
+                                        >
+                                            <LogOut size={16} />
+                                            Keluar
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <Link
+                                        href="/login"
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 font-medium hover:bg-cyan-600/20 transition-colors"
+                                    >
+                                        <LogIn size={18} />
+                                        Masuk Akun
+                                    </Link>
+                                )
+                            )}
+
                             {categories.map((item, i) => (
                                 <Link
                                     key={item}
