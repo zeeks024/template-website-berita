@@ -125,7 +125,7 @@ export default function MainNewsGrid() {
                                                         </div>
                                                         <div className="flex flex-col">
                                                             <span className="text-xs font-bold text-foreground">{article.author}</span>
-                                                            <span className="text-2xs text-muted-foreground uppercase tracking-wider">{article.readTime} baca</span>
+                                                            <span className="text-2xs text-muted-foreground uppercase tracking-wider">{article.readTime}</span>
                                                         </div>
                                                     </div>
 

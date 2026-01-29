@@ -150,7 +150,7 @@ export default function HeroSection({
                                                     <span>{currentArticle.author}</span>
                                                 </div>
                                                 <span>•</span>
-                                                <span>{currentArticle.readTime} baca</span>
+                                                <span>{currentArticle.readTime}</span>
                                             </div>
                                         </div>
                                     </div>

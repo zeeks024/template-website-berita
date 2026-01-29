@@ -110,7 +110,7 @@ export default async function HomePage() {
                         </p>
                         
                         <div className="mt-auto pt-4 border-t border-border/50 flex items-center justify-between text-xs text-muted-foreground font-medium">
-                            <span className="flex items-center gap-1.5"><Clock size={14}/> {item.readTime} baca</span>
+                            <span className="flex items-center gap-1.5"><Clock size={14}/> {item.readTime}</span>
                             <span className="flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">Baca Opini <ArrowRight size={14}/></span>
                         </div>
                     </div>
