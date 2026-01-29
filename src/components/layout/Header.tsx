@@ -92,8 +92,6 @@ export default function Header() {
 
                     {/* Right Actions */}
                     <div className="flex items-center gap-2">
-                        <SettingsMenu />
-                        
                         {!loading && (
                             user ? (
                                 <div className="relative hidden sm:block">
@@ -164,6 +162,7 @@ export default function Header() {
                             <Search size={18} />
                             <span className="text-2xs bg-muted px-1.5 py-0.5 rounded border border-border opacity-0 group-hover:opacity-100 transition-opacity">CTRL+K</span>
                         </button>
+                        <SettingsMenu />
                         <button
                             onClick={() => setIsMenuOpen(true)}
                             className="px-5 py-2 bg-foreground text-background rounded-full font-bold text-xs uppercase tracking-wider hover:bg-cyan-600 dark:hover:bg-cyan-500 hover:text-white transition-all flex items-center gap-2 group"
