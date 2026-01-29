@@ -84,7 +84,7 @@ export default function HeroSection({
 
                         <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
                              <Link 
-                                href="/about"
+                                href="/tentang-kami"
                                 className="px-8 py-4 rounded-full bg-foreground text-background font-medium hover:bg-cyan-600 hover:text-white transition-colors duration-300"
                             >
                                 Tentang Kami
