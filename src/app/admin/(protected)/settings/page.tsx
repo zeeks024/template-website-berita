@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '../UserContext';
 import { Card, SectionHeader } from '@/components/admin/ui';
-import { Settings, Save, Loader2 } from 'lucide-react';
+import { Settings, Save, Loader2, Upload, X, Image as ImageIcon } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
+import Image from 'next/image';
 
 type SiteSettings = {
     id: string;
@@ -36,6 +37,8 @@ export default function SettingsPage() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (user.role !== 'ADMIN') {
@@ -89,6 +92,40 @@ export default function SettingsPage() {
     const updateField = (field: keyof SiteSettings, value: string) => {
         if (!settings) return;
         setSettings({ ...settings, [field]: value });
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploading(true);
+        setMessage(null);
+
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                updateField('sosokImageUrl', data.url);
+                setMessage({ type: 'success', text: 'Gambar berhasil diupload!' });
+            } else {
+                const data = await res.json();
+                setMessage({ type: 'error', text: data.error || 'Gagal upload gambar.' });
+            }
+        } catch {
+            setMessage({ type: 'error', text: 'Terjadi kesalahan saat upload.' });
+        } finally {
+            setUploading(false);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+        }
     };
 
     if (user.role !== 'ADMIN') return null;
@@ -287,13 +324,57 @@ export default function SettingsPage() {
                         </h3>
                         <div className="space-y-4">
                             <div>
-                                <label className={labelClass}>URL Gambar Sosok (Unsplash/CDN)</label>
-                                <input
-                                    value={settings.sosokImageUrl || ''}
-                                    onChange={e => updateField('sosokImageUrl', e.target.value)}
-                                    className={inputClass}
-                                    placeholder="https://images.unsplash.com/..."
-                                />
+                                <label className={labelClass}>Gambar Sosok</label>
+                                <div className="space-y-3">
+                                    <div className="flex gap-3">
+                                        <input
+                                            value={settings.sosokImageUrl || ''}
+                                            onChange={e => updateField('sosokImageUrl', e.target.value)}
+                                            className={`${inputClass} flex-1`}
+                                            placeholder="https://images.unsplash.com/... atau upload gambar"
+                                        />
+                                        <input
+                                            ref={fileInputRef}
+                                            type="file"
+                                            accept="image/jpeg,image/png,image/webp,image/gif"
+                                            onChange={handleImageUpload}
+                                            className="hidden"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => fileInputRef.current?.click()}
+                                            disabled={uploading}
+                                            className="px-4 py-3 bg-muted hover:bg-muted/80 disabled:opacity-50 border border-border rounded-xl font-medium text-sm transition-colors flex items-center gap-2"
+                                        >
+                                            {uploading ? (
+                                                <Loader2 size={16} className="animate-spin" />
+                                            ) : (
+                                                <Upload size={16} />
+                                            )}
+                                            Upload
+                                        </button>
+                                    </div>
+                                    {settings.sosokImageUrl && (
+                                        <div className="relative inline-block">
+                                            <div className="relative w-32 h-32 rounded-xl overflow-hidden border border-border">
+                                                <Image
+                                                    src={settings.sosokImageUrl}
+                                                    alt="Preview Sosok"
+                                                    fill
+                                                    className="object-cover"
+                                                    unoptimized
+                                                />
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => updateField('sosokImageUrl', '')}
+                                                className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-colors"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
