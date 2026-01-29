@@ -28,7 +28,7 @@ export default function SettingsMenu() {
                         onClick={() => setIsOpen(false)}
                     />
                     <div 
-                        className="absolute right-0 top-full mt-3 w-72 bg-background/80 backdrop-blur-xl border border-border rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/50 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-right"
+                        className="absolute right-0 top-full mt-3 w-72 bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur-xl border border-border rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/50 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-right"
                     >
                         <div className="p-5 space-y-5">
                             <div>

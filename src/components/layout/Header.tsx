@@ -114,7 +114,7 @@ export default function Header() {
                                                 className="fixed inset-0 z-40" 
                                                 onClick={() => setIsUserMenuOpen(false)}
                                             />
-                                            <div className="absolute top-full right-0 mt-2 w-64 bg-background/80 backdrop-blur-xl border border-border rounded-xl shadow-xl shadow-black/10 dark:shadow-black/50 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+                                            <div className="absolute top-full right-0 mt-2 w-64 bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur-xl border border-border rounded-xl shadow-xl shadow-black/10 dark:shadow-black/50 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-right">
                                                 <div className="p-4 border-b border-border bg-muted/30">
                                                     <p className="font-medium truncate">{user.name}</p>
                                                     <p className="text-xs text-muted-foreground uppercase tracking-wider mt-1 font-bold">{user.role}</p>
