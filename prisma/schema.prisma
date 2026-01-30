@@ -9,12 +9,12 @@ datasource db {
 
 model Comment {
   id        String   @id @default(cuid())
+  name      String?
   text      String
   slug      String
-  name      String?
+  createdAt DateTime @default(now())
   userId    String?
   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
 
   @@index([slug])
   @@index([userId])
@@ -24,8 +24,8 @@ model Bookmark {
   id        String   @id @default(cuid())
   slug      String
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, slug])
   @@index([slug])
@@ -45,8 +45,6 @@ model Article {
   content       String
   category      String
   author        String
-  authorId      String?
-  authorUser    User?     @relation(fields: [authorId], references: [id])
   image         String?
   gallery       String?
   status        String    @default("draft")
@@ -58,75 +56,102 @@ model Article {
   tags          String?
   editor        String?
   lastUpdatedBy String?
-  publishedAt   DateTime?
   readTime      String
   featured      Boolean   @default(false)
   trendingRank  Int?
-  views         Int       @default(0)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  views         Int       @default(0)
+  authorId      String?
+  publishedAt   DateTime?
+  scheduledAt   DateTime?
+  authorUser    User?     @relation(fields: [authorId], references: [id])
+
+  @@index([category])
+  @@index([status])
+}
+
+model User {
+  id                      String     @id @default(cuid())
+  email                   String     @unique
+  password                String?
+  name                    String
+  role                    Role       @default(READER)
+  isVerified              Boolean    @default(false)
+  verificationToken       String?
+  resetToken              String?
+  resetTokenExpiry        DateTime?
+  createdAt               DateTime   @default(now())
+  updatedAt               DateTime   @updatedAt
+  verificationTokenExpiry DateTime?
+  avatar                  String?
+  bio                     String?
+  socialLinks             String?
+  emailVerified           DateTime?
+  image                   String?
+  accounts                Account[]
+  articles                Article[]
+  bookmarks               Bookmark[]
+  comments                Comment[]
+}
+
+model SiteSettings {
+  id              String   @id @default("default")
+  heroTitle       String   @default("Cerita dari Serayu.")
+  heroDescription String   @default("Mengangkat opini, cerita inspiratif, dan potensi tersembunyi dari Banjarnegara.")
+  sectionOpini    String   @default("Perspektif")
+  sectionCerita   String   @default("Kearifan Lokal")
+  sectionSosok    String   @default("Wajah Banjarnegara.")
+  sectionPotensi  String   @default("Potensi & Unggulan")
+  statsDesaWisata String   @default("266")
+  statsLabel      String   @default("Desa Wisata")
+  quoteText       String   @default("Keramik Klampok adalah warisan seni yang terus dilestarikan oleh para pengrajin lokal.")
+  quoteAuthor     String   @default("Pengrajin Keramik Klampok")
+  contactAddress  String   @default("Jl. Dipayuda No. 12, Banjarnegara")
+  contactPhone    String   @default("+62 286 123456")
+  contactEmail    String   @default("redaksi@derapserayu.id")
+  sosokImageUrl   String?
+  socialFacebook  String?
+  socialInstagram String?
+  socialTwitter   String?
+  socialYoutube   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Newsletter {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  verified       Boolean   @default(false)
+  verifyToken    String?
+  unsubscribedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([email])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 enum Role {
   ADMIN
   WRITER
   READER
-}
-
-model User {
-  id                String     @id @default(cuid())
-  email             String     @unique
-  password          String
-  name              String
-  role              Role       @default(READER)
-  isVerified        Boolean    @default(false)
-  verificationToken       String?
-  verificationTokenExpiry DateTime?
-  resetToken              String?
-  resetTokenExpiry  DateTime?
-  articles          Article[]
-  comments          Comment[]
-  bookmarks         Bookmark[]
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
-}
-
-model SiteSettings {
-  id              String   @id @default("default")
-  
-  // Hero Section
-  heroTitle       String   @default("Cerita dari Serayu.")
-  heroDescription String   @default("Mengangkat opini, cerita inspiratif, dan potensi tersembunyi dari Banjarnegara.")
-  
-  // Section Headers
-  sectionOpini    String   @default("Perspektif")
-  sectionCerita   String   @default("Kearifan Lokal")
-  sectionSosok    String   @default("Wajah Banjarnegara.")
-  sectionPotensi  String   @default("Potensi & Unggulan")
-  
-  // Stats
-  statsDesaWisata String   @default("266")
-  statsLabel      String   @default("Desa Wisata")
-  
-  // Quote
-  quoteText       String   @default("Keramik Klampok adalah warisan seni yang terus dilestarikan oleh para pengrajin lokal.")
-  quoteAuthor     String   @default("Pengrajin Keramik Klampok")
-  
-  // Contact Info
-  contactAddress  String   @default("Jl. Dipayuda No. 12, Banjarnegara")
-  contactPhone    String   @default("+62 286 123456")
-  contactEmail    String   @default("redaksi@derapserayu.id")
-  
-  // Images
-  sosokImageUrl   String?
-  
-  // Social Media
-  socialFacebook  String?
-  socialInstagram String?
-  socialTwitter   String?
-  socialYoutube   String?
-  
-  // Timestamps
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
 }
