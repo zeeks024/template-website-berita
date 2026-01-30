@@ -114,11 +114,11 @@ export default function Footer() {
 
                     {/* Column 3: Tentang (2 cols) */}
                     <div className="lg:col-span-2 space-y-8">
-                        <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Tentang</h4>
+<h4 className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Tentang</h4>
                         <ul className="space-y-4">
-                            {['Tentang Kami', 'Redaksi', 'Pedoman Siber', 'Hubungi Kami'].map((item) => (
+                            {['Cari Artikel', 'Tentang Kami', 'Redaksi', 'Pedoman Siber', 'Hubungi Kami'].map((item) => (
                                 <li key={item}>
-                                    <Link href={`/${item.toLowerCase().replace(' ', '-')}`} className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors flex items-center gap-2 group">
+                                    <Link href={item === 'Cari Artikel' ? '/search' : `/${item.toLowerCase().replace(' ', '-')}`} className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors flex items-center gap-2 group">
                                         <span className="w-1 h-1 rounded-full bg-border group-hover:bg-primary transition-colors"></span>
                                         <span className="group-hover:translate-x-1 transition-transform">{item}</span>
                                     </Link>

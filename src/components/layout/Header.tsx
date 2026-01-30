@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { Search, Menu, X, LogIn, LogOut, User, Bookmark, ChevronDown } from 'lucide-react';
+import { Search, Menu, X, LogIn, LogOut, User, Bookmark, ChevronDown, LayoutDashboard } from 'lucide-react';
 import SettingsMenu from '@/components/ui/SettingsMenu';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -54,24 +54,24 @@ export default function Header() {
 
     return (
         <>
-            <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out px-4 lg:px-12 flex justify-center ${scrolled ? 'pt-4' : 'pt-6'
-                }`}>
+<nav className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out px-4 lg:px-12 flex justify-center ${scrolled ? 'pt-4' : 'pt-6'
+                } ${isMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                 <div className={`w-full max-w-[1600px] flex justify-between items-center transition-all duration-500 ${scrolled
                     ? 'bg-background/80 backdrop-blur-xl border border-border rounded-full px-6 py-3 shadow-2xl shadow-black/5 dark:shadow-black/50 max-w-5xl'
                     : 'bg-transparent py-4'
                     }`}>
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2.5 group" onClick={scrollToTop}>
-                        <Image 
+<Image 
                             src="/icon.png" 
                             alt="Derap Serayu" 
-                            width={36} 
-                            height={36} 
-                            className="h-9 w-9 object-contain"
+                            width={72} 
+                            height={72} 
+                            className="h-[72px] w-[72px] object-contain"
                             priority
                             unoptimized
                         />
-                        <span className="text-xl font-serif font-bold tracking-tight text-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                        <span className="text-2xl md:text-3xl font-serif font-bold tracking-tight text-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
                             Derap<span className="text-cyan-600 dark:text-cyan-400">Serayu</span>
                         </span>
                     </Link>
@@ -90,70 +90,8 @@ export default function Header() {
                         ))}
                     </div>
 
-                    {/* Right Actions */}
+{/* Right Actions */}
                     <div className="flex items-center gap-2">
-                        {!loading && (
-                            user ? (
-                                <div className="relative hidden sm:block">
-                                    <button
-                                        onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                                        className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full hover:bg-accent transition-colors border border-transparent hover:border-border"
-                                    >
-                                        <div className="w-8 h-8 rounded-full bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center text-cyan-700 dark:text-cyan-300 font-bold text-sm border border-cyan-200 dark:border-cyan-800">
-                                            {user.name?.charAt(0).toUpperCase() || 'U'}
-                                        </div>
-                                        <span className="text-sm font-medium max-w-[100px] truncate">
-                                            {user.name?.split(' ')[0]}
-                                        </span>
-                                        <ChevronDown size={14} className={`text-muted-foreground transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
-                                    </button>
-
-                                    {isUserMenuOpen && (
-                                        <>
-                                            <div 
-                                                className="fixed inset-0 z-40" 
-                                                onClick={() => setIsUserMenuOpen(false)}
-                                            />
-                                            <div className="absolute top-full right-0 mt-2 w-64 bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur-xl border border-border rounded-xl shadow-xl shadow-black/10 dark:shadow-black/50 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-right">
-                                                <div className="p-4 border-b border-border bg-muted/30">
-                                                    <p className="font-medium truncate">{user.name}</p>
-                                                    <p className="text-xs text-muted-foreground uppercase tracking-wider mt-1 font-bold">{user.role}</p>
-                                                </div>
-                                                <div className="p-2">
-                                                    <Link 
-                                                        href="/saved" 
-                                                        onClick={() => setIsUserMenuOpen(false)}
-                                                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted transition-colors text-sm group"
-                                                    >
-                                                        <Bookmark size={16} className="text-muted-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors" />
-                                                        Tersimpan
-                                                    </Link>
-                                                    <button 
-                                                        onClick={() => {
-                                                            logout();
-                                                            setIsUserMenuOpen(false);
-                                                        }}
-                                                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/10 text-red-600 dark:text-red-400 transition-colors text-sm mt-1"
-                                                    >
-                                                        <LogOut size={16} />
-                                                        Keluar
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                            ) : (
-                                <Link
-                                    href="/login"
-                                    className="hidden sm:flex p-2.5 rounded-full hover:bg-accent text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 transition-all"
-                                    title="Masuk"
-                                >
-                                    <User size={18} />
-                                </Link>
-                            )
-                        )}
-
                         <button
                             onClick={() => setIsSearchOpen(true)}
                             className="hidden md:flex p-2.5 rounded-full hover:bg-accent text-muted-foreground hover:text-foreground transition-all items-center gap-2 group"
@@ -185,7 +123,17 @@ export default function Header() {
                         onClick={() => setIsMenuOpen(false)}
                     />
                     <div className="fixed top-20 right-4 lg:right-12 w-72 max-h-[80vh] bg-background/80 backdrop-blur-xl border border-border rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/50 z-50 overflow-hidden overflow-y-auto animate-in fade-in zoom-in-95 duration-200 origin-top-right">
-                        <div className="p-2">
+<div className="p-2">
+                            <Link
+                                href="/search"
+                                onClick={() => setIsMenuOpen(false)}
+                                className="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-muted transition-colors group mb-2 bg-cyan-500/10 border border-cyan-500/20"
+                            >
+                                <Search size={18} className="text-cyan-500" />
+                                <span className="font-medium text-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                                    Cari Artikel
+                                </span>
+                            </Link>
                             {!loading && (
                                 user ? (
                                     <div className="mb-2 pb-2 border-b border-border px-4 py-2">
@@ -206,7 +154,17 @@ export default function Header() {
                                             <Bookmark size={16} />
                                             Tersimpan
                                         </Link>
-                                        <button 
+                                        {(user.role === 'ADMIN' || user.role === 'WRITER') && (
+                                            <Link 
+                                                href="/admin"
+                                                onClick={() => setIsMenuOpen(false)}
+                                                className="flex items-center gap-3 py-2 text-sm text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                                            >
+                                                <LayoutDashboard size={16} />
+                                                Dashboard
+                                            </Link>
+                                        )}
+                                        <button
                                             onClick={() => {
                                                 logout();
                                                 setIsMenuOpen(false);

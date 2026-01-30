@@ -72,7 +72,7 @@ export default async function HomePage() {
   const potensiArticles = sortedNews.filter(n => n.category.toLowerCase() === 'potensi');
 
   return (
-    <main className="relative z-10 pt-20 pb-12 space-y-24 md:space-y-32 overflow-hidden">
+    <main className="relative z-10 pt-20 pb-12 space-y-2 md:space-y-4 overflow-hidden">
       
       <HeroSection 
         articles={allNews} 
@@ -186,7 +186,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="cerita-list" className="bg-muted/30 py-20 md:py-32">
+      <section id="cerita-list" className="bg-muted/30 py-6 md:py-8">
         <div className="container px-4 mx-auto">
             <FadeIn>
             <div className="flex items-end justify-between mb-16 flex-wrap gap-4">
@@ -226,7 +226,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="sosok" className="relative py-12 md:py-24 overflow-hidden">
+      <section id="sosok" className="relative py-4 md:py-6 overflow-hidden">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-cyan-100 dark:bg-cyan-900/10 rounded-full blur-3xl -z-10 opacity-50 pointer-events-none translate-x-1/3 -translate-y-1/4"></div>
         
         <div className="container px-4 mx-auto">
@@ -283,7 +283,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="sudut-kota" className="py-12 bg-black text-white relative overflow-hidden">
+      <section id="sudut-kota" className="py-4 bg-black text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black via-transparent to-black opacity-80 pointer-events-none z-10"></div>
         
@@ -326,7 +326,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="potensi" className="container px-4 mx-auto pb-24">
+      <section id="potensi" className="container px-4 mx-auto pb-8">
         <FadeIn>
           <div className="flex items-center justify-between mb-12 flex-wrap gap-4 border-b border-border pb-6">
             <h2 className="text-3xl lg:text-5xl font-serif font-bold text-foreground">Potensi <span className="text-cyan-600 dark:text-cyan-400 italic">&</span> Unggulan</h2>
