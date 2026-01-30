@@ -9,7 +9,7 @@ import { useUser } from '../UserContext';
 import Link from 'next/link';
 import ImageUploader from '@/components/admin/ImageUploader';
 import RichTextEditor from '@/components/admin/RichTextEditor';
-import { calculateReadTime } from '@/lib/dateUtils';
+import { calculateReadTime, formatDateWIB } from '@/lib/dateUtils';
 import { 
     Send, X, Rocket, Settings2, PenLine, 
     AlignLeft, Newspaper, ImagePlus, Hash,
@@ -35,6 +35,7 @@ interface ArticleFormData {
     metaTitle: string;
     metaDesc: string;
     featured: boolean;
+    scheduledAt: string;
 }
 
 const defaultFormData: ArticleFormData = {
@@ -51,7 +52,8 @@ const defaultFormData: ArticleFormData = {
     tags: '',
     metaTitle: '',
     metaDesc: '',
-    featured: false
+    featured: false,
+    scheduledAt: ''
 };
 
 export default function CreateArticlePage() {
@@ -110,7 +112,7 @@ export default function CreateArticlePage() {
             metaTitle: formData.metaTitle,
             metaDesc: formData.metaDesc,
             featured: formData.featured,
-            publishedAt: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+            publishedAt: formatDateWIB(new Date()),
             readTime: calculateReadTime(formData.content)
         });
 
@@ -302,11 +304,30 @@ export default function CreateArticlePage() {
                                     >
                                         <option value="draft">Draft (Konsep)</option>
                                         <option value="published">Terbitkan Sekarang</option>
+                                        <option value="scheduled">Jadwalkan</option>
                                         <option value="archived">Arsipkan</option>
                                     </select>
                                     <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                                 </div>
                             </div>
+
+                            {formData.status === 'scheduled' && (
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-muted-foreground uppercase">
+                                        Jadwal Publikasi
+                                    </label>
+                                    <input
+                                        type="datetime-local"
+                                        value={formData.scheduledAt}
+                                        onChange={e => setFormData({ ...formData, scheduledAt: e.target.value })}
+                                        min={new Date().toISOString().slice(0, 16)}
+                                        className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-foreground focus:border-cyan-500 focus:outline-none transition-all"
+                                    />
+                                    <p className="text-xs text-muted-foreground">
+                                        Artikel akan otomatis dipublikasikan pada waktu yang ditentukan
+                                    </p>
+                                </div>
+                            )}
 
                             {isAdmin && (
                                 <div className="flex items-center justify-between p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl">

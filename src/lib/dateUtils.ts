@@ -12,6 +12,34 @@ export function formatWIB(date: Date | string | number): string {
     }).format(d).replace('pukul', ''); // Common ID cleanup
 }
 
+/**
+ * Format date only (no time) in WIB timezone
+ * Example: "30 Januari 2026"
+ */
+export function formatDateWIB(date: Date | string | number): string {
+    const d = new Date(date);
+    return new Intl.DateTimeFormat('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'Asia/Jakarta'
+    }).format(d);
+}
+
+/**
+ * Format short date in WIB timezone
+ * Example: "30 Jan 2026"
+ */
+export function formatShortDateWIB(date: Date | string | number): string {
+    const d = new Date(date);
+    return new Intl.DateTimeFormat('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        timeZone: 'Asia/Jakarta'
+    }).format(d);
+}
+
 export function calculateReadTime(content: string): string {
     const wordsPerMinute = 200;
     const text = content.replace(/<[^>]*>/g, '');

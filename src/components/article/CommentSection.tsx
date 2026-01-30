@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { formatDateWIB } from '@/lib/dateUtils';
 
 type Comment = {
     id: string;
@@ -145,7 +146,7 @@ export default function CommentSection({ slug }: { slug: string }) {
                                 <div className="flex items-baseline gap-3">
                                     <span className="font-bold text-foreground text-sm">{comment.name}</span>
                                     <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                                        {new Date(comment.createdAt || Date.now()).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                        {formatDateWIB(new Date(comment.createdAt || Date.now()))}
                                     </span>
                                 </div>
                                 <p className="text-muted-foreground text-sm leading-relaxed bg-muted p-4 rounded-r-xl rounded-bl-xl border border-border group-hover:border-border transition-colors">

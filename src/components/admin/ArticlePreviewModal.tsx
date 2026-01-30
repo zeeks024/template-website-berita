@@ -2,7 +2,7 @@
 
 import { X, Clock, Calendar, User, Tag, Eye as EyeIcon } from 'lucide-react';
 import Image from 'next/image';
-import { calculateReadTime } from '@/lib/dateUtils';
+import { calculateReadTime, formatDateWIB } from '@/lib/dateUtils';
 
 interface ArticlePreviewData {
     title: string;
@@ -61,7 +61,7 @@ export default function ArticlePreviewModal({ data, onClose }: ArticlePreviewMod
                             <span className="inline-block px-3 py-1 bg-cyan-600 text-white text-xs font-bold uppercase tracking-wider rounded-full mb-3">
                                 {data.category || 'Kategori'}
                             </span>
-                            <h1 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-white leading-tight">
+                            <h1 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-white leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                                 {data.title || 'Judul Artikel'}
                             </h1>
                         </div>
@@ -75,7 +75,7 @@ export default function ArticlePreviewModal({ data, onClose }: ArticlePreviewMod
                             </div>
                             <div className="flex items-center gap-2">
                                 <Calendar size={16} className="text-cyan-500" />
-                                <span>{new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                                <span>{formatDateWIB(new Date())}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Clock size={16} className="text-cyan-500" />
