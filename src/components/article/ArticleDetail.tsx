@@ -5,11 +5,14 @@ import Image from 'next/image';
 import CommentSection from '@/components/article/CommentSection';
 import ShareButtons from '@/components/ui/ShareButtons';
 import BookmarkButton from '@/components/ui/BookmarkButton';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import FadeIn from '@/components/ui/FadeIn';
-import { Clock, Calendar, User, Tag, Eye, ChevronRight, Home } from 'lucide-react';
+import { Clock, Calendar, User, Tag, Eye, ChevronRight, Home, Maximize2 } from 'lucide-react';
 import { formatTimeAgo } from '@/lib/utils';
 import { NewsItem } from '@/types/news';
+import { GalleryLightbox } from '@/components/gallery/GalleryLightbox';
+import { GalleryThumbnails } from '@/components/gallery/GalleryThumbnails';
+import { AnimatePresence } from 'framer-motion';
 
 type Props = {
     article: NewsItem;
@@ -17,6 +20,17 @@ type Props = {
 };
 
 export default function ArticleDetail({ article, relatedArticles }: Props) {
+    const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+    const [lightboxIndex, setLightboxIndex] = useState(0);
+
+    const galleryImages = article.gallery || [];
+    const allImages = [article.image, ...galleryImages].filter(Boolean);
+
+    const openLightbox = (index: number) => {
+        setLightboxIndex(index);
+        setIsLightboxOpen(true);
+    };
+
     useEffect(() => {
         if (article.slug) {
             fetch('/api/views', {
@@ -32,20 +46,25 @@ export default function ArticleDetail({ article, relatedArticles }: Props) {
     return (
         <article className="min-h-screen pb-20 bg-background">
             {/* Hero Image */}
-            <div className="h-[50vh] lg:h-[70vh] relative w-full overflow-hidden">
+            <div className="h-[50vh] lg:h-[70vh] relative w-full overflow-hidden group cursor-pointer" onClick={() => openLightbox(0)}>
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent z-10 pointer-events-none"></div>
                 <Image
                     src={article.image}
                     alt={article.title}
                     fill
                     priority
-                    className="object-cover"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                     sizes="100vw"
                 />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="bg-black/50 backdrop-blur-sm p-4 rounded-full text-white border border-white/20">
+                        <Maximize2 size={32} />
+                    </div>
+                </div>
 
-                <div className="absolute bottom-0 left-0 w-full z-20 px-6 lg:px-12 pb-12 max-w-[1600px] mx-auto">
+                <div className="absolute bottom-0 left-0 w-full z-20 px-6 lg:px-12 pb-12 max-w-[1600px] mx-auto pointer-events-none">
                     <FadeIn>
-                        <div className="bg-black/70 backdrop-blur-md rounded-2xl p-6 lg:p-8 border border-white/10 shadow-xl shadow-black/30">
+                        <div className="bg-black/70 backdrop-blur-md rounded-2xl p-6 lg:p-8 border border-white/10 shadow-xl shadow-black/30 pointer-events-auto">
                             {/* Breadcrumb */}
                             <nav aria-label="Breadcrumb" className="mb-6">
                                 <ol className="flex items-center gap-2 text-xs font-medium">
@@ -120,6 +139,13 @@ export default function ArticleDetail({ article, relatedArticles }: Props) {
                                 prose-img:rounded-[2rem] prose-img:border prose-img:border-border"
                         />
 
+                        {galleryImages.length > 0 && (
+                            <GalleryThumbnails 
+                                images={galleryImages} 
+                                onImageClick={(index) => openLightbox(index + 1)} 
+                            />
+                        )}
+
                         {/* Actions */}
                         <div className="flex items-center justify-between gap-4 mt-16 pt-8 border-t border-border">
                             <div className="flex items-center gap-4">
@@ -167,6 +193,16 @@ export default function ArticleDetail({ article, relatedArticles }: Props) {
                     </div>
                 </div>
             </div>
+
+            <AnimatePresence>
+                {isLightboxOpen && (
+                    <GalleryLightbox
+                        images={allImages}
+                        initialIndex={lightboxIndex}
+                        onClose={() => setIsLightboxOpen(false)}
+                    />
+                )}
+            </AnimatePresence>
         </article>
     );
 }

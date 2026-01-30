@@ -81,7 +81,7 @@ export default function DaftarPage() {
                             <div className="w-12 h-12 bg-cyan-500/20 text-cyan-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                                 <BookOpen size={24} />
                             </div>
-                            <h3 className="text-lg font-bold text-foreground mb-2">Pembaca</h3>
+                            <h2 className="text-lg font-bold text-foreground mb-2">Pembaca</h2>
                             <p className="text-muted-foreground text-sm">Simpan bookmark artikel dan berkomentar.</p>
                         </button>
 
@@ -92,7 +92,7 @@ export default function DaftarPage() {
                             <div className="w-12 h-12 bg-purple-500/20 text-purple-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                                 <PenTool size={24} />
                             </div>
-                            <h3 className="text-lg font-bold text-foreground mb-2">Penulis</h3>
+                            <h2 className="text-lg font-bold text-foreground mb-2">Penulis</h2>
                             <p className="text-muted-foreground text-sm">Tulis dan publikasikan artikel di Serayu.</p>
                         </button>
                     </div>

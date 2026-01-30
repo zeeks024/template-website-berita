@@ -107,7 +107,7 @@ export default function ImageUploader({ values, onChange }: Props) {
                 className={`
                     border-2 border-dashed rounded-xl p-8 text-center cursor-pointer mb-4 transition-all
                     ${dragActive 
-                        ? 'border-cyan-500 bg-cyan-500/10' 
+                        ? 'border-primary bg-primary/10' 
                         : 'border-border bg-muted hover:border-muted-foreground/30 hover:bg-muted/80'
                     }
                 `}
@@ -145,13 +145,13 @@ export default function ImageUploader({ values, onChange }: Props) {
                             <button
                                 type="button"
                                 onClick={() => removeImage(idx)}
-                                className="absolute top-3 right-3 z-10 w-6 h-6 bg-red-500 hover:bg-red-400 text-white rounded-full flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"
+                                className="absolute top-3 right-3 z-10 w-6 h-6 bg-destructive hover:bg-destructive/90 text-destructive-foreground rounded-full flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"
                             >
                                 <X size={14} />
                             </button>
 
                             {idx === 0 && (
-                                <span className="absolute top-3 left-3 z-10 px-2 py-0.5 bg-cyan-500 text-white text-2xs font-bold uppercase tracking-wider rounded">
+                                <span className="absolute top-3 left-3 z-10 px-2 py-0.5 bg-primary text-primary-foreground text-2xs font-bold uppercase tracking-wider rounded">
                                     Cover
                                 </span>
                             )}

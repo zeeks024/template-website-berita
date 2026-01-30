@@ -35,17 +35,43 @@ async function getArticle(slug: string): Promise<NewsItem | null> {
     };
 }
 
-async function getRelatedArticles(currentSlug: string, limit: number = 3): Promise<NewsItem[]> {
-    const articles = await prisma.article.findMany({
+async function getRelatedArticles(
+    currentSlug: string,
+    currentCategory: string,
+    currentTags: string[],
+    limit: number = 3
+): Promise<NewsItem[]> {
+    const candidates = await prisma.article.findMany({
         where: {
             slug: { not: currentSlug },
             status: 'published',
         },
-        orderBy: { createdAt: 'desc' },
-        take: limit,
+        orderBy: { publishedAt: 'desc' },
+        take: 20,
     });
 
-    return articles.map(article => ({
+    const scored = candidates.map(article => {
+        let score = 0;
+
+        if (article.category === currentCategory) {
+            score += 10;
+        }
+
+        const articleTags: string[] = article.tags ? JSON.parse(article.tags) : [];
+        const matchingTags = articleTags.filter(t => currentTags.includes(t));
+        score += matchingTags.length * 3;
+
+        return { article, score };
+    });
+
+    scored.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        const dateA = a.article.publishedAt?.getTime() || 0;
+        const dateB = b.article.publishedAt?.getTime() || 0;
+        return dateB - dateA;
+    });
+
+    return scored.slice(0, limit).map(({ article }) => ({
         id: article.id,
         slug: article.slug,
         title: article.title,
@@ -121,7 +147,11 @@ export default async function Page({ params }: Props) {
         notFound();
     }
 
-    const relatedArticles = await getRelatedArticles(slug);
+    const relatedArticles = await getRelatedArticles(
+        slug,
+        article.category,
+        article.tags || []
+    );
 
     return <ArticleDetail article={article} relatedArticles={relatedArticles} />;
 }
