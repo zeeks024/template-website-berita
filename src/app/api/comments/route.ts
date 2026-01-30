@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { rateLimit, getClientIP, type RateLimitConfig } from '@/lib/rate-limit';
+
+const COMMENTS_RATE_LIMIT: RateLimitConfig = {
+    maxRequests: 10,
+    windowMs: 5 * 60 * 1000 // 10 comments per 5 minutes
+};
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -38,6 +44,21 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     try {
+        const ip = getClientIP(request);
+        const rateLimitResult = rateLimit(`comments:${ip}`, COMMENTS_RATE_LIMIT);
+        
+        if (!rateLimitResult.success) {
+            return NextResponse.json(
+                { error: `Terlalu banyak komentar. Coba lagi dalam ${rateLimitResult.retryAfter} detik.` },
+                { 
+                    status: 429,
+                    headers: {
+                        'Retry-After': String(rateLimitResult.retryAfter)
+                    }
+                }
+            );
+        }
+
         const user = await getCurrentUser();
         if (!user) {
             return NextResponse.json({ error: 'Login diperlukan untuk berkomentar' }, { status: 401 });

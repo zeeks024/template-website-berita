@@ -98,5 +98,17 @@ export const RATE_LIMIT_CONFIGS = {
     forgotPassword: {
         maxRequests: 3,
         windowMs: 60 * 60 * 1000
+    },
+    newsletter: {
+        maxRequests: 5,
+        windowMs: 60 * 60 * 1000
     }
 } as const;
+
+export function checkRateLimit(
+    identifier: string,
+    maxRequests: number,
+    windowMs: number
+): RateLimitResult {
+    return rateLimit(identifier, { maxRequests, windowMs });
+}

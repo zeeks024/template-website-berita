@@ -121,3 +121,73 @@ export function resetPasswordEmailTemplate(name: string, resetLink: string): str
     `;
     return emailWrapper(content);
 }
+
+export function newsletterVerificationTemplate(verifyUrl: string): string {
+    const content = `
+        <h2 style="color: #111827; font-size: 20px; font-weight: 600; margin: 0 0 16px 0;">
+            Konfirmasi Langganan Newsletter 📧
+        </h2>
+        <p style="color: #374151; font-size: 15px; line-height: 1.6; margin: 0 0 24px 0;">
+            Terima kasih telah berlangganan newsletter Derap Serayu! Klik tombol di bawah untuk mengkonfirmasi email Anda:
+        </p>
+        <table role="presentation" style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td align="center" style="padding: 8px 0 32px 0;">
+                    <a href="${verifyUrl}" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);">
+                        ✓ Konfirmasi Email
+                    </a>
+                </td>
+            </tr>
+        </table>
+        <p style="color: #6b7280; font-size: 13px; margin: 0;">
+            Jika Anda tidak mendaftar newsletter ini, abaikan email ini.
+        </p>
+    `;
+    return emailWrapper(content);
+}
+
+export function newsletterDigestTemplate(articles: Array<{ title: string; summary: string; slug: string; image: string }>): string {
+    const articleCards = articles.map(article => `
+        <tr>
+            <td style="padding: 16px 0; border-bottom: 1px solid #e5e7eb;">
+                <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 100px; vertical-align: top;">
+                            <img src="${article.image || 'https://via.placeholder.com/100x60'}" alt="${article.title}" style="width: 100px; height: 60px; object-fit: cover; border-radius: 4px;"/>
+                        </td>
+                        <td style="padding-left: 16px; vertical-align: top;">
+                            <a href="${process.env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}" style="color: #111827; font-size: 14px; font-weight: 600; text-decoration: none; display: block; margin-bottom: 4px;">
+                                ${article.title}
+                            </a>
+                            <p style="color: #6b7280; font-size: 12px; margin: 0; line-height: 1.4;">
+                                ${article.summary.slice(0, 100)}...
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    `).join('');
+
+    const content = `
+        <h2 style="color: #111827; font-size: 20px; font-weight: 600; margin: 0 0 16px 0;">
+            Berita Minggu Ini 📰
+        </h2>
+        <p style="color: #374151; font-size: 15px; line-height: 1.6; margin: 0 0 24px 0;">
+            Berikut artikel terbaru dari Derap Serayu minggu ini:
+        </p>
+        <table role="presentation" style="width: 100%; border-collapse: collapse;">
+            ${articleCards}
+        </table>
+        <table role="presentation" style="width: 100%; border-collapse: collapse; margin-top: 24px;">
+            <tr>
+                <td align="center">
+                    <a href="${process.env.NEXT_PUBLIC_SITE_URL}" style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px;">
+                        Lihat Semua Artikel
+                    </a>
+                </td>
+            </tr>
+        </table>
+    `;
+    return emailWrapper(content);
+}

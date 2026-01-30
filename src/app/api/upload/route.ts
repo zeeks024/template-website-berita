@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 import { existsSync } from 'fs';
+import { requireAuth } from '@/lib/auth';
 
 const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads');
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -9,6 +10,9 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
 export async function POST(request: NextRequest) {
     try {
+        // Require authentication before processing upload
+        await requireAuth();
+        
         const formData = await request.formData();
         const file = formData.get('file') as File | null;
 
@@ -41,6 +45,10 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ url, filename });
     } catch (error) {
+        // Handle auth errors
+        if (error instanceof Error && error.message === 'UNAUTHORIZED') {
+            return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+        }
         console.error('Upload error:', error);
         return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
     }
