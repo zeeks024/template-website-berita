@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
+import { signOut } from "next-auth/react";
 
 interface User {
     id: string;
@@ -26,7 +27,7 @@ export function useAuth() {
         try {
             setState(prev => ({ ...prev, isLoading: true, error: null }));
             const response = await fetch('/api/auth/me');
-            
+
             if (response.ok) {
                 const data = await response.json();
                 setState({
@@ -57,12 +58,20 @@ export function useAuth() {
 
     const logout = async () => {
         try {
+            // 1. NextAuth SignOut (Client-side)
+            await signOut({ redirect: false });
+
+            // 2. Custom SignOut (Server-side)
             await fetch('/api/auth/logout', { method: 'POST' });
+
             setState({
                 user: null,
                 isLoading: false,
                 error: null
             });
+
+            // Reload to clear state fully
+            window.location.href = '/login';
         } catch (error) {
             console.error('Logout failed:', error);
         }

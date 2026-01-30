@@ -1,7 +1,11 @@
 // Centralized auth configuration
 // This ensures JWT_SECRET is consistent across all auth-related code
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key-123';
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required. Please set it in your .env file.');
+}
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const AUTH_CONFIG = {
   jwtSecret: JWT_SECRET,
