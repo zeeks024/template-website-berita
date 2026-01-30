@@ -29,14 +29,14 @@ const ToolbarButton = ({ cmd, arg, label, icon, onExec }: ToolbarButtonProps) =>
         type="button"
         onMouseDown={(e) => { e.preventDefault(); onExec(cmd, arg); }}
         title={label}
-        className="p-1.5 rounded hover:bg-gray-100 active:bg-gray-200 text-gray-600 hover:text-gray-900 transition-colors flex items-center justify-center min-w-[28px]"
+        className="p-1.5 rounded hover:bg-muted active:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center min-w-[28px]"
     >
         {icon}
     </button>
 );
 
 const ToolbarDivider = () => (
-    <span className="w-px h-6 bg-gray-200 mx-1" />
+    <span className="w-px h-6 bg-border mx-1" />
 );
 
 export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_autosave' }: Props) {
@@ -108,8 +108,8 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
     };
 
     return (
-        <div className="flex flex-col border border-gray-200 rounded-xl overflow-hidden bg-white">
-            <div className="px-2 sm:px-3 py-2 bg-gray-50 border-b border-gray-200 flex flex-wrap items-center gap-0.5 sticky top-0 z-10 overflow-x-auto">
+        <div className="flex flex-col border border-border rounded-xl overflow-hidden bg-card">
+            <div className="px-2 sm:px-3 py-2 bg-muted border-b border-border flex flex-wrap items-center gap-0.5 sticky top-0 z-10 overflow-x-auto">
                 {isMounted && hasDraft && (
                     <>
                         <button
@@ -156,7 +156,7 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
                 <button
                     type="button"
                     onMouseDown={(e) => { e.preventDefault(); handleLinkInsert(); }}
-                    className="p-1.5 rounded hover:bg-gray-100 active:bg-gray-200 text-gray-600 hover:text-gray-900 transition-colors flex items-center justify-center min-w-[28px]"
+                    className="p-1.5 rounded hover:bg-muted active:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center min-w-[28px]"
                     title="Insert Link"
                 >
                     <Link2 size={16} />
@@ -165,7 +165,7 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
                 <button
                     type="button"
                     onMouseDown={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}
-                    className="p-1.5 rounded hover:bg-gray-100 active:bg-gray-200 text-gray-600 hover:text-gray-900 transition-colors flex items-center justify-center min-w-[28px]"
+                    className="p-1.5 rounded hover:bg-muted active:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center min-w-[28px]"
                     title="Insert Image"
                 >
                     <ImagePlus size={16} />
@@ -180,7 +180,7 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
             </div>
 
             <div 
-                className="bg-gray-100 p-6 md:p-8 cursor-text min-h-[500px]" 
+                className="bg-muted p-6 md:p-8 cursor-text min-h-[500px]" 
                 onClick={() => editorRef.current?.focus()}
             >
                 {isMounted ? (
@@ -190,24 +190,24 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
                         onInput={handleInput}
                         spellCheck={false}
                         suppressHydrationWarning
-                        className="min-h-[400px] max-w-3xl mx-auto p-8 md:p-12 bg-white shadow-lg rounded-sm outline-none prose prose-gray prose-lg max-w-none
-                            [&_h2]:font-sans [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-6 [&_h2]:mb-3 [&_h2]:text-gray-900 [&_h2]:border-b [&_h2]:border-gray-200 [&_h2]:pb-2
-                            [&_h3]:font-sans [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mt-5 [&_h3]:mb-2 [&_h3]:text-gray-800
+                        className="min-h-[400px] max-w-3xl mx-auto p-8 md:p-12 bg-white dark:bg-card shadow-lg rounded-sm outline-none prose prose-gray dark:prose-invert prose-lg max-w-none text-foreground
+                            [&_h2]:font-sans [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-6 [&_h2]:mb-3 [&_h2]:text-foreground dark:[&_h2]:text-foreground [&_h2]:border-b [&_h2]:border-border [&_h2]:pb-2
+                            [&_h3]:font-sans [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mt-5 [&_h3]:mb-2 [&_h3]:text-foreground dark:[&_h3]:text-foreground
                             [&_p]:mb-4 [&_p]:leading-relaxed
                             [&_ul]:ml-6 [&_ul]:mb-4 [&_ul]:list-disc
                             [&_ol]:ml-6 [&_ol]:mb-4 [&_ol]:list-decimal
                             [&_li]:mb-1
-                            [&_blockquote]:border-l-4 [&_blockquote]:border-cyan-500 [&_blockquote]:my-5 [&_blockquote]:py-2 [&_blockquote]:px-5 [&_blockquote]:bg-gray-50 [&_blockquote]:text-gray-600 [&_blockquote]:italic
+                            [&_blockquote]:border-l-4 [&_blockquote]:border-cyan-500 [&_blockquote]:my-5 [&_blockquote]:py-2 [&_blockquote]:px-5 [&_blockquote]:bg-muted dark:[&_blockquote]:bg-muted [&_blockquote]:text-muted-foreground [&_blockquote]:italic
                             [&_a]:text-cyan-600 [&_a]:underline [&_a]:cursor-pointer
                             [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4 [&_img]:rounded [&_img]:shadow-md
-                            [&_hr]:border-none [&_hr]:border-t [&_hr]:border-gray-300 [&_hr]:my-6"
+                            [&_hr]:border-none [&_hr]:border-t [&_hr]:border-border [&_hr]:my-6"
                         style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
                     />
                 ) : (
-                    <div className="min-h-[400px] max-w-3xl mx-auto p-8 md:p-12 bg-white shadow-lg rounded-sm animate-pulse">
-                        <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                        <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
-                        <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                    <div className="min-h-[400px] max-w-3xl mx-auto p-8 md:p-12 bg-white dark:bg-card shadow-lg rounded-sm animate-pulse text-foreground">
+                        <div className="h-4 bg-muted rounded w-3/4 mb-4"></div>
+                        <div className="h-4 bg-muted rounded w-1/2 mb-4"></div>
+                        <div className="h-4 bg-muted rounded w-5/6"></div>
                     </div>
                 )}
             </div>
