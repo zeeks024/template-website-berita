@@ -67,6 +67,7 @@ export default function SearchModal({ isOpen, onClose }: Props) {
                         ref={inputRef}
                         type="text"
                         placeholder="Cari berita, opini, atau tokoh..."
+                        aria-label="Cari artikel"
                         className="flex-1 bg-transparent border-none outline-none text-lg text-foreground placeholder:text-muted-foreground"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}

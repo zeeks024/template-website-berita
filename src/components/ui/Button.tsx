@@ -17,10 +17,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-    primary: 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30',
+    primary: 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-primary/30',
     secondary: 'bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground',
     ghost: 'bg-transparent hover:bg-muted text-muted-foreground hover:text-foreground',
-    danger: 'bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-500/20',
+    danger: 'bg-destructive hover:bg-destructive/90 text-destructive-foreground shadow-lg shadow-destructive/20',
     outline: 'bg-transparent border border-border hover:bg-muted text-foreground',
     gradient: 'bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40',
 };
@@ -53,7 +53,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         const baseStyles = [
             'inline-flex items-center justify-center font-bold transition-all',
             'disabled:opacity-50 disabled:cursor-not-allowed',
-            'focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:ring-offset-2 focus:ring-offset-background',
+            'focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background',
             pill ? 'rounded-full' : 'rounded-xl',
             fullWidth ? 'w-full' : '',
             variantStyles[variant],

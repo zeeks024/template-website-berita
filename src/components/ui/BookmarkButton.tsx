@@ -8,7 +8,7 @@ export default function BookmarkButton({ id, className = "" }: { id: string, cla
     const active = isBookmarked(id);
 
     if (!isInitialized) return (
-        <button className={`px-6 py-2 rounded-full border border-border bg-muted text-muted-foreground text-xs font-bold uppercase tracking-widest ${className}`} disabled>
+        <button className={`px-6 py-2 rounded-full border border-border bg-muted text-muted-foreground text-xs font-bold uppercase tracking-widest ${className}`} disabled aria-label="Memuat bookmark">
             <Bookmark size={14} />
         </button>
     );
@@ -20,8 +20,8 @@ export default function BookmarkButton({ id, className = "" }: { id: string, cla
                 toggleBookmark(id);
             }}
             className={`px-6 py-2 rounded-full border text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 ${active
-                ? 'bg-cyan-500 border-cyan-500 text-white shadow-lg shadow-cyan-500/25'
-                : 'bg-muted border-border text-foreground hover:bg-cyan-500 hover:border-cyan-500 hover:text-white'
+                ? 'bg-primary border-primary text-primary-foreground shadow-lg shadow-primary/25'
+                : 'bg-muted border-border text-foreground hover:bg-primary hover:border-primary hover:text-primary-foreground'
                 } ${className}`}
         >
             <Bookmark size={14} className={active ? 'fill-current' : ''} />

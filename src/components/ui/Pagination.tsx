@@ -49,7 +49,7 @@ export default function Pagination({
     };
 
     const buttonBase = "p-2 rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed";
-    const buttonActive = "bg-cyan-600 text-white hover:bg-cyan-500";
+    const buttonActive = "bg-primary text-primary-foreground hover:bg-primary/90";
     const buttonInactive = "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground";
 
     return (

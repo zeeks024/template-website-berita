@@ -55,7 +55,7 @@ export default function HorizontalScroll({ children, className = '' }: Props) {
             {canScrollLeft && (
                 <button
                     onClick={() => scroll('left')}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center opacity-0 group-hover/scroll:opacity-100 transition-opacity hover:bg-cyan-500 hover:border-cyan-500"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-background/80 backdrop-blur-sm border border-border text-foreground flex items-center justify-center opacity-0 group-hover/scroll:opacity-100 transition-opacity hover:bg-primary hover:border-primary hover:text-primary-foreground"
                     aria-label="Scroll kiri"
                 >
                     <ChevronLeft size={24} />
@@ -65,7 +65,7 @@ export default function HorizontalScroll({ children, className = '' }: Props) {
             {canScrollRight && (
                 <button
                     onClick={() => scroll('right')}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center opacity-0 group-hover/scroll:opacity-100 transition-opacity hover:bg-cyan-500 hover:border-cyan-500"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-background/80 backdrop-blur-sm border border-border text-foreground flex items-center justify-center opacity-0 group-hover/scroll:opacity-100 transition-opacity hover:bg-primary hover:border-primary hover:text-primary-foreground"
                     aria-label="Scroll kanan"
                 >
                     <ChevronRight size={24} />
@@ -73,7 +73,7 @@ export default function HorizontalScroll({ children, className = '' }: Props) {
             )}
 
             <div className="flex justify-center gap-2 mt-6 md:hidden">
-                <span className="text-white/40 text-xs font-medium flex items-center gap-2">
+                <span className="text-muted-foreground text-xs font-medium flex items-center gap-2">
                     <ChevronLeft size={14} />
                     Geser
                     <ChevronRight size={14} />
