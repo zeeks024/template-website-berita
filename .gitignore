@@ -61,3 +61,11 @@ token.txt
 
 .vercel
 .env*.local
+
+# User uploads
+public/uploads/
+
+# Internal/temp folders
+.sisyphus/
+_temp/
+nul
