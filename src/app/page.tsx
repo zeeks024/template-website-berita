@@ -3,6 +3,9 @@ import {
   ArrowRight, Quote, MapPin,
   Lightbulb, ArrowUpRight, Clock, TrendingUp
 } from 'lucide-react';
+
+export const dynamic = 'force-dynamic';
+
 import FadeIn from '@/components/ui/FadeIn';
 import HeroSection from '@/components/home/HeroSection';
 import HorizontalScroll from '@/components/ui/HorizontalScroll';

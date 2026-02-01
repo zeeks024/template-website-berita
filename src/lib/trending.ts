@@ -51,27 +51,32 @@ export async function updateTrendingRanks(): Promise<void> {
 }
 
 export async function getTrendingArticles(limit: number = 5) {
-    const scores = await calculateTrendingScores();
-    const topSlugs = scores.slice(0, limit).map(s => s.slug);
+    try {
+        const scores = await calculateTrendingScores();
+        const topSlugs = scores.slice(0, limit).map(s => s.slug);
 
-    if (topSlugs.length === 0) {
-        return prisma.article.findMany({
-            where: { status: 'published' },
-            orderBy: { views: 'desc' },
-            take: limit,
+        if (topSlugs.length === 0) {
+            return prisma.article.findMany({
+                where: { status: 'published' },
+                orderBy: { views: 'desc' },
+                take: limit,
+            });
+        }
+
+        const articles = await prisma.article.findMany({
+            where: {
+                slug: { in: topSlugs },
+                status: 'published',
+            },
         });
+
+        return articles.sort((a, b) => {
+            const aIndex = topSlugs.indexOf(a.slug);
+            const bIndex = topSlugs.indexOf(b.slug);
+            return aIndex - bIndex;
+        });
+    } catch (error) {
+        console.error('Failed to fetch trending articles:', error);
+        return [];
     }
-
-    const articles = await prisma.article.findMany({
-        where: {
-            slug: { in: topSlugs },
-            status: 'published',
-        },
-    });
-
-    return articles.sort((a, b) => {
-        const aIndex = topSlugs.indexOf(a.slug);
-        const bIndex = topSlugs.indexOf(b.slug);
-        return aIndex - bIndex;
-    });
 }
