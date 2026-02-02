@@ -130,7 +130,7 @@ export default function ImageUploader({ values, onChange }: Props) {
                     <div className="text-muted-foreground">
                         <Upload size={32} className="mx-auto mb-3 opacity-50" />
                         <p className="text-sm font-medium">Klik atau tarik gambar ke sini</p>
-                        <p className="text-xs mt-1 opacity-60">Bisa upload banyak gambar (Max 10MB)</p>
+                        <p className="text-xs mt-1 opacity-60">Format: JPG, PNG, WEBP • Maks 10MB per file</p>
                     </div>
                 )}
             </div>

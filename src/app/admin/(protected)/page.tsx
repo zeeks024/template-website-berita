@@ -1,17 +1,30 @@
 "use client";
 
 import { useNews } from '@/hooks/useNews';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
     FileText, Eye, Grid, Search, Plus,
     Edit, Trash2, ExternalLink, PenTool, 
-    FolderOpen, BarChart3, Clock, Activity, Users
+    FolderOpen, Clock, Activity, Users
 } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
 import Pagination from '@/components/ui/Pagination';
 import { useUser } from './UserContext';
 import { Card, StatCard, Badge, QuickActions } from '@/components/admin/ui';
+
+interface DashboardStats {
+    totalArticles: number;
+    totalViews: number;
+    topCategory: string;
+    draftCount: number;
+    recentArticles: Array<{
+        id: string;
+        title: string;
+        status: string;
+        publishedAt: string;
+    }>;
+}
 
 export default function AdminDashboard() {
     const user = useUser();
@@ -19,22 +32,35 @@ export default function AdminDashboard() {
     const { allNews, loading, deleteArticle, pagination, setPage } = useNews('all', !isAdmin, { paginate: true, pageSize: 10 });
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
+    const [stats, setStats] = useState<DashboardStats>({
+        totalArticles: 0,
+        totalViews: 0,
+        topCategory: '-',
+        draftCount: 0,
+        recentArticles: []
+    });
+    const [statsLoading, setStatsLoading] = useState(true);
 
-    if (loading) return (
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const res = await fetch('/api/articles/stats', { credentials: 'include' });
+                const data = await res.json();
+                setStats(data);
+            } catch (error) {
+                console.error('Failed to fetch stats:', error);
+            } finally {
+                setStatsLoading(false);
+            }
+        };
+        fetchStats();
+    }, []);
+
+    if (loading && statsLoading) return (
         <div className="flex items-center justify-center h-64 text-muted-foreground animate-pulse">
             Memuat data dashboard...
         </div>
     );
-
-    const totalArticles = allNews.length;
-    const totalViews = allNews.reduce((sum, item) => sum + (item.views || 0), 0);
-    const draftCount = allNews.filter(n => n.status === 'draft').length;
-    
-    const categoryCounts: Record<string, number> = {};
-    allNews.forEach(news => {
-        categoryCounts[news.category] = (categoryCounts[news.category] || 0) + 1;
-    });
-    const topCategory = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || '-';
 
     const adminActions = [
         { icon: <PenTool size={24} />, label: 'Tulis Artikel', href: '/admin/create', color: 'cyan' },
@@ -67,7 +93,7 @@ export default function AdminDashboard() {
                     <p className="text-muted-foreground text-sm">
                         {isAdmin 
                             ? 'Kelola portal berita dan pantau performa konten.' 
-                            : `Kamu memiliki ${draftCount} artikel draft yang perlu diselesaikan.`}
+                            : `Kamu memiliki ${stats.draftCount} artikel draft yang perlu diselesaikan.`}
                     </p>
                 </div>
                 <Link href="/admin/create" className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-full font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:scale-105 w-full sm:w-auto justify-center">
@@ -80,23 +106,23 @@ export default function AdminDashboard() {
                 <QuickActions actions={isAdmin ? adminActions : writerActions} />
             </div>
 
-<div className="grid md:grid-cols-3 gap-6 mb-8">
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
                 <StatCard 
                     icon={<FileText size={24} />}
                     iconColor="cyan"
-                    value={totalArticles}
+                    value={statsLoading ? '...' : stats.totalArticles}
                     label="Total Artikel"
                 />
                 <StatCard 
                     icon={<Eye size={24} />}
                     iconColor="emerald"
-                    value={totalViews.toLocaleString()}
+                    value={statsLoading ? '...' : stats.totalViews.toLocaleString()}
                     label="Total Pembaca"
                 />
                 <StatCard 
                     icon={<Grid size={24} />}
                     iconColor="purple"
-                    value={topCategory}
+                    value={statsLoading ? '...' : stats.topCategory}
                     label="Kategori Populer"
                 />
             </div>
@@ -109,7 +135,7 @@ export default function AdminDashboard() {
                     </h3>
                 </div>
                 <div className="space-y-1">
-                    {allNews.slice(0, 5).map(article => (
+                    {stats.recentArticles.length > 0 ? stats.recentArticles.map(article => (
                         <div key={article.id} className="flex items-center justify-between py-3 border-b border-border last:border-0 hover:bg-muted px-3 -mx-3 rounded-lg transition-all duration-200 hover:translate-x-1">
                             <div className="flex items-center gap-4">
                                 <Badge variant={(article.status || 'published') === 'published' ? 'success' : 'warning'} dot>
@@ -119,8 +145,7 @@ export default function AdminDashboard() {
                             </div>
                             <span className="text-muted-foreground text-xs font-mono">{article.publishedAt}</span>
                         </div>
-                    ))}
-                    {allNews.length === 0 && (
+                    )) : (
                         <div className="text-muted-foreground text-sm text-center py-4">Belum ada aktivitas.</div>
                     )}
                 </div>
@@ -134,7 +159,7 @@ export default function AdminDashboard() {
                             {isAdmin ? 'Semua Artikel' : 'Artikel Saya'}
                         </h3>
                         <span className="px-2 py-1 bg-muted rounded-md text-xs font-mono text-muted-foreground">
-                            {filteredNews.length}
+                            {pagination.total}
                         </span>
                     </div>
 
