@@ -130,7 +130,7 @@ export default function ContactPage() {
                     <FadeIn delay={100}>
                         <div className="bg-card border border-border rounded-3xl overflow-hidden h-[400px] relative">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63310.04716880972!2d109.66799372167964!3d-7.398097199999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7aa7d14fe8a5f7%3A0x3027a76e352bc30!2sBanjarnegara%2C%20Kec.%20Banjarnegara%2C%20Kabupaten%20Banjarnegara%2C%20Jawa%20Tengah!5e0!3m2!1sid!2sid!4v1699999999999!5m2!1sid!2sid"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d493.7!2d109.6959174!3d-7.3958644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7aa91633d1ce89%3A0x2a33bba42f9a4122!2sDinas%20Komunikasi%20dan%20Informatika%20Kab.%20Banjarnegara!5e0!3m2!1sid!2sid!4v1706500000000!5m2!1sid!2sid"
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}
