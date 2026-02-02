@@ -5,8 +5,10 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { Search, Menu, X, LogIn, LogOut, User, Bookmark, ChevronDown, LayoutDashboard } from 'lucide-react';
+import { Search, Menu, X, LogIn, LogOut, User, Bookmark, ChevronDown, LayoutDashboard, Sun, Moon, Type, Eye, Settings } from 'lucide-react';
 import SettingsMenu from '@/components/ui/SettingsMenu';
+import { useAccessibility } from '@/components/providers/AccessibilityProvider';
+import { useTheme } from 'next-themes';
 import { useAuth } from '@/hooks/useAuth';
 
 const SearchModal = dynamic(() => import('@/components/ui/SearchModal'), {
@@ -16,11 +18,14 @@ const SearchModal = dynamic(() => import('@/components/ui/SearchModal'), {
 
 export default function Header() {
     const [scrolled, setScrolled] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     
     const { user, isLoading: loading, logout } = useAuth();
+    const { fontSize, setFontSize, highContrast, setHighContrast } = useAccessibility();
+    const { theme, setTheme } = useTheme();
 
     const pathname = usePathname();
 
@@ -87,7 +92,7 @@ export default function Header() {
                                 {item}
                                 <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-cyan-600 dark:bg-cyan-400 transition-all group-hover:w-full rounded-full"></span>
                             </Link>
-                        ))}
+                            ))}
                     </div>
 
 {/* Right Actions */}
@@ -100,7 +105,9 @@ export default function Header() {
                             <Search size={18} />
                             <span className="text-2xs bg-muted px-1.5 py-0.5 rounded border border-border opacity-0 group-hover:opacity-100 transition-opacity">CTRL+K</span>
                         </button>
-                        <SettingsMenu />
+                        <div className="hidden lg:block">
+                            <SettingsMenu />
+                        </div>
                         <button
                             onClick={() => setIsMenuOpen(true)}
                             className="px-5 py-2 bg-foreground text-background rounded-full font-bold text-xs uppercase tracking-wider hover:bg-cyan-600 dark:hover:bg-cyan-500 hover:text-white transition-all flex items-center gap-2 group"
@@ -200,6 +207,111 @@ export default function Header() {
                                     </span>
                                 </Link>
                             ))}
+                            
+                            <div className="lg:hidden">
+                                <button
+                                    onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                                    className="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-muted transition-colors group w-full"
+                                >
+                                    <Settings size={18} className="text-muted-foreground" />
+                                    <span className="font-medium text-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors flex-1 text-left">
+                                        Pengaturan
+                                    </span>
+                                    <ChevronDown size={16} className={`text-muted-foreground transition-transform ${isSettingsOpen ? 'rotate-180' : ''}`} />
+                                </button>
+                                
+                                {isSettingsOpen && (
+                                    <div className="px-4 pb-3 space-y-4">
+                                        <div>
+                                            <label className="text-2xs font-bold uppercase tracking-widest text-muted-foreground mb-2 flex items-center gap-2">
+                                                <Sun size={12} className="dark:hidden" />
+                                                <Moon size={12} className="hidden dark:block" />
+                                                Tema
+                                            </label>
+                                            <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-xl">
+                                                <button
+                                                    onClick={() => setTheme('light')}
+                                                    className={`flex-1 py-2 rounded-lg text-center transition-all text-xs font-medium flex items-center justify-center gap-2 ${
+                                                        theme === 'light'
+                                                            ? 'bg-background text-foreground shadow-sm'
+                                                            : 'text-muted-foreground hover:text-foreground'
+                                                    }`}
+                                                >
+                                                    <Sun size={14} />
+                                                    Terang
+                                                </button>
+                                                <button
+                                                    onClick={() => setTheme('dark')}
+                                                    className={`flex-1 py-2 rounded-lg text-center transition-all text-xs font-medium flex items-center justify-center gap-2 ${
+                                                        theme === 'dark'
+                                                            ? 'bg-background text-foreground shadow-sm'
+                                                            : 'text-muted-foreground hover:text-foreground'
+                                                    }`}
+                                                >
+                                                    <Moon size={14} />
+                                                    Gelap
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-2xs font-bold uppercase tracking-widest text-muted-foreground mb-2 flex items-center gap-2">
+                                                <Type size={12} />
+                                                Ukuran Teks
+                                            </label>
+                                            <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-xl">
+                                                <button
+                                                    onClick={() => setFontSize('normal')}
+                                                    className={`flex-1 py-2 rounded-lg text-center transition-all text-xs font-medium ${
+                                                        fontSize === 'normal'
+                                                            ? 'bg-background text-foreground shadow-sm'
+                                                            : 'text-muted-foreground hover:text-foreground'
+                                                    }`}
+                                                >
+                                                    <span className="text-sm">A</span>
+                                                </button>
+                                                <button
+                                                    onClick={() => setFontSize('large')}
+                                                    className={`flex-1 py-2 rounded-lg text-center transition-all text-xs font-medium ${
+                                                        fontSize === 'large'
+                                                            ? 'bg-background text-foreground shadow-sm'
+                                                            : 'text-muted-foreground hover:text-foreground'
+                                                    }`}
+                                                >
+                                                    <span className="text-base">A</span>
+                                                </button>
+                                                <button
+                                                    onClick={() => setFontSize('xlarge')}
+                                                    className={`flex-1 py-2 rounded-lg text-center transition-all text-xs font-medium ${
+                                                        fontSize === 'xlarge'
+                                                            ? 'bg-background text-foreground shadow-sm'
+                                                            : 'text-muted-foreground hover:text-foreground'
+                                                    }`}
+                                                >
+                                                    <span className="text-lg">A</span>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            onClick={() => setHighContrast(!highContrast)}
+                                            className="w-full flex items-center justify-between gap-3"
+                                        >
+                                            <span className="flex items-center gap-2 text-2xs font-bold uppercase tracking-widest text-muted-foreground">
+                                                <Eye size={12} />
+                                                Kontras Tinggi
+                                            </span>
+                                            <div className={`w-10 h-6 rounded-full p-0.5 transition-colors ${
+                                                highContrast ? 'bg-cyan-500' : 'bg-muted'
+                                            }`}>
+                                                <div className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
+                                                    highContrast ? 'translate-x-4' : 'translate-x-0'
+                                                }`} />
+                                            </div>
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                         <div className="p-4 border-t border-border bg-muted/30">
                             <div className="flex items-center justify-between text-xs text-muted-foreground">

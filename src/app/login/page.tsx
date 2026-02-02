@@ -109,16 +109,7 @@ export default function LoginPage() {
                 </form>
 
                 <div className="mt-6">
-                    <div className="relative">
-                        <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-border"></div>
-                        </div>
-                        <div className="relative flex justify-center text-sm">
-                            <span className="px-6 bg-card text-muted-foreground relative z-10">atau masuk dengan</span>
-                        </div>
-                    </div>
-
-                    <div className="mt-6 flex justify-center">
+                    <div className="flex justify-center">
                         <button
                             type="button"
                             onClick={() => signIn('google', { callbackUrl: '/' })}
