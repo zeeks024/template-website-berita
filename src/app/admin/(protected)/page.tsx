@@ -191,7 +191,7 @@ export default function AdminDashboard() {
                                         </div>
                                     </td>
                                     <td className="p-6">
-                                        <span className="px-1.5 py-0.5 rounded bg-muted border border-border text-3xs font-semibold uppercase tracking-wide text-muted-foreground">
+                                        <span className="px-1.5 py-0.5 rounded bg-muted border border-border text-3xs font-semibold capitalize tracking-wide text-muted-foreground">
                                             {item.category}
                                         </span>
                                     </td>
