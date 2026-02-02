@@ -60,7 +60,7 @@ export default function ContactPage() {
                                 </div>
                                 <h3 className="text-lg font-bold text-foreground mb-2">WhatsApp</h3>
                                 <p className="text-muted-foreground text-sm mb-4">Hotline pengaduan dan info cepat.</p>
-                                <a href="https://wa.me/6281234567890" className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">+62 812-3456-7890</a>
+                                <a href="https://wa.me/621234567" className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">+62 812-3456-7890</a>
                             </div>
                         </FadeIn>
 
@@ -84,31 +84,31 @@ export default function ContactPage() {
                                 <div className="grid md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
                                         <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Nama</label>
-                                        <input 
-                                            type="text" 
-                                            className="w-full bg-muted/50 border border-border rounded-xl p-4 text-foreground focus:border-cyan-500 focus:outline-none transition-colors placeholder:text-muted-foreground" 
-                                            placeholder="John Doe" 
+                                        <input
+                                            type="text"
+                                            className="w-full bg-muted/50 border border-border rounded-xl p-4 text-foreground focus:border-cyan-500 focus:outline-none transition-colors placeholder:text-muted-foreground"
+                                            placeholder="John Doe"
                                         />
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Email</label>
-                                        <input 
-                                            type="email" 
-                                            className="w-full bg-muted/50 border border-border rounded-xl p-4 text-foreground focus:border-cyan-500 focus:outline-none transition-colors placeholder:text-muted-foreground" 
-                                            placeholder="john@example.com" 
+                                        <input
+                                            type="email"
+                                            className="w-full bg-muted/50 border border-border rounded-xl p-4 text-foreground focus:border-cyan-500 focus:outline-none transition-colors placeholder:text-muted-foreground"
+                                            placeholder="john@example.com"
                                         />
                                     </div>
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Pesan</label>
-                                    <textarea 
-                                        rows={4} 
-                                        className="w-full bg-muted/50 border border-border rounded-xl p-4 text-foreground focus:border-cyan-500 focus:outline-none transition-colors resize-none placeholder:text-muted-foreground" 
+                                    <textarea
+                                        rows={4}
+                                        className="w-full bg-muted/50 border border-border rounded-xl p-4 text-foreground focus:border-cyan-500 focus:outline-none transition-colors resize-none placeholder:text-muted-foreground"
                                         placeholder="Tulis pesan anda di sini..."
                                     ></textarea>
                                 </div>
-                                <button 
-                                    type="button" 
+                                <button
+                                    type="button"
                                     className="w-full py-4 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white rounded-xl font-bold uppercase tracking-widest transition-all transform hover:scale-[1.02] hover:shadow-lg hover:shadow-cyan-500/25 flex items-center justify-center gap-2"
                                 >
                                     <Send size={18} /> Kirim Pesan

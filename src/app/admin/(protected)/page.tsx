@@ -142,7 +142,7 @@ export default function AdminDashboard() {
 
                     <div className="flex items-center gap-3">
                         <div className="flex bg-muted p-1 rounded-xl">
-                            {['all', 'published', 'draft'].map(status => (
+                            {['all', 'published', 'draft', 'archived'].map(status => (
                                 <button
                                     key={status}
                                     onClick={() => setFilterStatus(status)}

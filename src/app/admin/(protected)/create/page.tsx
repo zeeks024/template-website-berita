@@ -304,7 +304,7 @@ export default function CreateArticlePage() {
                                     >
                                         <option value="draft">Draft (Konsep)</option>
                                         <option value="published">Terbitkan Sekarang</option>
-                                        <option value="scheduled">Jadwalkan</option>
+                                        <option value="scheduled">Jadwalkan (not working yet)</option>
                                         <option value="archived">Arsipkan</option>
                                     </select>
                                     <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
