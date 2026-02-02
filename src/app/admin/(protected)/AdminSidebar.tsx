@@ -122,7 +122,7 @@ export default function AdminSidebar({
                                 <p className="text-sm font-bold text-foreground truncate">{user.name}</p>
                                 <div className="flex items-center gap-2 mt-0.5">
                                     <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${isAdmin ? 'bg-cyan-400' : 'bg-emerald-400'}`} />
-                                    <span className="text-2xs font-medium text-muted-foreground uppercase tracking-wider">
+                                    <span className="text-2xs font-medium text-muted-foreground lowercase tracking-wider">
                                         {isAdmin ? 'Administrator' : 'Penulis'}
                                     </span>
                                 </div>
