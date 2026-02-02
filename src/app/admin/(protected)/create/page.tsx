@@ -94,7 +94,7 @@ export default function CreateArticlePage() {
 
         const slug = formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
-        const success = await addArticle({
+const result = await addArticle({
             id: Date.now().toString(),
             slug: slug,
             title: formData.title,
@@ -118,11 +118,11 @@ export default function CreateArticlePage() {
 
         setIsSubmitting(false);
 
-        if (success) {
+        if (result.success) {
             clearAutosave();
             router.push('/admin');
         } else {
-            alert('Gagal menerbitkan berita. Silakan coba lagi.');
+            alert(result.error || 'Gagal menerbitkan berita.');
         }
     };
 

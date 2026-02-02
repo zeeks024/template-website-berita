@@ -23,8 +23,8 @@ interface UseNewsReturn {
     loading: boolean;
     pagination: PaginationState;
     setPage: (page: number) => void;
-    addArticle: (article: NewsItem) => Promise<boolean>;
-    updateArticle: (article: NewsItem) => Promise<boolean>;
+addArticle: (article: NewsItem) => Promise<{ success: boolean; error?: string }>;
+    updateArticle: (article: NewsItem) => Promise<{ success: boolean; error?: string }>;
     deleteArticle: (id: string) => Promise<void>;
     incrementView: () => void;
     refetch: () => Promise<void>;
@@ -99,34 +99,40 @@ export function useNews(
         }
     }, [pagination.totalPages, fetchNews]);
 
-    const addArticle = async (article: NewsItem) => {
+const addArticle = async (article: NewsItem): Promise<{ success: boolean; error?: string }> => {
         try {
             const res = await fetch('/api/articles', {
                 method: 'POST',
                 body: JSON.stringify(article)
             });
-            if (!res.ok) throw new Error('Failed to add article');
+            const data = await res.json();
+            if (!res.ok) {
+                return { success: false, error: data.error || 'Gagal menyimpan artikel' };
+            }
             fetchNews();
-            return true;
+            return { success: true };
         } catch (error) {
             console.error("Failed to add article", error);
-            return false;
+            return { success: false, error: 'Terjadi kesalahan koneksi' };
         }
     };
 
-    const updateArticle = async (article: NewsItem) => {
+    const updateArticle = async (article: NewsItem): Promise<{ success: boolean; error?: string }> => {
         try {
             const res = await fetch(`/api/articles/${article.slug}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(article)
             });
-            if (!res.ok) throw new Error('Failed to update article');
+            const data = await res.json();
+            if (!res.ok) {
+                return { success: false, error: data.error || 'Gagal mengupdate artikel' };
+            }
             fetchNews();
-            return true;
+            return { success: true };
         } catch (error) {
             console.error("Failed to update article", error);
-            return false;
+            return { success: false, error: 'Terjadi kesalahan koneksi' };
         }
     };
 

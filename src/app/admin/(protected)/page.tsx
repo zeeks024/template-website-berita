@@ -80,20 +80,18 @@ export default function AdminDashboard() {
                 <QuickActions actions={isAdmin ? adminActions : writerActions} />
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6 mb-8">
+<div className="grid md:grid-cols-3 gap-6 mb-8">
                 <StatCard 
                     icon={<FileText size={24} />}
                     iconColor="cyan"
                     value={totalArticles}
                     label="Total Artikel"
-                    trend={{ value: 12, isUp: true }}
                 />
                 <StatCard 
                     icon={<Eye size={24} />}
                     iconColor="emerald"
                     value={totalViews.toLocaleString()}
                     label="Total Pembaca"
-                    trend={{ value: 5, isUp: true }}
                 />
                 <StatCard 
                     icon={<Grid size={24} />}

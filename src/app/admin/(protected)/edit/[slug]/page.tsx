@@ -157,7 +157,7 @@ export default function EditArticlePage({ params }: Props) {
         if (!formData.title || !formData.content) return;
         setIsSubmitting(true);
 
-        const success = await updateArticle({
+const result = await updateArticle({
             id: formData.id,
             slug: slug,
             title: formData.title,
@@ -181,11 +181,11 @@ export default function EditArticlePage({ params }: Props) {
 
         setIsSubmitting(false);
 
-        if (success) {
+        if (result.success) {
             clearAutosave();
             router.push('/admin');
         } else {
-            alert('Gagal menyimpan perubahan.');
+            alert(result.error || 'Gagal menyimpan perubahan.');
         }
     };
 
