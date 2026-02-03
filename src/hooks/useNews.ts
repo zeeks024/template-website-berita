@@ -103,6 +103,7 @@ const addArticle = async (article: NewsItem): Promise<{ success: boolean; error?
         try {
             const res = await fetch('/api/articles', {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(article)
             });
             const data = await res.json();

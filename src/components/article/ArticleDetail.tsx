@@ -125,7 +125,7 @@ export default function ArticleDetail({ article, relatedArticles }: Props) {
                 <div className="lg:col-span-8">
                     <FadeIn delay={200}>
                         <p className="text-xl lg:text-2xl font-serif italic text-foreground/80 leading-relaxed mb-12 pl-6 border-l-4 border-cyan-500">
-                            &quot;{article.summary}&quot;
+                            &quot;{article.excerpt || article.summary}&quot;
                         </p>
 
                         <div
@@ -144,6 +144,22 @@ export default function ArticleDetail({ article, relatedArticles }: Props) {
                                 images={galleryImages} 
                                 onImageClick={(index) => openLightbox(index + 1)} 
                             />
+                        )}
+
+                        {/* Tags */}
+                        {article.tags && article.tags.length > 0 && (
+                            <div className="flex flex-wrap items-center gap-2 mt-8">
+                                <Tag size={14} className="text-muted-foreground" />
+                                {article.tags.map((tag: string, idx: number) => (
+                                    <Link
+                                        key={idx}
+                                        href={`/tag/${encodeURIComponent(tag)}`}
+                                        className="px-3 py-1 bg-muted hover:bg-cyan-500/20 text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 rounded-full text-xs font-medium transition-colors"
+                                    >
+                                        #{tag}
+                                    </Link>
+                                ))}
+                            </div>
                         )}
 
                         {/* Actions */}
