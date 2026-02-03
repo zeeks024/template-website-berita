@@ -325,6 +325,7 @@ export default function SettingsPage() {
                         <div className="space-y-4">
                             <div>
                                 <label className={labelClass}>Gambar Sosok</label>
+                                <p className="text-xs text-muted-foreground mb-2">Format: JPG, PNG, WebP, GIF. Maksimal 5MB.</p>
                                 <div className="space-y-3">
                                     <div className="flex gap-3">
                                         <input

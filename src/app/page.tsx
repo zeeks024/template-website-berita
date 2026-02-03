@@ -269,11 +269,12 @@ export default async function HomePage() {
             
             <FadeIn delay={200} className="relative h-[600px] rounded-[3rem] overflow-hidden hidden lg:block group shadow-2xl shadow-cyan-900/10">
                 <div className="absolute inset-0 bg-cyan-900/20 group-hover:bg-transparent transition-all z-10 duration-700"></div>
-                <Image
+<Image
                 src={settings.sosokImageUrl || "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1976&auto=format&fit=crop"}
                 fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-105"
                 alt="Potret tokoh inspiratif Banjarnegara"
+                unoptimized={settings.sosokImageUrl?.startsWith('/uploads')}
                 />
                 
                 <div className="absolute bottom-10 right-10 z-20">

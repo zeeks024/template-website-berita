@@ -7,7 +7,7 @@ import {
     Bold, Italic, Underline, Strikethrough,
     AlignLeft, AlignCenter, AlignRight, AlignJustify,
     ListOrdered, List, Quote, Minus, Link2, ImagePlus,
-    RotateCcw
+    RotateCcw, RemoveFormatting, Palette
 } from 'lucide-react';
 
 interface Props {
@@ -107,6 +107,39 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
         if (url) exec("createLink", url);
     };
 
+    const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        const text = e.clipboardData.getData('text/plain');
+        document.execCommand('insertText', false, text);
+        handleInput();
+    };
+
+    const TEXT_COLORS = [
+        { label: 'Hitam', value: '#000000' },
+        { label: 'Abu-abu', value: '#6b7280' },
+        { label: 'Merah', value: '#dc2626' },
+        { label: 'Oranye', value: '#ea580c' },
+        { label: 'Kuning', value: '#ca8a04' },
+        { label: 'Hijau', value: '#16a34a' },
+        { label: 'Biru', value: '#2563eb' },
+        { label: 'Ungu', value: '#9333ea' },
+        { label: 'Pink', value: '#db2777' },
+        { label: 'Cyan', value: '#0891b2' },
+    ];
+
+    const [showColorPicker, setShowColorPicker] = useState(false);
+    const colorPickerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (colorPickerRef.current && !colorPickerRef.current.contains(e.target as Node)) {
+                setShowColorPicker(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     return (
         <div className="flex flex-col border border-border rounded-xl overflow-hidden bg-card">
             <div className="px-2 sm:px-3 py-2 bg-muted border-b border-border flex flex-wrap items-center gap-0.5 sticky top-0 z-10 overflow-x-auto">
@@ -138,6 +171,36 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
                 <ToolbarButton cmd="italic" label="Italic (Ctrl+I)" icon={<Italic size={16} />} onExec={exec} />
                 <ToolbarButton cmd="underline" label="Underline (Ctrl+U)" icon={<Underline size={16} />} onExec={exec} />
                 <ToolbarButton cmd="strikeThrough" label="Strikethrough" icon={<Strikethrough size={16} />} onExec={exec} />
+                <ToolbarButton cmd="removeFormat" label="Hapus Format" icon={<RemoveFormatting size={16} />} onExec={exec} />
+
+                <div className="relative" ref={colorPickerRef}>
+                    <button
+                        type="button"
+                        onMouseDown={(e) => { e.preventDefault(); setShowColorPicker(!showColorPicker); }}
+                        className="p-1.5 rounded hover:bg-muted active:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center min-w-[28px]"
+                        title="Warna Teks"
+                    >
+                        <Palette size={16} />
+                    </button>
+                    {showColorPicker && (
+                        <div className="absolute top-full left-0 mt-1 p-2 bg-popover border border-border rounded-lg shadow-lg z-50 grid grid-cols-5 gap-1 min-w-[140px]">
+                            {TEXT_COLORS.map((color) => (
+                                <button
+                                    key={color.value}
+                                    type="button"
+                                    onMouseDown={(e) => {
+                                        e.preventDefault();
+                                        exec('foreColor', color.value);
+                                        setShowColorPicker(false);
+                                    }}
+                                    className="w-6 h-6 rounded border border-border hover:scale-110 transition-transform"
+                                    style={{ backgroundColor: color.value }}
+                                    title={color.label}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
                 <ToolbarDivider />
 
                 <ToolbarButton cmd="justifyLeft" label="Align Left" icon={<AlignLeft size={16} />} onExec={exec} />
@@ -188,6 +251,7 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
                         ref={editorRef}
                         contentEditable
                         onInput={handleInput}
+                        onPaste={handlePaste}
                         spellCheck={false}
                         suppressHydrationWarning
                         className="min-h-[400px] max-w-3xl mx-auto p-8 md:p-12 bg-white dark:bg-card shadow-lg rounded-sm outline-none prose prose-gray dark:prose-invert prose-lg max-w-none text-foreground
