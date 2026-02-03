@@ -62,6 +62,14 @@ export default function ArticleDetail({ article, relatedArticles }: Props) {
                     </div>
                 </div>
 
+                {(article.imageCaption || article.imageCredit) && (
+                    <div className="absolute bottom-4 right-6 z-30 text-sm text-white/80 bg-black/40 backdrop-blur-sm px-4 py-2 rounded-lg">
+                        {article.imageCaption && <span>{article.imageCaption}</span>}
+                        {article.imageCaption && article.imageCredit && <span className="mx-2">•</span>}
+                        {article.imageCredit && <span className="italic">Foto: {article.imageCredit}</span>}
+                    </div>
+                )}
+
                 <div className="absolute bottom-0 left-0 w-full z-20 px-6 lg:px-12 pb-12 max-w-[1600px] mx-auto pointer-events-none">
                     <FadeIn>
                         <div className="bg-black/70 backdrop-blur-md rounded-2xl p-6 lg:p-8 border border-white/10 shadow-xl shadow-black/30 pointer-events-auto">
@@ -132,9 +140,9 @@ export default function ArticleDetail({ article, relatedArticles }: Props) {
                             dangerouslySetInnerHTML={{ __html: article.content }}
                             className="prose prose-lg dark:prose-invert max-w-none break-words overflow-hidden min-w-0
                                 prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight prose-headings:text-foreground
-                                prose-p:text-foreground/80 prose-p:leading-8 prose-p:font-light
+                                prose-p:leading-8 prose-p:font-light
                                 prose-blockquote:border-l-cyan-500 prose-blockquote:bg-muted prose-blockquote:p-6 prose-blockquote:rounded-r-2xl prose-blockquote:not-italic
-                                prose-strong:text-foreground prose-strong:font-bold
+                                prose-strong:font-bold
                                 prose-a:text-cyan-600 dark:prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline
                                 prose-img:rounded-[2rem] prose-img:border prose-img:border-border"
                         />

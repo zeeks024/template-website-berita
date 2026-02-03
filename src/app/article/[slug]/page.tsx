@@ -25,6 +25,8 @@ async function getArticle(slug: string): Promise<NewsItem | null> {
         category: article.category,
         author: article.author,
         image: article.image || '',
+        imageCaption: article.imageCaption || '',
+        imageCredit: article.imageCredit || '',
         readTime: article.readTime || '1 menit',
         publishedAt: article.publishedAt?.toISOString() || '',
         createdAt: article.createdAt.toISOString(),

@@ -92,9 +92,9 @@ export default function ArticlePreviewModal({ data, onClose }: ArticlePreviewMod
                         <div 
                             className="prose prose-lg dark:prose-invert max-w-none
                                 prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight
-                                prose-p:text-foreground/90 prose-p:leading-relaxed
+                                prose-p:leading-relaxed
                                 prose-a:text-cyan-500 prose-a:no-underline hover:prose-a:underline
-                                prose-strong:text-foreground prose-strong:font-bold
+                                prose-strong:font-bold
                                 prose-img:rounded-2xl prose-img:shadow-xl"
                             dangerouslySetInnerHTML={{ 
                                 __html: data.content || '<p class="text-muted-foreground">Belum ada konten...</p>' 
