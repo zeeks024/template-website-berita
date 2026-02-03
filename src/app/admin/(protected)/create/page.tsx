@@ -10,8 +10,8 @@ import Link from 'next/link';
 import ImageUploader from '@/components/admin/ImageUploader';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 import { calculateReadTime, formatDateWIB } from '@/lib/dateUtils';
-import { 
-    Send, X, Rocket, Settings2, PenLine, 
+import {
+    Send, X, Rocket, Settings2, PenLine,
     AlignLeft, Newspaper, ImagePlus, Hash,
     FolderOpen, ChevronDown, ArrowLeft, Sparkles, Star,
     CloudOff, Cloud, CheckCircle, RotateCcw, Eye
@@ -94,7 +94,7 @@ export default function CreateArticlePage() {
 
         const slug = formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
-const result = await addArticle({
+        const result = await addArticle({
             id: Date.now().toString(),
             slug: slug,
             title: formData.title,
@@ -190,8 +190,8 @@ const result = await addArticle({
                                         </>
                                     )}
                                 </div>
-                                <Link 
-                                    href="/admin" 
+                                <Link
+                                    href="/admin"
                                     className="px-4 py-2 bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground rounded-xl text-sm font-medium flex items-center gap-2 transition-all"
                                 >
                                     <ArrowLeft size={16} />
@@ -205,7 +205,7 @@ const result = await addArticle({
                         <div className="space-y-6">
                             <div>
                                 <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
-                                    <PenLine size={14} className="text-cyan-500" /> 
+                                    <PenLine size={14} className="text-cyan-500" />
                                     Judul Artikel
                                     <span className="text-red-400">*</span>
                                 </label>
@@ -221,8 +221,8 @@ const result = await addArticle({
 
                             <div>
                                 <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
-                                    <AlignLeft size={14} className="text-cyan-500" /> 
-                                    Ringkasan (Excerpt)
+                                    <AlignLeft size={14} className="text-cyan-500" />
+                                    Ringkasan
                                 </label>
                                 <textarea
                                     rows={3}
@@ -258,7 +258,7 @@ const result = await addArticle({
 
                     <Card>
                         <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-4">
-                            <ImagePlus size={14} className="text-cyan-500" /> 
+                            <ImagePlus size={14} className="text-cyan-500" />
                             Media & Gambar
                         </label>
                         <ImageUploader values={formData.images} onChange={(vals) => setFormData({ ...formData, images: vals })} />
@@ -338,15 +338,13 @@ const result = await addArticle({
                                     <button
                                         type="button"
                                         onClick={() => setFormData({ ...formData, featured: !formData.featured })}
-                                        className={`relative w-11 h-6 rounded-full transition-all ${
-                                            formData.featured 
-                                                ? 'bg-amber-500' 
+                                        className={`relative w-11 h-6 rounded-full transition-all ${formData.featured
+                                                ? 'bg-amber-500'
                                                 : 'bg-muted'
-                                        }`}
+                                            }`}
                                     >
-                                        <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all ${
-                                            formData.featured ? 'left-6' : 'left-1'
-                                        }`} />
+                                        <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all ${formData.featured ? 'left-6' : 'left-1'
+                                            }`} />
                                     </button>
                                 </div>
                             )}
@@ -367,7 +365,7 @@ const result = await addArticle({
                                 disabled={isSubmitting}
                                 className="w-full py-3.5 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white rounded-xl font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40"
                             >
-                                <Send size={16} /> 
+                                <Send size={16} />
                                 {isSubmitting ? 'Menyimpan...' : 'Terbitkan Artikel'}
                             </button>
                             <button
