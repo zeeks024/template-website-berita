@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useRef } from 'react';
-import { validateImageFile, readFileAsDataURL, fitTo16By9, cropTo16By9 } from '@/lib/imageUtils';
+import { validateImageFile, readFileAsDataURL, fitTo16By9 } from '@/lib/imageUtils';
 import { Upload, X, Sparkles, Scissors, Loader2 } from 'lucide-react';
+import CropModal from './CropModal';
 
 interface Props {
     values: string[];
@@ -12,6 +13,8 @@ interface Props {
 export default function ImageUploader({ values, onChange }: Props) {
     const [dragActive, setDragActive] = useState(false);
     const [processing, setProcessing] = useState(false);
+    const [cropModalOpen, setCropModalOpen] = useState(false);
+    const [cropImageIndex, setCropImageIndex] = useState<number | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleFiles = async (files: FileList | null) => {
@@ -75,16 +78,17 @@ export default function ImageUploader({ values, onChange }: Props) {
 
     const applyEdit = async (index: number, mode: 'fit' | 'crop') => {
         if (processing) return;
+        
+        if (mode === 'crop') {
+            setCropImageIndex(index);
+            setCropModalOpen(true);
+            return;
+        }
+        
         setProcessing(true);
         try {
             const original = values[index];
-            let result = original;
-
-            if (mode === 'fit') {
-                result = await fitTo16By9(original);
-            } else {
-                result = await cropTo16By9(original);
-            }
+            const result = await fitTo16By9(original);
 
             const newValues = [...values];
             newValues[index] = result;
@@ -94,6 +98,14 @@ export default function ImageUploader({ values, onChange }: Props) {
             console.error(e);
         }
         setProcessing(false);
+    };
+
+    const handleCropComplete = (croppedImageDataUrl: string) => {
+        if (cropImageIndex === null) return;
+        const newValues = [...values];
+        newValues[cropImageIndex] = croppedImageDataUrl;
+        onChange(newValues);
+        setCropImageIndex(null);
     };
 
     return (
@@ -184,6 +196,17 @@ export default function ImageUploader({ values, onChange }: Props) {
                         </div>
                     ))}
                 </div>
+            )}
+
+            {cropModalOpen && cropImageIndex !== null && (
+                <CropModal
+                    imageSrc={values[cropImageIndex]}
+                    onClose={() => {
+                        setCropModalOpen(false);
+                        setCropImageIndex(null);
+                    }}
+                    onCropComplete={handleCropComplete}
+                />
             )}
         </div>
     );

@@ -3,6 +3,7 @@
 import { X, Clock, Calendar, User, Tag, Eye as EyeIcon } from 'lucide-react';
 import Image from 'next/image';
 import { calculateReadTime, formatDateWIB } from '@/lib/dateUtils';
+import Portal from '@/components/ui/Portal';
 
 interface ArticlePreviewData {
     title: string;
@@ -27,7 +28,8 @@ export default function ArticlePreviewModal({ data, onClose }: ArticlePreviewMod
     const heroImage = data.images[0] || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1600&q=80';
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <Portal>
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/95 backdrop-blur-sm">
             <div className="relative w-full max-w-4xl max-h-[90vh] bg-background rounded-3xl overflow-hidden shadow-2xl border border-border">
                 <div className="sticky top-0 z-10 flex items-center justify-between p-4 bg-card border-b border-border">
                     <div className="flex items-center gap-3">
@@ -129,6 +131,7 @@ export default function ArticlePreviewModal({ data, onClose }: ArticlePreviewMod
                     </div>
                 </div>
             </div>
-        </div>
+            </div>
+        </Portal>
     );
 }

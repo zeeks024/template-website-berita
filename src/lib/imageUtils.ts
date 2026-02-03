@@ -110,3 +110,44 @@ export const cropTo16By9 = (imgSrc: string): Promise<string> => {
         img.src = imgSrc;
     });
 };
+
+export type CropArea = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+};
+
+export const cropToRegion = (
+    imgSrc: string,
+    cropArea: CropArea,
+    targetWidth: number = 1280,
+    targetHeight: number = 720
+): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return reject("Context error");
+
+            ctx.drawImage(
+                img,
+                cropArea.x,
+                cropArea.y,
+                cropArea.width,
+                cropArea.height,
+                0,
+                0,
+                targetWidth,
+                targetHeight
+            );
+
+            resolve(canvas.toDataURL('image/jpeg', 0.9));
+        };
+        img.onerror = () => reject("Gagal memuat gambar");
+        img.src = imgSrc;
+    });
+};
