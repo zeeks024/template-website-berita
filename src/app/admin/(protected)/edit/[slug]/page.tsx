@@ -14,7 +14,7 @@ import {
     Save, X, Rocket, Settings2, PenLine, 
     AlignLeft, Newspaper, ImagePlus, Hash,
     FolderOpen, ChevronDown, ArrowLeft, Sparkles,
-    Globe, Edit3, Star,
+    Edit3, Star,
     Cloud, CheckCircle, CloudOff, Eye
 } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
@@ -38,8 +38,6 @@ interface FormData {
     author: string;
     status: string;
     tags: string;
-    metaTitle: string;
-    metaDesc: string;
     featured: boolean;
 }
 
@@ -90,7 +88,7 @@ export default function EditArticlePage({ params }: Props) {
 
     const initialFormData = useMemo<FormData>(() => {
         if (!foundArticle) {
-            return {
+return {
                 id: '',
                 title: '',
                 category: '',
@@ -103,8 +101,6 @@ export default function EditArticlePage({ params }: Props) {
                 author: 'Admin Redaksi',
                 status: 'published',
                 tags: '',
-                metaTitle: '',
-                metaDesc: '',
                 featured: false
             };
         }
@@ -112,7 +108,7 @@ export default function EditArticlePage({ params }: Props) {
         const galleryArray = getArray(foundArticle.gallery);
         const finalImages = galleryArray.length > 0 ? galleryArray : (foundArticle.image ? [foundArticle.image] : []);
 
-        return {
+return {
             id: foundArticle.id,
             title: foundArticle.title,
             category: foundArticle.category,
@@ -125,8 +121,6 @@ export default function EditArticlePage({ params }: Props) {
             author: foundArticle.author,
             status: foundArticle.status || 'draft',
             tags: getTagsString(foundArticle.tags),
-            metaTitle: foundArticle.metaTitle || '',
-            metaDesc: foundArticle.metaDesc || '',
             featured: foundArticle.featured || false
         };
     }, [foundArticle]);
@@ -172,8 +166,6 @@ const result = await updateArticle({
             author: formData.author,
             status: formData.status as 'draft' | 'published' | 'archived',
             tags: formData.tags.split(',').map(t => t.trim()).filter(t => t),
-            metaTitle: formData.metaTitle,
-            metaDesc: formData.metaDesc,
             featured: formData.featured,
             publishedAt: new Date().toISOString(),
             readTime: calculateReadTime(formData.content)
@@ -451,41 +443,7 @@ const result = await updateArticle({
                                 />
                             </div>
                         </div>
-                    </Card>
-
-                    <Card>
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                                <Globe className="text-purple-400" size={20} />
-                            </div>
-                            <div>
-                                <h3 className="font-bold text-foreground text-sm">SEO</h3>
-                                <p className="text-muted-foreground text-xs">Optimasi mesin pencari</p>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-muted-foreground uppercase">Meta Title</label>
-                                <input
-                                    className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none transition-all"
-                                    value={formData.metaTitle}
-                                    onChange={e => setFormData({ ...formData, metaTitle: e.target.value })}
-                                    placeholder="Judul untuk Google..."
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-muted-foreground uppercase">Meta Description</label>
-                                <textarea
-                                    rows={3}
-                                    className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none transition-all resize-none"
-                                    value={formData.metaDesc}
-                                    onChange={e => setFormData({ ...formData, metaDesc: e.target.value })}
-                                    placeholder="Deskripsi singkat untuk hasil pencarian..."
-                                />
-                            </div>
-                        </div>
-                    </Card>
+</Card>
                 </div>
             </form>
 
