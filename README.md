@@ -507,17 +507,7 @@ npx prisma db seed
    ```
 
 ---
-
-## Contributing
-
-Kami menyambut kontribusi! Silakan baca panduan berikut sebelum berkontribusi:
-
-1. Fork repository ini
-2. Buat branch fitur (`git checkout -b feature/fitur-baru`)
-3. Commit perubahan (`git commit -m 'Menambahkan fitur baru'`)
-4. Push ke branch (`git push origin feature/fitur-baru`)
-5. Buat Pull Request
-
+S
 ### Development Guidelines
 
 - Gunakan TypeScript strict mode
@@ -552,10 +542,3 @@ Proyek ini bersifat privat dan tidak untuk distribusi publik.
 
 ---
 
-<div align="center">
-
-**Dibuat untuk Banjarnegara**
-
-*Mengangkat opini, cerita inspiratif, dan potensi tersembunyi dari Banjarnegara.*
-
-</div>
