@@ -310,7 +310,7 @@ export default function EditArticlePage({ params }: Props) {
                 </div>
 
                 <div className="space-y-3">
-                    <Card className="sticky top-4 border-amber-500/20 bg-gradient-to-b from-admin-surface to-admin-surface/80">
+                    <Card className="border-amber-500/20 bg-gradient-to-b from-admin-surface to-admin-surface/80">
                         <div className="flex items-center gap-2 mb-3">
                             <div className="w-7 h-7 rounded-lg bg-amber-500/20 flex items-center justify-center">
                                 <Rocket className="text-amber-400" size={14} />
