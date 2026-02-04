@@ -36,6 +36,9 @@ export default function CropModal({ imageSrc, onClose, onCropComplete }: CropMod
             setDetectedOrientation(isPortrait ? 'portrait' : 'landscape');
             setAspectMode(isPortrait ? 'portrait' : 'landscape');
         };
+        if (!imageSrc.startsWith('data:')) {
+            img.crossOrigin = "anonymous";
+        }
         img.src = imageSrc;
     }, [imageSrc]);
 
@@ -117,6 +120,9 @@ export default function CropModal({ imageSrc, onClose, onCropComplete }: CropMod
                             onZoomChange={setZoom}
                             onCropComplete={handleCropComplete}
                             showGrid={true}
+                            mediaProps={{
+                                crossOrigin: 'anonymous'
+                            }}
                             style={{
                                 containerStyle: { backgroundColor: 'hsl(var(--muted))' },
                                 cropAreaStyle: { 

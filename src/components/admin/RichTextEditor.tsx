@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
-import { readFileAsDataURL } from '@/lib/imageUtils';
+import { uploadImage } from '@/lib/imageUtils';
 import {
     Undo2, Redo2, Heading2, Heading3, Pilcrow,
     Bold, Italic, Underline, Strikethrough,
@@ -87,17 +87,21 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
     };
 
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isUploading, setIsUploading] = useState(false);
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setIsUploading(true);
             try {
-                const dataUrl = await readFileAsDataURL(file);
-                exec('insertImage', dataUrl);
+                const url = await uploadImage(file);
+                exec('insertImage', url);
                 if (fileInputRef.current) fileInputRef.current.value = '';
             } catch (err) {
-                alert("Gagal membaca gambar");
+                alert("Gagal mengupload gambar");
                 console.error(err);
+            } finally {
+                setIsUploading(false);
             }
         }
     };
@@ -227,11 +231,12 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
 
                 <button
                     type="button"
-                    onMouseDown={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}
-                    className="p-1.5 rounded hover:bg-muted active:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center min-w-[28px]"
-                    title="Insert Image"
+                    onMouseDown={(e) => { e.preventDefault(); if (!isUploading) fileInputRef.current?.click(); }}
+                    disabled={isUploading}
+                    className={`p-1.5 rounded hover:bg-muted active:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center min-w-[28px] ${isUploading ? 'opacity-50 cursor-wait' : ''}`}
+                    title={isUploading ? "Uploading..." : "Insert Image"}
                 >
-                    <ImagePlus size={16} />
+                    <ImagePlus size={16} className={isUploading ? 'animate-pulse' : ''} />
                 </button>
                 <input
                     ref={fileInputRef}

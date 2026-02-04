@@ -1,4 +1,4 @@
-export const MAX_FILE_SIZE_MB = 10;
+export const MAX_FILE_SIZE_MB = 5;
 export const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 export type ImageProcessResult = {
@@ -78,6 +78,9 @@ export const fitTo16By9 = (imgSrc: string): Promise<string> => {
             resolve(canvas.toDataURL('image/jpeg', 0.9));
         };
         img.onerror = () => reject("Gagal memuat gambar");
+        if (!imgSrc.startsWith('data:')) {
+            img.crossOrigin = "anonymous";
+        }
         img.src = imgSrc;
     });
 };
@@ -107,6 +110,10 @@ export const cropTo16By9 = (imgSrc: string): Promise<string> => {
 
             resolve(canvas.toDataURL('image/jpeg', 0.9));
         };
+        img.onerror = () => reject("Gagal memuat gambar");
+        if (!imgSrc.startsWith('data:')) {
+            img.crossOrigin = "anonymous";
+        }
         img.src = imgSrc;
     });
 };
@@ -147,7 +154,50 @@ export const cropToRegion = (
 
             resolve(canvas.toDataURL('image/jpeg', 0.9));
         };
-        img.onerror = () => reject("Gagal memuat gambar");
+        img.onerror = (e) => {
+            console.error("Image load error:", e, "src:", imgSrc?.substring(0, 100));
+            reject("Gagal memuat gambar");
+        };
+        // Must set crossOrigin BEFORE src for CORS to work
+        if (!imgSrc.startsWith('data:')) {
+            img.crossOrigin = "anonymous";
+        }
         img.src = imgSrc;
     });
+};
+
+export const uploadImage = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Upload failed');
+    }
+
+    const data = await response.json();
+    return data.url;
+};
+
+export const uploadImageBlob = async (blob: Blob, filename: string): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', blob, filename);
+
+    const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Upload failed');
+    }
+
+    const data = await response.json();
+    return data.url;
 };
