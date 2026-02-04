@@ -309,133 +309,133 @@ export default function EditArticlePage({ params }: Props) {
                     </Card>
                 </div>
 
-                <div className="space-y-6">
-                    <Card className="sticky top-8 border-amber-500/20 bg-gradient-to-b from-admin-surface to-admin-surface/80">
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                                <Rocket className="text-amber-400" size={20} />
+                <div className="space-y-4">
+                    <Card className="sticky top-4 border-amber-500/20 bg-gradient-to-b from-admin-surface to-admin-surface/80">
+                        <div className="flex items-center gap-2.5 mb-4">
+                            <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                                <Rocket className="text-amber-400" size={16} />
                             </div>
                             <div>
-                                <h3 className="font-bold text-foreground text-sm">Publikasi</h3>
-                                <p className="text-muted-foreground text-xs">Simpan perubahan artikel</p>
+                                <h3 className="font-semibold text-foreground text-sm">Publikasi</h3>
+                                <p className="text-muted-foreground text-[10px]">Simpan perubahan artikel</p>
                             </div>
                         </div>
 
-                        <div className="space-y-4 mb-6">
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-2">
-                                    <Sparkles size={12} /> Status
+                        <div className="space-y-3 mb-4">
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1.5">
+                                    <Sparkles size={10} /> Status
                                 </label>
                                 <div className="relative">
                                     <select
                                         value={formData.status}
                                         onChange={e => setFormData({ ...formData, status: e.target.value })}
-                                        className="w-full appearance-none bg-muted border border-border rounded-xl px-4 py-3 pr-10 text-sm text-foreground focus:border-cyan-500 focus:outline-none cursor-pointer transition-all [&>option]:bg-[hsl(var(--admin-surface))] [&>option]:text-foreground"
+                                        className="w-full appearance-none bg-muted border border-border rounded-lg px-3 py-2 pr-8 text-xs text-foreground focus:border-cyan-500 focus:outline-none cursor-pointer transition-all [&>option]:bg-[hsl(var(--admin-surface))] [&>option]:text-foreground"
                                     >
                                         <option value="draft">Draft (Konsep)</option>
                                         <option value="published">Terbitkan Sekarang</option>
                                         <option value="archived">Arsipkan</option>
                                     </select>
-                                    <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                                    <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                                 </div>
                             </div>
 
                             {isAdmin && (
-                                <div className="flex items-center justify-between p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-                                    <div className="flex items-center gap-2">
-                                        <Star size={14} className="text-amber-400" />
-                                        <span className="text-sm text-foreground/80">Pilihan Editor</span>
+                                <div className="flex items-center justify-between p-2.5 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                                    <div className="flex items-center gap-1.5">
+                                        <Star size={12} className="text-amber-400" />
+                                        <span className="text-xs text-foreground/80">Pilihan Editor</span>
                                     </div>
                                     <button
                                         type="button"
                                         onClick={() => setFormData({ ...formData, featured: !formData.featured })}
-                                        className={`relative w-11 h-6 rounded-full transition-all ${formData.featured
+                                        className={`relative w-9 h-5 rounded-full transition-all ${formData.featured
                                                 ? 'bg-amber-500'
                                                 : 'bg-muted'
                                             }`}
                                     >
-                                        <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all ${formData.featured ? 'left-6' : 'left-1'
+                                        <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${formData.featured ? 'left-4' : 'left-0.5'
                                             }`} />
                                     </button>
                                 </div>
                             )}
                         </div>
 
-                        <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-2">
                             <button
                                 type="button"
                                 onClick={() => setShowPreview(true)}
                                 disabled={!formData.title && !formData.content}
-                                className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold text-xs flex items-center justify-center gap-1.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                <Eye size={16} />
+                                <Eye size={14} />
                                 Preview
                             </button>
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full py-3.5 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white rounded-xl font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40"
+                                className="w-full py-2.5 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white rounded-lg font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40"
                             >
-                                <Save size={16} />
+                                <Save size={14} />
                                 {isSubmitting ? 'Menyimpan...' : 'Simpan Perubahan'}
                             </button>
                             <button
                                 type="button"
                                 onClick={() => router.push('/admin')}
-                                className="w-full py-3 bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-all"
+                                className="w-full py-2 bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground rounded-lg font-medium text-xs flex items-center justify-center gap-1.5 transition-all"
                             >
-                                <X size={16} /> Batal
+                                <X size={14} /> Batal
                             </button>
                         </div>
                     </Card>
 
                     <Card>
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                                <Settings2 className="text-emerald-400" size={20} />
+                        <div className="flex items-center gap-2.5 mb-4">
+                            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                                <Settings2 className="text-emerald-400" size={16} />
                             </div>
                             <div>
-                                <h3 className="font-bold text-foreground text-sm">Pengaturan</h3>
-                                <p className="text-muted-foreground text-xs">Kategori & metadata</p>
+                                <h3 className="font-semibold text-foreground text-sm">Pengaturan</h3>
+                                <p className="text-muted-foreground text-[10px]">Kategori & metadata</p>
                             </div>
                         </div>
 
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-2">
-                                    <FolderOpen size={12} /> Kategori
+                        <div className="space-y-3">
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1.5">
+                                    <FolderOpen size={10} /> Kategori
                                 </label>
                                 <div className="relative">
                                     <select
-                                        className="w-full appearance-none bg-muted border border-border rounded-xl px-4 py-3 pr-10 text-sm text-foreground focus:border-cyan-500 focus:outline-none cursor-pointer transition-all [&>option]:bg-[hsl(var(--admin-surface))] [&>option]:text-foreground"
+                                        className="w-full appearance-none bg-muted border border-border rounded-lg px-3 py-2 pr-8 text-xs text-foreground focus:border-cyan-500 focus:outline-none cursor-pointer transition-all [&>option]:bg-[hsl(var(--admin-surface))] [&>option]:text-foreground"
                                         value={formData.category}
                                         onChange={e => setFormData({ ...formData, category: e.target.value })}
                                     >
                                         {categories.map(c => <option key={c} value={c}>{c}</option>)}
                                     </select>
-                                    <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                                    <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-2">
-                                    <Hash size={12} /> Tags
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1.5">
+                                    <Hash size={10} /> Tags
                                 </label>
                                 <input
-                                    className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none transition-all"
+                                    className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none transition-all"
                                     value={formData.tags}
                                     onChange={e => setFormData({ ...formData, tags: e.target.value })}
                                     placeholder="Viral, Tokoh, Wisata..."
                                 />
-                                <p className="text-2xs text-muted-foreground">Pisahkan dengan koma</p>
+                                <p className="text-[10px] text-muted-foreground">Pisahkan dengan koma</p>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-2">
-                                    <PenLine size={12} /> Penulis
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1.5">
+                                    <PenLine size={10} /> Penulis
                                 </label>
                                 <input
-                                    className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-foreground focus:border-cyan-500 focus:outline-none transition-all"
+                                    className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:border-cyan-500 focus:outline-none transition-all"
                                     value={formData.author}
                                     onChange={e => setFormData({ ...formData, author: e.target.value })}
                                 />
