@@ -280,7 +280,7 @@ export default function CreateArticlePage() {
                 </div>
 
                 <div className="space-y-6">
-                    <Card className="sticky top-8 border-cyan-500/20 bg-gradient-to-b from-admin-surface to-admin-surface/80">
+                    <Card className="border-cyan-500/20 bg-gradient-to-b from-admin-surface to-admin-surface/80">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center">
                                 <Rocket className="text-cyan-400" size={20} />
