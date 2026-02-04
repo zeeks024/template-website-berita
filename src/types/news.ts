@@ -6,7 +6,7 @@ export type NewsItem = {
   content: string;
   category: string;
   author: string;
-  publishedAt: string;
+  publishedAt?: string;
   readTime: string;
   image: string;
   gallery?: string[];

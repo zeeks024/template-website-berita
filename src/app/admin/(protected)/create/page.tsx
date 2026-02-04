@@ -9,7 +9,7 @@ import { useUser } from '../UserContext';
 import Link from 'next/link';
 import ImageUploader from '@/components/admin/ImageUploader';
 import RichTextEditor from '@/components/admin/RichTextEditor';
-import { calculateReadTime, formatDateWIB } from '@/lib/dateUtils';
+import { calculateReadTime } from '@/lib/dateUtils';
 import {
     Send, X, Rocket, Settings2, PenLine,
     AlignLeft, Newspaper, ImagePlus, Hash,
@@ -112,7 +112,7 @@ export default function CreateArticlePage() {
             metaTitle: formData.metaTitle,
             metaDesc: formData.metaDesc,
             featured: formData.featured,
-            publishedAt: formatDateWIB(new Date()),
+            publishedAt: new Date().toISOString(),
             readTime: calculateReadTime(formData.content)
         });
 

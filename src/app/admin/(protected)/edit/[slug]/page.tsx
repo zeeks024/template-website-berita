@@ -151,7 +151,7 @@ export default function EditArticlePage({ params }: Props) {
         if (!formData.title || !formData.content) return;
         setIsSubmitting(true);
 
-        const result = await updateArticle({
+const result = await updateArticle({
             id: formData.id,
             slug: slug,
             title: formData.title,
@@ -167,7 +167,6 @@ export default function EditArticlePage({ params }: Props) {
             status: formData.status as 'draft' | 'published' | 'archived',
             tags: formData.tags.split(',').map(t => t.trim()).filter(t => t),
             featured: formData.featured,
-            publishedAt: new Date().toISOString(),
             readTime: calculateReadTime(formData.content)
         });
 

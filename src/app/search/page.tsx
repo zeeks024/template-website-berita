@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { Suspense, useState, useMemo } from 'react';
 import FadeIn from '@/components/ui/FadeIn';
 import { SkeletonGrid } from '@/components/ui/SkeletonCard';
+import TimeAgo from '@/components/ui/TimeAgo';
 import { Search as SearchIcon, Filter, SlidersHorizontal, ArrowRight } from 'lucide-react';
 
 const SORT_OPTIONS = [
@@ -35,20 +36,24 @@ function SearchResults() {
     }, [dbCategories]);
 
     const filteredNews = useMemo(() => {
-        let results = allNews.filter(item =>
-            item.title.toLowerCase().includes(queryParam) ||
-            item.summary.toLowerCase().includes(queryParam) ||
-            item.category.toLowerCase().includes(queryParam)
-        );
+        let results = allNews;
+        
+        if (queryParam) {
+            results = results.filter(item =>
+                item.title.toLowerCase().includes(queryParam) ||
+                item.summary.toLowerCase().includes(queryParam) ||
+                item.category.toLowerCase().includes(queryParam)
+            );
+        }
 
         if (category !== 'Semua') {
             results = results.filter(item => item.category === category);
         }
 
         if (sort === 'newest') {
-            results.sort((a, b) => (new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()));
+            results.sort((a, b) => (new Date(b.publishedAt || 0).getTime() - new Date(a.publishedAt || 0).getTime()));
         } else if (sort === 'oldest') {
-            results.sort((a, b) => (new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()));
+            results.sort((a, b) => (new Date(a.publishedAt || 0).getTime() - new Date(b.publishedAt || 0).getTime()));
         }
 
         return results;
@@ -102,9 +107,11 @@ function SearchResults() {
                             </div>
                         </form>
 
-                        {queryParam && (
+                        {(queryParam || category !== 'Semua') && (
                             <p className="text-muted-foreground mb-6">
-                                Menampilkan hasil untuk: <span className="text-foreground font-semibold">&quot;{queryParam}&quot;</span>
+                                Menampilkan hasil 
+                                {queryParam && <> untuk: <span className="text-foreground font-semibold">&quot;{queryParam}&quot;</span></>}
+                                {category !== 'Semua' && <> {queryParam ? 'dalam' : 'untuk'} kategori <span className="text-cyan-400 font-semibold">{category}</span></>}
                             </p>
                         )}
 
@@ -164,29 +171,7 @@ function SearchResults() {
                         </div>
                     </div>
 
-                    {!queryParam ? (
-                        <div className="text-center py-24 bg-card border border-border rounded-3xl">
-                            <div className="w-24 h-24 mx-auto bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 rounded-full flex items-center justify-center mb-8">
-                                <SearchIcon size={48} className="text-cyan-400" />
-                            </div>
-                            <h3 className="text-3xl font-black text-foreground mb-4">Mulai Pencarian</h3>
-                            <p className="text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed">
-                                Ketik kata kunci di kolom pencarian untuk menemukan artikel yang Anda cari.
-                            </p>
-                            <div className="flex flex-wrap justify-center gap-3">
-                                <span className="text-xs text-muted-foreground uppercase tracking-wider self-center mr-2">Populer:</span>
-                                {['Dieng', 'UMKM', 'Wisata', 'Pertanian'].map(tag => (
-                                    <Link
-                                        key={tag}
-                                        href={`/search?q=${tag.toLowerCase()}`}
-                                        className="px-4 py-2 bg-muted hover:bg-cyan-500/20 border border-border hover:border-cyan-500/50 rounded-full text-sm text-muted-foreground hover:text-cyan-400 transition-all"
-                                    >
-                                        {tag}
-                                    </Link>
-                                ))}
-                            </div>
-                        </div>
-                    ) : filteredNews.length > 0 ? (
+                    {filteredNews.length > 0 ? (
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {filteredNews.map((item, index) => (
                                 <FadeIn key={item.id} delay={index * 0.05}>
@@ -207,10 +192,8 @@ function SearchResults() {
                                             </div>
                                         </div>
                                         <div className="p-6">
-                                            <div className="flex items-center gap-2 text-2xs font-bold uppercase tracking-wider text-muted-foreground mb-3">
-                                                <span>{item.publishedAt}</span>
-                                                <span>•</span>
-                                                <span className="text-cyan-400">{item.readTime || '3 min'} read</span>
+                                            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">
+                                                <TimeAgo date={item.publishedAt || new Date().toISOString()} />
                                             </div>
                                             <h2 className="text-xl font-bold text-foreground leading-tight mb-3 group-hover:text-cyan-400 transition-colors line-clamp-2">
                                                 {item.title}
@@ -218,8 +201,11 @@ function SearchResults() {
                                             <p className="text-sm text-muted-foreground line-clamp-3 mb-6 font-light">
                                                 {item.summary}
                                             </p>
-                                            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground group-hover:text-foreground transition-colors">
-                                                Baca Selengkapnya <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground group-hover:text-foreground transition-colors">
+                                                    Baca Selengkapnya <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                                                </div>
+                                                <span className="text-xs text-cyan-400">{item.readTime || '3 menit baca'}</span>
                                             </div>
                                         </div>
                                     </Link>
@@ -233,10 +219,16 @@ function SearchResults() {
                             </div>
                             <h3 className="text-3xl font-black text-foreground mb-4">Tidak Ditemukan</h3>
                             <p className="text-muted-foreground mb-4 max-w-md mx-auto leading-relaxed">
-                                Tidak ada artikel yang cocok dengan <span className="text-foreground font-semibold">&quot;{queryParam}&quot;</span>
+                                {queryParam ? (
+                                    <>Tidak ada artikel yang cocok dengan <span className="text-foreground font-semibold">&quot;{queryParam}&quot;</span></>
+                                ) : (
+                                    <>Tidak ada artikel</>
+                                )}
                                 {category !== 'Semua' && <span> dalam kategori <span className="text-cyan-400">{category}</span></span>}.
                             </p>
-                            <p className="text-muted-foreground/60 text-sm mb-8">Coba kata kunci lain atau hapus filter kategori.</p>
+                            <p className="text-muted-foreground/60 text-sm mb-8">
+                                {queryParam ? 'Coba kata kunci lain atau hapus filter kategori.' : 'Coba pilih kategori lain.'}
+                            </p>
                             <div className="flex flex-wrap justify-center gap-3">
                                 {category !== 'Semua' && (
                                     <button

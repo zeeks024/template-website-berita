@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
 import Pagination from '@/components/ui/Pagination';
+import TimeAgo from '@/components/ui/TimeAgo';
 import { useUser } from './UserContext';
 import { Card, StatCard, Badge, QuickActions } from '@/components/admin/ui';
 
@@ -143,7 +144,7 @@ export default function AdminDashboard() {
                                 </Badge>
                                 <span className="text-foreground font-medium text-sm truncate max-w-xs md:max-w-md">{article.title}</span>
                             </div>
-                            <span className="text-muted-foreground text-xs font-mono">{article.publishedAt}</span>
+                            <span className="text-muted-foreground font-medium text-xs"><TimeAgo date={article.publishedAt} /></span>
                         </div>
                     )) : (
                         <div className="text-muted-foreground text-sm text-center py-4">Belum ada aktivitas.</div>
@@ -210,7 +211,7 @@ export default function AdminDashboard() {
                                             {item.title}
                                         </div>
                                         <div className="text-xs text-muted-foreground flex items-center gap-2">
-                                            <span>{item.author}</span> • <span>{item.publishedAt}</span>
+                                            <span>{item.author}</span> • <TimeAgo date={item.publishedAt || new Date().toISOString()} />
                                         </div>
                                     </td>
                                     <td className="p-6">

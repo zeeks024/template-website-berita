@@ -14,7 +14,7 @@ interface SavedArticle {
     title: string;
     image: string;
     category: string;
-    publishedAt: string;
+    publishedAt?: string;
 }
 
 export default function SavedPage() {

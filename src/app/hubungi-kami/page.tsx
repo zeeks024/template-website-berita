@@ -60,7 +60,7 @@ export default function ContactPage() {
                                 </div>
                                 <h3 className="text-lg font-bold text-foreground mb-2">WhatsApp</h3>
                                 <p className="text-muted-foreground text-sm mb-4">Hotline pengaduan dan info cepat.</p>
-                                <a href="https://wa.me/621234567" className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">+62 812-3456-7890</a>
+                                <a href="https://wa.me/621234567" className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">+62 1234567</a>
                             </div>
                         </FadeIn>
 
