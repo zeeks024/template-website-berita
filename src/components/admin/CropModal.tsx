@@ -87,119 +87,124 @@ export default function CropModal({ imageSrc, onClose, onCropComplete }: CropMod
     return (
         <Portal>
             <div 
-                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/95 backdrop-blur-sm"
+                className="fixed inset-0 z-[100] flex items-center justify-center p-3 bg-background/90 backdrop-blur-md"
                 onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
             >
                 <div 
-                    className="relative w-full max-w-2xl bg-card rounded-2xl overflow-hidden shadow-2xl border border-border"
+                    className="relative w-full max-w-xl bg-card rounded-xl overflow-hidden shadow-xl border border-border"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <div className="flex items-center justify-between p-4 border-b border-border">
-                    <div className="flex items-center gap-3">
-                        <h3 className="font-bold text-foreground">Crop Gambar</h3>
-                        <span className="text-xs text-muted-foreground px-2 py-1 bg-muted rounded">
-                            {detectedOrientation === 'portrait' ? 'Portrait' : 'Landscape'} terdeteksi
-                        </span>
+                    <div className="flex items-center justify-between px-3 py-2.5 border-b border-border bg-muted/30">
+                        <div className="flex items-center gap-2">
+                            <h3 className="text-sm font-semibold text-foreground">Crop Gambar</h3>
+                            <span className="text-[10px] text-muted-foreground px-1.5 py-0.5 bg-muted rounded">
+                                {detectedOrientation === 'portrait' ? 'Portrait' : 'Landscape'}
+                            </span>
+                        </div>
+                        <button
+                            onClick={onClose}
+                            className="p-1 hover:bg-muted rounded-md transition-colors"
+                            aria-label="Tutup"
+                        >
+                            <X size={16} />
+                        </button>
                     </div>
-                    <button
-                        onClick={onClose}
-                        className="p-2 hover:bg-muted rounded-full transition-colors"
-                        aria-label="Tutup"
-                    >
-                        <X size={20} />
-                    </button>
-                </div>
 
-                <div className="relative w-full h-[400px] bg-muted">
-                    <Cropper
-                        image={imageSrc}
-                        crop={crop}
-                        zoom={zoom}
-                        aspect={currentConfig.ratio}
-                        onCropChange={setCrop}
-                        onZoomChange={setZoom}
-                        onCropComplete={handleCropComplete}
-                        showGrid={true}
-                        style={{
-                            containerStyle: { backgroundColor: 'hsl(var(--muted))' },
-                            cropAreaStyle: { border: '2px solid #06b6d4' },
-                        }}
-                    />
-                </div>
+                    <div className="relative w-full h-[320px] bg-muted">
+                        <Cropper
+                            image={imageSrc}
+                            crop={crop}
+                            zoom={zoom}
+                            aspect={currentConfig.ratio}
+                            onCropChange={setCrop}
+                            onZoomChange={setZoom}
+                            onCropComplete={handleCropComplete}
+                            showGrid={true}
+                            style={{
+                                containerStyle: { backgroundColor: 'hsl(var(--muted))' },
+                                cropAreaStyle: { 
+                                    border: '2px solid hsl(var(--primary))',
+                                    borderRadius: '4px',
+                                    boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.5)'
+                                },
+                            }}
+                        />
+                    </div>
 
-                <div className="p-4 border-t border-border space-y-4">
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground font-medium">Rasio:</span>
-                        <div className="flex gap-1">
+                    <div className="px-3 py-2.5 border-t border-border space-y-2.5 bg-muted/30">
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-muted-foreground font-medium min-w-[35px]">Rasio:</span>
+                            <div className="flex gap-1">
+                                <button
+                                    type="button"
+                                    onClick={() => setAspectMode('landscape')}
+                                    className={`px-2 py-1 rounded-md text-[10px] font-medium flex items-center gap-1 transition-colors ${
+                                        aspectMode === 'landscape' 
+                                            ? 'bg-primary text-primary-foreground shadow-sm' 
+                                            : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                                    }`}
+                                >
+                                    <RectangleHorizontal size={12} />
+                                    16:9
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setAspectMode('portrait')}
+                                    className={`px-2 py-1 rounded-md text-[10px] font-medium flex items-center gap-1 transition-colors ${
+                                        aspectMode === 'portrait' 
+                                            ? 'bg-primary text-primary-foreground shadow-sm' 
+                                            : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                                    }`}
+                                >
+                                    <RectangleVertical size={12} />
+                                    9:16
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-muted-foreground font-medium min-w-[35px]">Zoom:</span>
+                            <ZoomOut size={12} className="text-muted-foreground flex-shrink-0" />
+                            <input
+                                type="range"
+                                min={1}
+                                max={3}
+                                step={0.05}
+                                value={zoom}
+                                onChange={(e) => setZoom(Number(e.target.value))}
+                                className="flex-1 h-1.5 bg-muted rounded-full appearance-none cursor-pointer accent-primary"
+                            />
+                            <ZoomIn size={12} className="text-muted-foreground flex-shrink-0" />
+                            <span className="text-[10px] text-muted-foreground w-9 text-right font-medium">
+                                {Math.round(zoom * 100)}%
+                            </span>
+                        </div>
+
+                        <div className="flex gap-2 pt-1">
                             <button
                                 type="button"
-                                onClick={() => setAspectMode('landscape')}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors ${
-                                    aspectMode === 'landscape' 
-                                        ? 'bg-primary text-primary-foreground' 
-                                        : 'bg-muted text-muted-foreground hover:text-foreground'
-                                }`}
+                                onClick={onClose}
+                                className="flex-1 px-3 py-1.5 bg-muted hover:bg-muted/80 rounded-lg text-xs font-medium transition-colors"
                             >
-                                <RectangleHorizontal size={14} />
-                                16:9
+                                Batal
                             </button>
                             <button
                                 type="button"
-                                onClick={() => setAspectMode('portrait')}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors ${
-                                    aspectMode === 'portrait' 
-                                        ? 'bg-primary text-primary-foreground' 
-                                        : 'bg-muted text-muted-foreground hover:text-foreground'
-                                }`}
+                                onClick={handleSave}
+                                disabled={isProcessing || !croppedAreaPixels}
+                                className="flex-1 px-3 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                <RectangleVertical size={14} />
-                                9:16
+                                {isProcessing ? (
+                                    <span>Memproses...</span>
+                                ) : (
+                                    <>
+                                        <Check size={14} />
+                                        <span>Terapkan</span>
+                                    </>
+                                )}
                             </button>
                         </div>
                     </div>
-
-                    <div className="flex items-center gap-3">
-                        <ZoomOut size={16} className="text-muted-foreground" />
-                        <input
-                            type="range"
-                            min={1}
-                            max={3}
-                            step={0.05}
-                            value={zoom}
-                            onChange={(e) => setZoom(Number(e.target.value))}
-                            className="flex-1 h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
-                        />
-                        <ZoomIn size={16} className="text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground w-12 text-right">
-                            {Math.round(zoom * 100)}%
-                        </span>
-                    </div>
-
-                    <div className="flex gap-3">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="flex-1 px-4 py-2.5 bg-muted hover:bg-muted/80 border border-border rounded-xl text-sm font-medium transition-colors"
-                        >
-                            Batal
-                        </button>
-                        <button
-                            type="button"
-                            onClick={handleSave}
-                            disabled={isProcessing || !croppedAreaPixels}
-                            className="flex-1 px-4 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-                        >
-                            {isProcessing ? (
-                                <span>Memproses...</span>
-                            ) : (
-                                <>
-                                    <Check size={16} />
-                                    <span>Terapkan</span>
-                                </>
-                            )}
-                        </button>
-                    </div>
-                </div>
                 </div>
             </div>
         </Portal>
