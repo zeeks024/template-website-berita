@@ -2,6 +2,7 @@
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useNews } from '@/hooks/useNews';
+import { useCategories } from '@/hooks/useCategories';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Suspense, useState, useMemo } from 'react';
@@ -9,7 +10,6 @@ import FadeIn from '@/components/ui/FadeIn';
 import { SkeletonGrid } from '@/components/ui/SkeletonCard';
 import { Search as SearchIcon, Filter, SlidersHorizontal, ArrowRight } from 'lucide-react';
 
-const CATEGORIES = ['Semua', 'Teknologi', 'Ekonomi', 'Nusantara', 'Daerah', 'Kesehatan', 'Opini', 'Cerita', 'Sosok Inspiratif', 'Sudut Kota', 'Potensi'];
 const SORT_OPTIONS = [
     { value: 'relevance', label: 'Relevansi' },
     { value: 'newest', label: 'Terbaru' },
@@ -19,67 +19,95 @@ const SORT_OPTIONS = [
 function SearchResults() {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const query = searchParams.get('q')?.toLowerCase() || '';
+    const queryParam = searchParams.get('q')?.toLowerCase() || '';
     const categoryParam = searchParams.get('category') || 'Semua';
     const sortParam = searchParams.get('sort') || 'relevance';
 
+    const [searchInput, setSearchInput] = useState(queryParam);
     const [category, setCategory] = useState(categoryParam);
     const [sort, setSort] = useState(sortParam);
 
     const { allNews } = useNews();
+    const { categories: dbCategories, loading: categoriesLoading } = useCategories();
+
+    const categoryOptions = useMemo(() => {
+        return ['Semua', ...dbCategories];
+    }, [dbCategories]);
 
     const filteredNews = useMemo(() => {
         let results = allNews.filter(item =>
-            item.title.toLowerCase().includes(query) ||
-            item.summary.toLowerCase().includes(query) ||
-            item.category.toLowerCase().includes(query)
+            item.title.toLowerCase().includes(queryParam) ||
+            item.summary.toLowerCase().includes(queryParam) ||
+            item.category.toLowerCase().includes(queryParam)
         );
 
-        // Apply category filter
         if (category !== 'Semua') {
             results = results.filter(item => item.category === category);
         }
 
-        // Apply sorting
         if (sort === 'newest') {
-            // Sort by publishedAt desc (assuming string comparison works for ISO dates, or modify logic if needed)
             results.sort((a, b) => (new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()));
         } else if (sort === 'oldest') {
             results.sort((a, b) => (new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()));
         }
-        // 'relevance' keeps the default order/filter finding order
 
         return results;
-    }, [allNews, query, category, sort]);
+    }, [allNews, queryParam, category, sort]);
 
     const updateFilters = (newCategory: string, newSort: string) => {
         const params = new URLSearchParams();
-        if (query) params.set('q', query);
+        if (queryParam) params.set('q', queryParam);
         if (newCategory !== 'Semua') params.set('category', newCategory);
         if (newSort !== 'relevance') params.set('sort', newSort);
         router.push(`/search?${params.toString()}`);
     };
 
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        const params = new URLSearchParams();
+        if (searchInput.trim()) params.set('q', searchInput.trim().toLowerCase());
+        if (category !== 'Semua') params.set('category', category);
+        if (sort !== 'relevance') params.set('sort', sort);
+        router.push(`/search?${params.toString()}`);
+    };
+
     return (
         <div className="min-h-screen pt-32 pb-24 px-6 relative overflow-hidden">
-            {/* Decor */}
             <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-cyan-900/10 rounded-full blur-[120px] pointer-events-none" />
 
             <div className="max-w-7xl mx-auto relative z-10">
                 <FadeIn>
                     <div className="mb-12">
-                        <span className="text-cyan-500 font-bold tracking-widest uppercase text-xs mb-3 block">Search Results</span>
-                        {query ? (
-                            <h1 className="text-4xl md:text-5xl font-black text-foreground uppercase tracking-tight mb-6">
-                                Menampilkan: <span className="text-muted-foreground">&quot;{query}&quot;</span>
-                            </h1>
-                        ) : (
-                            <h1 className="text-4xl md:text-5xl font-black text-foreground uppercase tracking-tight mb-6">
-                                Cari Artikel
-                            </h1>
+                        <span className="text-cyan-500 font-bold tracking-widest uppercase text-xs mb-3 block">Search</span>
+                        <h1 className="text-4xl md:text-5xl font-black text-foreground uppercase tracking-tight mb-6">
+                            Cari Artikel
+                        </h1>
+
+                        <form onSubmit={handleSearch} className="mb-6">
+                            <div className="relative">
+                                <SearchIcon size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                                <input
+                                    type="text"
+                                    value={searchInput}
+                                    onChange={(e) => setSearchInput(e.target.value)}
+                                    placeholder="Ketik kata kunci pencarian..."
+                                    className="w-full bg-card border border-border rounded-2xl py-4 pl-12 pr-32 text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all text-lg"
+                                />
+                                <button
+                                    type="submit"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-white rounded-xl font-bold text-sm uppercase tracking-wider transition-all"
+                                >
+                                    Cari
+                                </button>
+                            </div>
+                        </form>
+
+                        {queryParam && (
+                            <p className="text-muted-foreground mb-6">
+                                Menampilkan hasil untuk: <span className="text-foreground font-semibold">&quot;{queryParam}&quot;</span>
+                            </p>
                         )}
 
-                        {/* Filters Bar */}
                         <div className="bg-card border border-border rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center gap-6">
                             <div className="flex items-center gap-3 w-full md:w-auto">
                                 <Filter size={18} className="text-cyan-400" />
@@ -91,9 +119,10 @@ function SearchResults() {
                                             setCategory(e.target.value);
                                             updateFilters(e.target.value, sort);
                                         }}
-                                        className="appearance-none bg-muted border border-border rounded-lg py-2 pl-4 pr-10 text-sm text-foreground focus:border-cyan-500 focus:outline-none w-full md:w-48 cursor-pointer hover:bg-muted/80 transition-colors"
+                                        disabled={categoriesLoading}
+                                        className="appearance-none bg-muted border border-border rounded-lg py-2 pl-4 pr-10 text-sm text-foreground focus:border-cyan-500 focus:outline-none w-full md:w-48 cursor-pointer hover:bg-muted/80 transition-colors disabled:opacity-50"
                                     >
-                                        {CATEGORIES.map(cat => (
+                                        {categoryOptions.map(cat => (
                                             <option key={cat} value={cat} className="bg-card text-foreground">{cat}</option>
                                         ))}
                                     </select>
@@ -135,7 +164,7 @@ function SearchResults() {
                         </div>
                     </div>
 
-                    {!query ? (
+                    {!queryParam ? (
                         <div className="text-center py-24 bg-card border border-border rounded-3xl">
                             <div className="w-24 h-24 mx-auto bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 rounded-full flex items-center justify-center mb-8">
                                 <SearchIcon size={48} className="text-cyan-400" />
@@ -204,7 +233,7 @@ function SearchResults() {
                             </div>
                             <h3 className="text-3xl font-black text-foreground mb-4">Tidak Ditemukan</h3>
                             <p className="text-muted-foreground mb-4 max-w-md mx-auto leading-relaxed">
-                                Tidak ada artikel yang cocok dengan <span className="text-foreground font-semibold">&quot;{query}&quot;</span>
+                                Tidak ada artikel yang cocok dengan <span className="text-foreground font-semibold">&quot;{queryParam}&quot;</span>
                                 {category !== 'Semua' && <span> dalam kategori <span className="text-cyan-400">{category}</span></span>}.
                             </p>
                             <p className="text-muted-foreground/60 text-sm mb-8">Coba kata kunci lain atau hapus filter kategori.</p>
