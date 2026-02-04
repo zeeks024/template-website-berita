@@ -1,3 +1,6 @@
+import { config } from 'dotenv';
+config({ path: '.env.local' });
+
 import { PrismaClient } from '@prisma/client';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import crypto from 'crypto';
