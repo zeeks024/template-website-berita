@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
+    "@prisma/client": "^5.22.0",
     "@serwist/next": "^9.5.0",
     "bcryptjs": "^3.0.3",
     "date-fns": "^4.1.0",
@@ -33,7 +34,6 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@prisma/client": "^5.22.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -44,7 +44,6 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^5.1.2",
-    "autoprefixer": "^10.4.23",
     "babel-plugin-react-compiler": "1.0.0",
     "dotenv-cli": "^11.0.0",
     "eslint": "^9",

@@ -428,18 +428,7 @@ export const newsData: NewsItem[] = [
   }
 ];
 
-export function getAllNews() {
-  return newsData;
-}
-
 export function getNewsBySlug(slug: string) {
   return newsData.find((item) => item.slug === slug);
 }
 
-export function getNewsByCategory(categorySlug: string) {
-  return newsData.filter((item) => item.category.toLowerCase() === categorySlug.toLowerCase());
-}
-
-export function getTrendingNews() {
-  return newsData.filter(item => item.trendingRank).sort((a, b) => (a.trendingRank || 99) - (b.trendingRank || 99));
-}
