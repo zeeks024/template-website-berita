@@ -178,19 +178,19 @@ export default function ImageUploader({ values, onChange }: Props) {
                                     type="button"
                                     onClick={() => applyEdit(idx, 'fit')}
                                     disabled={processing}
-                                    className="flex-1 px-2 py-1.5 bg-muted hover:bg-muted/80 border border-border rounded-lg text-2xs font-medium text-muted-foreground hover:text-foreground transition-all flex items-center justify-center gap-1 disabled:opacity-50"
+                                    className="flex-1 p-2 bg-muted hover:bg-primary/10 border border-border hover:border-primary/50 rounded-lg text-muted-foreground hover:text-primary transition-all flex items-center justify-center disabled:opacity-50"
+                                    title="Blur Background"
                                 >
-                                    <Sparkles size={10} />
-                                    Blur BG
+                                    <Sparkles size={14} />
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => applyEdit(idx, 'crop')}
                                     disabled={processing}
-                                    className="flex-1 px-2 py-1.5 bg-muted hover:bg-muted/80 border border-border rounded-lg text-2xs font-medium text-muted-foreground hover:text-foreground transition-all flex items-center justify-center gap-1 disabled:opacity-50"
+                                    className="flex-1 p-2 bg-muted hover:bg-primary/10 border border-border hover:border-primary/50 rounded-lg text-muted-foreground hover:text-primary transition-all flex items-center justify-center disabled:opacity-50"
+                                    title="Crop Image"
                                 >
-                                    <Scissors size={10} />
-                                    Crop
+                                    <Scissors size={14} />
                                 </button>
                             </div>
                         </div>

@@ -95,12 +95,9 @@ export default function CropModal({ imageSrc, onClose, onCropComplete }: CropMod
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="flex items-center justify-between px-3 py-2.5 border-b border-border bg-muted/30">
-                        <div className="flex items-center gap-2">
-                            <h3 className="text-sm font-semibold text-foreground">Crop Gambar</h3>
-                            <span className="text-[10px] text-muted-foreground px-1.5 py-0.5 bg-muted rounded">
-                                {detectedOrientation === 'portrait' ? 'Portrait' : 'Landscape'}
-                            </span>
-                        </div>
+                        <span className="text-[10px] text-muted-foreground px-1.5 py-0.5 bg-muted rounded">
+                            {detectedOrientation === 'portrait' ? 'Portrait' : 'Landscape'}
+                        </span>
                         <button
                             onClick={onClose}
                             className="p-1 hover:bg-muted rounded-md transition-colors"
