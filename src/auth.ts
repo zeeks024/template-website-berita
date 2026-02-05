@@ -13,13 +13,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }),
     ],
     callbacks: {
-        async jwt({ token, user, account }) {
+        async jwt({ token, user }) {
             if (user) {
                 token.email = user.email
                 token.name = user.name
                 token.id = user.id
-                // Default role for Google users if not in DB
-                token.role = "READER"
+                
+                try {
+                    const dbUser = await prisma.user.findUnique({
+                        where: { email: user.email! },
+                        select: { role: true }
+                    })
+                    token.role = dbUser?.role || "READER"
+                } catch (error) {
+                    console.error("Failed to fetch user role from database:", error)
+                    token.role = "READER"
+                }
             }
             return token
         },

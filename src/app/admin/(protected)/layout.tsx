@@ -13,5 +13,10 @@ export default async function ProtectedLayout({
     redirect('/login?redirect=/admin');
   }
 
+  // Only ADMIN and WRITER can access admin dashboard
+  if (user.role !== 'ADMIN' && user.role !== 'WRITER') {
+    redirect('/');
+  }
+
   return <AdminSidebar user={user}>{children}</AdminSidebar>;
 }
