@@ -10,6 +10,7 @@ import Link from 'next/link';
 import ImageUploader from '@/components/admin/ImageUploader';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 import { calculateReadTime } from '@/lib/dateUtils';
+import type { ArticleStatus } from '@/types/news';
 import {
     Send, X, Rocket, Settings2, PenLine,
     AlignLeft, Newspaper, ImagePlus, Hash,
@@ -48,7 +49,7 @@ const defaultFormData: ArticleFormData = {
     imageCaption: '',
     imageCredit: '',
     author: 'Admin Serayu',
-    status: 'published',
+    status: 'draft',
     tags: '',
     metaTitle: '',
     metaDesc: '',
@@ -66,7 +67,7 @@ export default function CreateArticlePage() {
     const [showRestorePrompt, setShowRestorePrompt] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
 
-    const [formData, setFormData] = useState<ArticleFormData>(defaultFormData);
+    const [formData, setFormData] = useState<ArticleFormData>({ ...defaultFormData, author: user.name || 'Admin Serayu' });
 
     const handleRestore = useCallback((data: ArticleFormData) => {
         setFormData(data);
@@ -107,7 +108,7 @@ export default function CreateArticlePage() {
             imageCaption: formData.imageCaption,
             imageCredit: formData.imageCredit,
             author: formData.author,
-            status: formData.status as 'draft' | 'published' | 'archived',
+            status: formData.status as ArticleStatus,
             tags: formData.tags.split(',').map(t => t.trim()).filter(t => t),
             metaTitle: formData.metaTitle,
             metaDesc: formData.metaDesc,
@@ -228,7 +229,7 @@ export default function CreateArticlePage() {
                                     rows={3}
                                     value={formData.excerpt}
                                     onChange={e => setFormData({ ...formData, excerpt: e.target.value })}
-                                    placeholder="Tulis ringkasan singkat untuk SEO dan preview..."
+                                    placeholder="Tulis ringkasan singkat untuk preview..."
                                     className="w-full bg-muted border border-border rounded-xl p-5 text-base text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all resize-none"
                                 />
                             </div>
@@ -302,10 +303,16 @@ export default function CreateArticlePage() {
                                         onChange={e => setFormData({ ...formData, status: e.target.value })}
                                         className="w-full appearance-none bg-muted border border-border rounded-xl px-4 py-3 pr-10 text-sm text-foreground focus:border-cyan-500 focus:outline-none cursor-pointer transition-all [&>option]:bg-[hsl(var(--admin-surface))] [&>option]:text-foreground"
                                     >
-                                        <option value="draft">Draft (Konsep)</option>
-                                        <option value="published">Terbitkan Sekarang</option>
-                                        <option value="scheduled">Jadwalkan (not working yet)</option>
-                                        <option value="archived">Arsipkan</option>
+                                        <option value="draft">Draf</option>
+                                        {isAdmin ? (
+                                            <>
+                                                <option value="published">Terbitkan Sekarang</option>
+                                                <option value="scheduled">Jadwalkan (Belum tersedia)</option>
+                                                <option value="archived">Arsipkan</option>
+                                            </>
+                                        ) : (
+                                            <option value="pending_review">Ajukan Review</option>
+                                        )}
                                     </select>
                                     <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                                 </div>
@@ -339,8 +346,8 @@ export default function CreateArticlePage() {
                                         type="button"
                                         onClick={() => setFormData({ ...formData, featured: !formData.featured })}
                                         className={`relative w-11 h-6 rounded-full transition-all ${formData.featured
-                                                ? 'bg-amber-500'
-                                                : 'bg-muted'
+                                            ? 'bg-amber-500'
+                                            : 'bg-muted'
                                             }`}
                                     >
                                         <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all ${formData.featured ? 'left-6' : 'left-1'
@@ -366,7 +373,7 @@ export default function CreateArticlePage() {
                                 className="w-full py-3.5 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white rounded-xl font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40"
                             >
                                 <Send size={16} />
-                                {isSubmitting ? 'Menyimpan...' : 'Terbitkan Artikel'}
+                                {isSubmitting ? 'Menyimpan...' : formData.status === 'published' ? 'Terbitkan Artikel' : formData.status === 'pending_review' ? 'Ajukan Review' : 'Simpan Draft'}
                             </button>
                             <button
                                 type="button"
