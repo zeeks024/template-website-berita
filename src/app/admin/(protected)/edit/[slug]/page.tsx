@@ -10,12 +10,13 @@ import Link from 'next/link';
 import ImageUploader from '@/components/admin/ImageUploader';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 import { calculateReadTime } from '@/lib/dateUtils';
+import type { ArticleStatus } from '@/types/news';
 import {
     Save, X, Rocket, Settings2, PenLine,
     AlignLeft, Newspaper, ImagePlus, Hash,
     FolderOpen, ChevronDown, ArrowLeft, Sparkles,
     Edit3, Star,
-    Cloud, CheckCircle, CloudOff, Eye
+    Cloud, CheckCircle, CloudOff, Eye, ShieldCheck, XCircle, Send
 } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
 import { Card, SectionHeader, Badge } from '@/components/admin/ui';
@@ -39,6 +40,7 @@ interface FormData {
     status: string;
     tags: string;
     featured: boolean;
+    rejectionNote: string;
 }
 
 const getArray = (data: unknown): string[] => {
@@ -101,7 +103,8 @@ export default function EditArticlePage({ params }: Props) {
                 author: 'Admin Redaksi',
                 status: 'published',
                 tags: '',
-                featured: false
+                featured: false,
+                rejectionNote: ''
             };
         }
 
@@ -121,7 +124,8 @@ export default function EditArticlePage({ params }: Props) {
             author: foundArticle.author,
             status: foundArticle.status || 'draft',
             tags: getTagsString(foundArticle.tags),
-            featured: foundArticle.featured || false
+            featured: foundArticle.featured || false,
+            rejectionNote: foundArticle.rejectionNote || ''
         };
     }, [foundArticle]);
 
@@ -151,7 +155,7 @@ export default function EditArticlePage({ params }: Props) {
         if (!formData.title || !formData.content) return;
         setIsSubmitting(true);
 
-const result = await updateArticle({
+        const result = await updateArticle({
             id: formData.id,
             slug: slug,
             title: formData.title,
@@ -164,7 +168,7 @@ const result = await updateArticle({
             imageCaption: formData.imageCaption,
             imageCredit: formData.imageCredit,
             author: formData.author,
-            status: formData.status as 'draft' | 'published' | 'archived',
+            status: formData.status as ArticleStatus,
             tags: formData.tags.split(',').map(t => t.trim()).filter(t => t),
             featured: formData.featured,
             readTime: calculateReadTime(formData.content)
@@ -257,7 +261,7 @@ const result = await updateArticle({
                                     rows={3}
                                     value={formData.excerpt}
                                     onChange={e => setFormData({ ...formData, excerpt: e.target.value })}
-                                    placeholder="Tulis ringkasan singkat untuk SEO dan preview..."
+                                    placeholder="Tulis ringkasan singkat untuk preview..."
                                     className="w-full bg-muted border border-border rounded-xl p-5 text-base text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all resize-none"
                                 />
                             </div>
@@ -320,6 +324,26 @@ const result = await updateArticle({
                             </div>
                         </div>
 
+                        {formData.status === 'rejected' && formData.rejectionNote && (
+                            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <XCircle size={14} className="text-red-400" />
+                                    <span className="text-xs font-bold text-red-400 uppercase">Artikel Ditolak</span>
+                                </div>
+                                <p className="text-sm text-foreground/80">{formData.rejectionNote}</p>
+                            </div>
+                        )}
+
+                        {formData.status === 'pending_review' && !isAdmin && (
+                            <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                                <div className="flex items-center gap-2">
+                                    <ShieldCheck size={14} className="text-blue-400" />
+                                    <span className="text-xs font-bold text-blue-400 uppercase">Menunggu Review</span>
+                                </div>
+                                <p className="text-sm text-muted-foreground mt-1">Artikel sedang ditinjau oleh admin.</p>
+                            </div>
+                        )}
+
                         <div className="space-y-4 mb-6">
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-2">
@@ -331,9 +355,22 @@ const result = await updateArticle({
                                         onChange={e => setFormData({ ...formData, status: e.target.value })}
                                         className="w-full appearance-none bg-muted border border-border rounded-xl px-4 py-3 pr-10 text-sm text-foreground focus:border-cyan-500 focus:outline-none cursor-pointer transition-all [&>option]:bg-[hsl(var(--admin-surface))] [&>option]:text-foreground"
                                     >
-                                        <option value="draft">Draft (Konsep)</option>
-                                        <option value="published">Terbitkan Sekarang</option>
-                                        <option value="archived">Arsipkan</option>
+                                        {isAdmin ? (
+                                            <>
+                                                <option value="draft">Draf</option>
+                                                <option value="pending_review">Menunggu Review</option>
+                                                <option value="published">Terbitkan</option>
+                                                <option value="rejected">Tolak</option>
+                                                <option value="archived">Arsipkan</option>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <option value="draft">Draf</option>
+                                                <option value="pending_review">Ajukan Review</option>
+                                                {formData.status === 'published' && <option value="published">Diterbitkan</option>}
+                                                {formData.status === 'rejected' && <option value="rejected">Ditolak</option>}
+                                            </>
+                                        )}
                                     </select>
                                     <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                                 </div>
@@ -349,8 +386,8 @@ const result = await updateArticle({
                                         type="button"
                                         onClick={() => setFormData({ ...formData, featured: !formData.featured })}
                                         className={`relative w-11 h-6 rounded-full transition-all ${formData.featured
-                                                ? 'bg-amber-500'
-                                                : 'bg-muted'
+                                            ? 'bg-amber-500'
+                                            : 'bg-muted'
                                             }`}
                                     >
                                         <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all ${formData.featured ? 'left-6' : 'left-1'
@@ -361,6 +398,66 @@ const result = await updateArticle({
                         </div>
 
                         <div className="flex flex-col gap-3">
+                            {isAdmin && foundArticle?.status === 'pending_review' && (
+                                <div className="grid grid-cols-2 gap-2 mb-1">
+                                    <button
+                                        type="button"
+                                        onClick={async () => {
+                                            setIsSubmitting(true);
+                                            const result = await updateArticle({
+                                                id: formData.id,
+                                                slug: slug,
+                                                title: formData.title,
+                                                category: formData.category,
+                                                summary: formData.summary,
+                                                excerpt: formData.excerpt,
+                                                content: formData.content,
+                                                image: formData.images[0] || '',
+                                                gallery: formData.images,
+                                                imageCaption: formData.imageCaption,
+                                                imageCredit: formData.imageCredit,
+                                                author: formData.author,
+                                                status: 'published' as ArticleStatus,
+                                                tags: formData.tags.split(',').map(t => t.trim()).filter(t => t),
+                                                featured: formData.featured,
+                                                readTime: calculateReadTime(formData.content)
+                                            });
+                                            setIsSubmitting(false);
+                                            if (result.success) { clearAutosave(); router.push('/admin'); }
+                                            else alert(result.error || 'Gagal menyetujui artikel.');
+                                        }}
+                                        disabled={isSubmitting}
+                                        className="py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                                    >
+                                        <ShieldCheck size={16} />
+                                        Setujui
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={async () => {
+                                            const note = prompt('Alasan penolakan:');
+                                            if (!note) return;
+                                            setIsSubmitting(true);
+                                            try {
+                                                const res = await fetch(`/api/articles/${slug}`, {
+                                                    method: 'PUT',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    credentials: 'include',
+                                                    body: JSON.stringify({ ...formData, status: 'rejected', rejectionNote: note, tags: formData.tags.split(',').map(t => t.trim()).filter(t => t), image: formData.images[0] || '', gallery: formData.images })
+                                                });
+                                                if (res.ok) { clearAutosave(); router.push('/admin'); }
+                                                else { const data = await res.json(); alert(data.error || 'Gagal menolak artikel.'); }
+                                            } catch { alert('Gagal menolak artikel.'); }
+                                            setIsSubmitting(false);
+                                        }}
+                                        disabled={isSubmitting}
+                                        className="py-3 bg-red-600 hover:bg-red-500 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                                    >
+                                        <XCircle size={16} />
+                                        Tolak
+                                    </button>
+                                </div>
+                            )}
                             <button
                                 type="button"
                                 onClick={() => setShowPreview(true)}
@@ -376,7 +473,7 @@ const result = await updateArticle({
                                 className="w-full py-3.5 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white rounded-xl font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40"
                             >
                                 <Save size={16} />
-                                {isSubmitting ? 'Menyimpan...' : 'Simpan Perubahan'}
+                                {isSubmitting ? 'Menyimpan...' : formData.status === 'pending_review' && !isAdmin ? 'Ajukan Review' : 'Simpan Perubahan'}
                             </button>
                             <button
                                 type="button"

@@ -4,8 +4,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
-import { LayoutDashboard, PenTool, FolderOpen, Users, ExternalLink, LogOut, Menu, X, Settings } from 'lucide-react';
+import { LayoutDashboard, PenTool, FolderOpen, Users, ExternalLink, LogOut, Menu, X, Settings, ShieldCheck } from 'lucide-react';
 import { UserProvider, type AuthUser } from './UserContext';
+import { useAdminStats } from '@/hooks/useAdminStats';
 
 export default function AdminSidebar({ 
   children,
@@ -37,11 +38,14 @@ export default function AdminSidebar({
     };
 
     const isAdmin = user.role === 'ADMIN';
+    const { stats } = useAdminStats(isAdmin);
+    const pendingReviewCount = stats.pendingReviewCount;
     
-    const menuItems = [
+    const menuItems: Array<{ label: string; href: string; icon: React.ReactNode; badge?: number }> = [
         { label: 'Dashboard', href: '/admin', icon: <LayoutDashboard size={20} /> },
         { label: 'Tulis Artikel', href: '/admin/create', icon: <PenTool size={20} /> },
         ...(isAdmin ? [
+            { label: 'Review Artikel', href: '/admin/review', icon: <ShieldCheck size={20} />, badge: pendingReviewCount },
             { label: 'Kategori', href: '/admin/categories', icon: <FolderOpen size={20} /> },
             { label: 'Users', href: '/admin/users', icon: <Users size={20} /> },
             { label: 'Pengaturan', href: '/admin/settings', icon: <Settings size={20} /> },
@@ -98,6 +102,11 @@ export default function AdminSidebar({
                                     {item.icon}
                                 </span>
                                 {item.label}
+                                {item.badge !== undefined && item.badge > 0 && (
+                                    <span className="ml-auto min-w-5 h-5 px-1.5 flex items-center justify-center bg-red-500 text-white text-2xs font-bold rounded-full">
+                                        {item.badge}
+                                    </span>
+                                )}
                             </Link>
                         );
                     })}
