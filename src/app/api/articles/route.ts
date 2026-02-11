@@ -3,6 +3,8 @@ import prisma from '@/lib/prisma';
 import { newsData } from '@/data/news';
 import { getCurrentUser, requireAuth } from '@/lib/auth';
 
+const VALID_STATUSES = ['draft', 'pending_review', 'published', 'rejected', 'scheduled', 'archived'];
+
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
@@ -14,7 +16,9 @@ export async function GET(request: Request) {
 
         let whereClause: Record<string, unknown> = {};
         
-        if (status !== 'all') {
+        if (status && status !== 'all' && VALID_STATUSES.includes(status)) {
+            whereClause.status = status;
+        } else if (status !== 'all') {
             whereClause.status = 'published';
         }
 
@@ -24,7 +28,7 @@ export async function GET(request: Request) {
                 return NextResponse.json(paginate ? { articles: [], total: 0, page, limit, totalPages: 0 } : []);
             }
             whereClause.authorId = user.userId;
-        } else if (status === 'all') {
+        } else if (status === 'all' || (status && status !== 'published' && VALID_STATUSES.includes(status))) {
             const user = await getCurrentUser();
             if (!user) {
                 whereClause.status = 'published';
@@ -88,6 +92,17 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
+        let requestedStatus = body.status || 'draft';
+
+        if (user.role === 'WRITER') {
+            if (requestedStatus === 'published') {
+                requestedStatus = 'pending_review';
+            }
+            if (!['draft', 'pending_review'].includes(requestedStatus)) {
+                requestedStatus = 'draft';
+            }
+        }
+
         let uniqueSlug = body.slug;
         let counter = 1;
 
@@ -107,14 +122,14 @@ export async function POST(request: Request) {
                 authorId: user.userId,
                 image: body.image || '',
                 gallery: body.gallery ? JSON.stringify(body.gallery) : undefined,
-                status: body.status || 'draft',
+                status: requestedStatus,
                 excerpt: body.excerpt || '',
                 imageCaption: body.imageCaption || '',
                 imageCredit: body.imageCredit || '',
                 metaTitle: body.metaTitle || '',
                 metaDesc: body.metaDesc || '',
                 tags: body.tags ? JSON.stringify(body.tags) : undefined,
-                publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
+                publishedAt: requestedStatus === 'published' ? new Date() : undefined,
                 readTime: body.readTime || '3 menit',
                 featured: body.featured || false
             }

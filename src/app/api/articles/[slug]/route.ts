@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getNewsBySlug } from '@/data/news';
 import { getCurrentUser } from '@/lib/auth';
+import { validateStatusTransition } from '@/lib/validations';
 
 type Props = {
     params: Promise<{ slug: string }>
@@ -61,28 +62,69 @@ export async function PUT(
             return NextResponse.json({ error: 'Forbidden: You can only edit your own articles' }, { status: 403 });
         }
 
+        const newStatus = body.status;
+        const currentStatus = article.status;
+        const updateData: Record<string, unknown> = {
+            title: body.title,
+            summary: body.summary,
+            content: body.content,
+            category: body.category,
+            author: body.author,
+            image: body.image,
+            gallery: body.gallery ? JSON.stringify(body.gallery) : undefined,
+            excerpt: body.excerpt,
+            imageCaption: body.imageCaption,
+            imageCredit: body.imageCredit,
+            metaTitle: body.metaTitle,
+            metaDesc: body.metaDesc,
+            tags: body.tags ? JSON.stringify(body.tags) : undefined,
+            readTime: body.readTime,
+            featured: body.featured !== undefined ? body.featured : undefined,
+            updatedAt: new Date()
+        };
+
+        if (newStatus && newStatus !== currentStatus) {
+            if (user.role === 'WRITER' && newStatus === 'published') {
+                updateData.status = 'pending_review';
+            } else {
+                const transition = validateStatusTransition(currentStatus, newStatus, user.role as 'ADMIN' | 'WRITER');
+                if (!transition.valid) {
+                    return NextResponse.json({ error: transition.message }, { status: 403 });
+                }
+                updateData.status = newStatus;
+            }
+
+            const finalStatus = updateData.status as string;
+
+            if (finalStatus === 'published' && currentStatus !== 'published') {
+                updateData.reviewedBy = user.name;
+                updateData.reviewedAt = new Date();
+                updateData.publishedAt = new Date();
+            }
+
+            if (finalStatus === 'rejected') {
+                if (!body.rejectionNote) {
+                    return NextResponse.json({ error: 'Alasan penolakan wajib diisi' }, { status: 400 });
+                }
+                updateData.reviewedBy = user.name;
+                updateData.reviewedAt = new Date();
+                updateData.rejectionNote = body.rejectionNote;
+            }
+
+            if (['draft', 'pending_review'].includes(finalStatus) && currentStatus === 'rejected') {
+                updateData.rejectionNote = null;
+            }
+        } else {
+            updateData.status = currentStatus;
+        }
+
+        if (body.publishedAt && updateData.status !== 'published') {
+            updateData.publishedAt = new Date(body.publishedAt);
+        }
+
         const updated = await prisma.article.update({
             where: { slug },
-            data: {
-                title: body.title,
-                summary: body.summary,
-                content: body.content,
-                category: body.category,
-                author: body.author,
-                image: body.image,
-                gallery: body.gallery ? JSON.stringify(body.gallery) : undefined,
-                status: body.status,
-                excerpt: body.excerpt,
-                imageCaption: body.imageCaption,
-                imageCredit: body.imageCredit,
-                metaTitle: body.metaTitle,
-                metaDesc: body.metaDesc,
-                tags: body.tags ? JSON.stringify(body.tags) : undefined,
-                readTime: body.readTime,
-                featured: body.featured !== undefined ? body.featured : undefined,
-                publishedAt: body.publishedAt ? new Date(body.publishedAt) : undefined,
-                updatedAt: new Date()
-            }
+            data: updateData
         });
 
         const parsedUpdated = {

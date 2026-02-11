@@ -14,7 +14,7 @@ export async function GET() {
             whereClause.authorId = user.userId;
         }
 
-        const [totalArticles, totalViewsResult, categoryStats, recentArticles, draftCount] = await Promise.all([
+        const [totalArticles, totalViewsResult, categoryStats, recentArticles, draftCount, pendingReviewCount] = await Promise.all([
             prisma.article.count({ where: whereClause }),
             prisma.article.aggregate({
                 where: whereClause,
@@ -41,6 +41,9 @@ export async function GET() {
             }),
             prisma.article.count({
                 where: { ...whereClause, status: 'draft' }
+            }),
+            prisma.article.count({
+                where: user?.role === 'ADMIN' ? { status: 'pending_review' } : { ...whereClause, status: 'pending_review' }
             })
         ]);
 
@@ -49,6 +52,7 @@ export async function GET() {
             totalViews: totalViewsResult._sum.views || 0,
             topCategory: categoryStats[0]?.category || '-',
             draftCount,
+            pendingReviewCount,
             recentArticles: recentArticles.map(a => ({
                 id: a.id,
                 title: a.title,
@@ -63,6 +67,7 @@ export async function GET() {
             totalViews: 0,
             topCategory: '-',
             draftCount: 0,
+            pendingReviewCount: 0,
             recentArticles: []
         });
     }
