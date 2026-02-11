@@ -16,6 +16,7 @@ interface Article {
     slug: string;
     title: string;
     summary: string;
+    excerpt?: string;
     image: string;
     category: string;
     author: string;
@@ -107,7 +108,7 @@ export default function TagPage({ params }: Props) {
                                         {article.title}
                                     </h3>
                                     <p className="text-muted-foreground text-sm leading-relaxed mb-6 font-serif line-clamp-3 flex-1">
-                                        {article.summary}
+                                        {article.summary || article.excerpt}
                                     </p>
 
                                     <div className="flex items-center justify-between pt-6 border-t border-border mt-auto">

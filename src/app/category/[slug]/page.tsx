@@ -15,14 +15,14 @@ type Props = {
 const getCategoryTitle = (slug: string): string => {
     const decoded = decodeURIComponent(slug);
     const titles: Record<string, string> = {
-        'opini': 'Sudut Opini',
-        'cerita': 'Cerita Rakyat',
+        'opini': 'Opini',
+        'cerita': 'Cerita',
         'sosok-inspiratif': 'Sosok Inspiratif',
         'sosok inspiratif': 'Sosok Inspiratif',
         'sosok': 'Sosok Inspiratif',
-        'sudut-kota': 'Lensa Kota',
-        'sudut kota': 'Lensa Kota',
-        'potensi': 'Potensi & Unggulan',
+        'sudut-kota': 'Sudut Kota',
+        'sudut kota': 'Sudut Kota',
+        'potensi': 'Potensi',
     };
     return titles[decoded.toLowerCase()] || decoded.charAt(0).toUpperCase() + decoded.slice(1);
 };
@@ -112,7 +112,7 @@ if (loading) {
                                         {article.title}
                                     </h3>
                                     <p className="text-muted-foreground text-sm leading-relaxed mb-6 font-serif line-clamp-3 flex-1">
-                                        {article.summary}
+                                        {article.summary || article.excerpt || article.content?.replace(/<[^>]*>/g, '').substring(0, 200)}
                                     </p>
 
                                     <div className="flex items-center justify-between pt-6 border-t border-border mt-auto">

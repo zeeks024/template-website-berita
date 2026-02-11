@@ -22,6 +22,7 @@ export async function GET(
                 slug: true,
                 title: true,
                 summary: true,
+                excerpt: true,
                 image: true,
                 category: true,
                 author: true,

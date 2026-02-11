@@ -70,3 +70,7 @@ public/uploads/
 .sisyphus/
 _temp/
 nul
+
+# AI knowledge base
+AGENTS.md
+**/AGENTS.md

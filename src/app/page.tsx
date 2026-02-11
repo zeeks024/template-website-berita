@@ -76,9 +76,9 @@ export default async function HomePage() {
 
   return (
     <main className="relative z-10 pt-20 pb-12 space-y-2 md:space-y-4 overflow-hidden">
-      
-      <HeroSection 
-        articles={allNews} 
+
+      <HeroSection
+        articles={allNews}
         heroTitle={settings.heroTitle}
         heroDescription={settings.heroDescription}
       />
@@ -90,43 +90,43 @@ export default async function HomePage() {
             <FadeIn>
               <div className="flex items-end justify-between mb-8 md:mb-12 border-b border-border pb-4">
                 <div className="space-y-2">
-                    <span className="text-cyan-600 dark:text-cyan-400 font-bold tracking-widest text-xs uppercase">{settings.sectionOpini}</span>
-                    <h2 className="text-3xl md:text-5xl font-serif font-bold text-foreground">Sudut <span className="text-cyan-600 dark:text-cyan-400 italic">Opini</span></h2>
+                  <span className="text-cyan-600 dark:text-cyan-400 font-bold tracking-widest text-xs uppercase">{settings.sectionOpini}</span>
+                  <h2 className="text-3xl md:text-5xl font-serif font-bold text-foreground">Sudut <span className="text-cyan-600 dark:text-cyan-400 italic">Opini</span></h2>
                 </div>
                 <Link href="/category/opini" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors group mb-2">
                   Lihat Semua <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </FadeIn>
-            
+
             <div className="grid md:grid-cols-2 gap-6">
               {opiniArticles.length > 0 ? opiniArticles.slice(0, 4).map((item, i) => (
                 <FadeIn key={item.id} delay={i * 100} className="h-full">
                   <Link href={`/article/${item.slug}`} className="flex flex-col h-full group bg-card border border-border p-8 rounded-3xl hover:shadow-xl hover:shadow-cyan-900/5 dark:hover:shadow-cyan-900/10 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-                    
-                    <div className="relative z-10 flex-1 flex flex-col">
-                        <div className="mb-6 flex items-center gap-3">
-                             <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center shrink-0 border border-border">
-                                <span className="font-serif font-bold text-lg text-muted-foreground group-hover:text-cyan-600 transition-colors">{item.author.charAt(0)}</span>
-                             </div>
-                             <div>
-                                 <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground block">{item.author}</span>
-                                 <span className="text-2xs text-muted-foreground">{item.publishedAt}</span>
-                             </div>
-                        </div>
 
-                        <h3 className="text-xl md:text-2xl font-serif font-bold leading-tight mb-4 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors line-clamp-3">
-                        {item.title}
-                        </h3>
-                        
-                        <p className="text-muted-foreground text-sm leading-relaxed mb-6 font-serif italic line-clamp-3">
-                        &quot;{item.summary}&quot;
-                        </p>
-                        
-                        <div className="mt-auto pt-4 border-t border-border/50 flex items-center justify-between text-xs text-muted-foreground font-medium">
-                            <span className="flex items-center gap-1.5"><Clock size={14}/> {item.readTime}</span>
-                            <span className="flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">Baca Opini <ArrowRight size={14}/></span>
+                    <div className="relative z-10 flex-1 flex flex-col">
+                      <div className="mb-6 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center shrink-0 border border-border">
+                          <span className="font-serif font-bold text-lg text-muted-foreground group-hover:text-cyan-600 transition-colors">{item.author.charAt(0)}</span>
                         </div>
+                        <div>
+                          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground block">{item.author}</span>
+                          <span className="text-2xs text-muted-foreground">{item.publishedAt}</span>
+                        </div>
+                      </div>
+
+                      <h3 className="text-xl md:text-2xl font-serif font-bold leading-tight mb-4 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors line-clamp-3">
+                        {item.title}
+                      </h3>
+
+                      <p className="text-muted-foreground text-sm leading-relaxed mb-6 font-serif italic line-clamp-3">
+                        &quot;{item.summary || item.excerpt || ''}&quot;
+                      </p>
+
+                      <div className="mt-auto pt-4 border-t border-border/50 flex items-center justify-between text-xs text-muted-foreground font-medium">
+                        <span className="flex items-center gap-1.5"><Clock size={14} /> {item.readTime}</span>
+                        <span className="flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">Baca Opini <ArrowRight size={14} /></span>
+                      </div>
                     </div>
                   </Link>
                 </FadeIn>
@@ -141,14 +141,14 @@ export default async function HomePage() {
             <FadeIn delay={200}>
               <div className="bg-card border border-border rounded-3xl p-8 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl -mr-10 -mt-10"></div>
-                
+
                 <div className="flex items-center gap-3 mb-8 relative z-10">
                   <div className="w-1.5 h-6 bg-cyan-500 rounded-full"></div>
                   <h3 className="text-xl font-bold uppercase tracking-tight flex items-center gap-2">
                     <TrendingUp size={18} className="text-cyan-500" /> Trending
                   </h3>
                 </div>
-                
+
                 <div className="space-y-6 relative z-10">
                   {(trendingArticles.length > 0 ? trendingArticles : sortedNews.slice(0, 3))
                     .slice(0, 3)
@@ -191,142 +191,142 @@ export default async function HomePage() {
 
       <section id="cerita-list" className="bg-muted/30 py-6 md:py-8">
         <div className="container px-4 mx-auto">
-            <FadeIn>
+          <FadeIn>
             <div className="flex items-end justify-between mb-16 flex-wrap gap-4">
-                <div className="space-y-2">
-                    <span className="text-cyan-600 dark:text-cyan-400 font-bold tracking-widest text-xs uppercase">{settings.sectionCerita}</span>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground">Cerita <span className="text-cyan-600 dark:text-cyan-400 italic">Rakyat</span></h2>
-                </div>
-                <Link href="/category/cerita" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors group">
+              <div className="space-y-2">
+                <span className="text-cyan-600 dark:text-cyan-400 font-bold tracking-widest text-xs uppercase">{settings.sectionCerita}</span>
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground">Cerita <span className="text-cyan-600 dark:text-cyan-400 italic">Rakyat</span></h2>
+              </div>
+              <Link href="/category/cerita" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors group">
                 Lihat Semua <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                </Link>
+              </Link>
             </div>
-            </FadeIn>
+          </FadeIn>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
             {ceritaArticles.slice(0, 4).map((item, i) => (
-                <FadeIn key={item.id} delay={i * 100}>
+              <FadeIn key={item.id} delay={i * 100}>
                 <Link href={`/article/${item.slug}`} className="block group h-full">
-                    <div className="aspect-[4/5] rounded-[2rem] overflow-hidden mb-6 relative shadow-lg group-hover:shadow-2xl transition-all duration-500 group-hover:-translate-y-2">
+                  <div className="aspect-[4/5] rounded-[2rem] overflow-hidden mb-6 relative shadow-lg group-hover:shadow-2xl transition-all duration-500 group-hover:-translate-y-2">
                     <Image
-                        src={item.image}
-                        alt={item.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity"></div>
                     <div className="absolute bottom-6 left-6 right-6">
-                        <span className="text-2xs font-bold uppercase tracking-widest text-cyan-400 mb-2 block backdrop-blur-md bg-black/20 w-fit px-2 py-1 rounded-md">Cerita</span>
-                        <h3 className="text-xl font-serif font-bold leading-tight text-white line-clamp-3 mb-2">{item.title}</h3>
-                        <div className="h-0.5 w-12 bg-cyan-500 group-hover:w-full transition-all duration-500"></div>
+                      <span className="text-2xs font-bold uppercase tracking-widest text-cyan-400 mb-2 block backdrop-blur-md bg-black/20 w-fit px-2 py-1 rounded-md">Cerita</span>
+                      <h3 className="text-xl font-serif font-bold leading-tight text-white line-clamp-3 mb-2">{item.title}</h3>
+                      <div className="h-0.5 w-12 bg-cyan-500 group-hover:w-full transition-all duration-500"></div>
                     </div>
-                    </div>
+                  </div>
                 </Link>
-                </FadeIn>
+              </FadeIn>
             ))}
-            </div>
+          </div>
         </div>
       </section>
 
       <section id="sosok" className="relative py-4 md:py-6 overflow-hidden">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-cyan-100 dark:bg-cyan-900/10 rounded-full blur-3xl -z-10 opacity-50 pointer-events-none translate-x-1/3 -translate-y-1/4"></div>
-        
-        <div className="container px-4 mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-            <FadeIn className="space-y-10">
-                <div className="space-y-4">
-                    <span className="inline-block px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-xs font-bold uppercase tracking-widest border border-cyan-200 dark:border-cyan-800">Inspirasi Lokal</span>
-                    <h2 className="text-5xl lg:text-7xl font-serif font-bold leading-[0.9]">{settings.sectionSosok.replace('.', '')}<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600">.</span></h2>
-                    <p className="text-muted-foreground text-lg lg:text-xl max-w-md leading-relaxed">Mengenal mereka yang berkarya dalam senyap, memberikan dampak nyata bagi lingkungan sekitar.</p>
-                </div>
 
-                <div className="space-y-4">
+        <div className="container px-4 mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+            <FadeIn className="space-y-10">
+              <div className="space-y-4">
+                <span className="inline-block px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-xs font-bold uppercase tracking-widest border border-cyan-200 dark:border-cyan-800">Inspirasi Lokal</span>
+                <h2 className="text-5xl lg:text-7xl font-serif font-bold leading-[0.9]">{settings.sectionSosok.replace('.', '')}<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600">.</span></h2>
+                <p className="text-muted-foreground text-lg lg:text-xl max-w-md leading-relaxed">Mengenal mereka yang berkarya dalam senyap, memberikan dampak nyata bagi lingkungan sekitar.</p>
+              </div>
+
+              <div className="space-y-4">
                 {sosokArticles.slice(0, 3).map((sosok, i) => (
-                    <Link key={i} href={`/article/${sosok.slug}`} className="flex gap-6 items-center group cursor-pointer p-4 -mx-4 rounded-2xl hover:bg-card hover:shadow-lg transition-all border border-transparent hover:border-border">
+                  <Link key={i} href={`/article/${sosok.slug}`} className="flex gap-6 items-center group cursor-pointer p-4 -mx-4 rounded-2xl hover:bg-card hover:shadow-lg transition-all border border-transparent hover:border-border">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 border-2 border-background shadow-md">
-                        <Image
-                            src={sosok.image}
-                            alt={sosok.title}
-                            fill
-                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                        />
+                      <Image
+                        src={sosok.image}
+                        alt={sosok.title}
+                        fill
+                        className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                      />
                     </div>
                     <div>
-                        <h4 className="text-xl font-bold group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors line-clamp-1 mb-1">{sosok.title}</h4>
-                        <span className="text-2xs font-bold uppercase tracking-widest text-muted-foreground block mb-2">Tokoh Inspiratif</span>
-                        <p className="text-sm text-muted-foreground italic font-serif line-clamp-1">&quot;{sosok.summary}&quot;</p>
+                      <h4 className="text-xl font-bold group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors line-clamp-1 mb-1">{sosok.title}</h4>
+                      <span className="text-2xs font-bold uppercase tracking-widest text-muted-foreground block mb-2">Tokoh Inspiratif</span>
+                      <p className="text-sm text-muted-foreground italic font-serif line-clamp-1">&quot;{sosok.summary || sosok.excerpt || ''}&quot;</p>
                     </div>
-                    </Link>
+                  </Link>
                 ))}
-                </div>
+              </div>
 
-                <Link href="/category/sosok-inspiratif" className="inline-flex items-center gap-2 px-8 py-4 bg-foreground text-background rounded-full font-bold text-xs uppercase tracking-widest hover:bg-cyan-600 hover:text-white transition-all duration-300">
+              <Link href="/category/sosok-inspiratif" className="inline-flex items-center gap-2 px-8 py-4 bg-foreground text-background rounded-full font-bold text-xs uppercase tracking-widest hover:bg-cyan-600 hover:text-white transition-all duration-300">
                 Lihat Semua Tokoh <ArrowRight size={14} />
-                </Link>
+              </Link>
 
             </FadeIn>
-            
+
             <FadeIn delay={200} className="relative h-[600px] rounded-[3rem] overflow-hidden hidden lg:block group shadow-2xl shadow-cyan-900/10">
-                <div className="absolute inset-0 bg-cyan-900/20 group-hover:bg-transparent transition-all z-10 duration-700"></div>
-<Image
+              <div className="absolute inset-0 bg-cyan-900/20 group-hover:bg-transparent transition-all z-10 duration-700"></div>
+              <Image
                 src={settings.sosokImageUrl || "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1976&auto=format&fit=crop"}
                 fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-105"
                 alt="Potret tokoh inspiratif Banjarnegara"
                 unoptimized={settings.sosokImageUrl?.startsWith('/uploads')}
-                />
-                
-                <div className="absolute bottom-10 right-10 z-20">
+              />
+
+              <div className="absolute bottom-10 right-10 z-20">
                 <div className="w-24 h-24 border border-white/30 rounded-full animate-spin-slow flex items-center justify-center backdrop-blur-sm">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  <div className="w-2 h-2 bg-white rounded-full"></div>
                 </div>
-                </div>
+              </div>
             </FadeIn>
-            </div>
+          </div>
         </div>
       </section>
 
       <section id="sudut-kota" className="py-4 bg-black text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black via-transparent to-black opacity-80 pointer-events-none z-10"></div>
-        
-        <div className="container px-4 mx-auto relative z-20">
-            <FadeIn className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div>
-                    <span className="text-cyan-400 font-mono text-xs mb-4 block">{'//'} GALERI KOTA</span>
-                    <h2 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter leading-none">Lensa <br/><span className="italic font-serif font-thin text-cyan-400">Kota</span></h2>
-                </div>
-                <p className="text-white/70 max-w-sm text-sm leading-relaxed">Geser untuk melihat keindahan arsitektur dan suasana kota yang terekam kamera.</p>
-            </FadeIn>
 
-            <FadeIn delay={200}>
+        <div className="container px-4 mx-auto relative z-20">
+          <FadeIn className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <span className="text-cyan-400 font-mono text-xs mb-4 block">{'//'} GALERI KOTA</span>
+              <h2 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter leading-none">Lensa <br /><span className="italic font-serif font-thin text-cyan-400">Kota</span></h2>
+            </div>
+            <p className="text-white/70 max-w-sm text-sm leading-relaxed">Geser untuk melihat keindahan arsitektur dan suasana kota yang terekam kamera.</p>
+          </FadeIn>
+
+          <FadeIn delay={200}>
             <HorizontalScroll className="gap-6 pb-12 -mx-4 px-4 lg:mx-0 lg:px-0">
-                {sudutArticles.map((item, i) => (
+              {sudutArticles.map((item, i) => (
                 <Link key={i} href={`/article/${item.slug}`} className="snap-center shrink-0 w-[280px] md:w-[350px] h-[450px] relative rounded-3xl overflow-hidden group border border-white/10 cursor-pointer bg-neutral-900">
-                    <Image
+                  <Image
                     src={item.image}
                     fill
                     className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
                     alt={item.title}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent flex flex-col justify-end p-8">
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent flex flex-col justify-end p-8">
                     <span className="text-cyan-400 font-bold mb-2 flex items-center gap-2 text-xs translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                        <MapPin size={14} />
-                        Lokasi Terdeteksi
+                      <MapPin size={14} />
+                      Lokasi Terdeteksi
                     </span>
                     <h4 className="text-xl font-bold uppercase text-white leading-tight transform group-hover:-translate-y-2 transition-transform duration-500">{item.title}</h4>
-                    </div>
+                  </div>
                 </Link>
-                ))}
+              ))}
 
-                <div className="snap-center shrink-0 w-[200px] h-[450px] flex items-center justify-center">
+              <div className="snap-center shrink-0 w-[200px] h-[450px] flex items-center justify-center">
                 <Link href="/category/sudut kota" className="w-24 h-24 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:text-black hover:scale-110 transition-all group duration-300">
-                    <ArrowRight size={32} className="group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight size={32} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
-                </div>
+              </div>
             </HorizontalScroll>
-            </FadeIn>
+          </FadeIn>
         </div>
       </section>
 
@@ -355,7 +355,7 @@ export default async function HomePage() {
                   </span>
                   <div>
                     <h3 className="text-3xl lg:text-5xl font-serif font-bold text-white mb-6 line-clamp-3 leading-tight">{potensiArticles[0].title}</h3>
-                    <p className="text-cyan-100/80 max-w-sm mb-8 line-clamp-2 text-lg">{potensiArticles[0].summary}</p>
+                    <p className="text-cyan-100/80 max-w-sm mb-8 line-clamp-2 text-lg">{potensiArticles[0].summary || potensiArticles[0].excerpt || ''}</p>
                     <Link href={`/article/${potensiArticles[0].slug}`} className="bg-white text-cyan-950 px-8 py-4 rounded-full font-bold uppercase tracking-widest hover:bg-cyan-400 transition-colors inline-block text-xs shadow-lg shadow-cyan-900/50">
                       Baca Selengkapnya
                     </Link>
@@ -367,7 +367,7 @@ export default async function HomePage() {
 
           <FadeIn delay={100} className="bg-card border border-border rounded-[2.5rem] p-8 flex flex-col justify-center items-center text-center hover:shadow-xl transition-all duration-300 min-h-[200px] group">
             <div className="w-16 h-16 rounded-full bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Lightbulb size={32} className="text-cyan-600 dark:text-cyan-400" />
+              <Lightbulb size={32} className="text-cyan-600 dark:text-cyan-400" />
             </div>
             <h4 className="text-5xl font-black text-foreground mb-2">{settings.statsDesaWisata}</h4>
             <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest">{settings.statsLabel}</p>

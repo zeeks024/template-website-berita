@@ -115,7 +115,7 @@ export default function MainNewsGrid() {
                                                     {article.title}
                                                 </h3>
                                                 <p className="text-muted-foreground mb-6 line-clamp-3 leading-relaxed">
-                                                    {article.summary}
+                                                    {article.summary || article.excerpt || article.content?.replace(/<[^>]*>/g, '').substring(0, 200)}
                                                 </p>
                                                 
                                                 <div className="mt-auto flex items-center justify-between pt-6 border-t border-border/50">

@@ -43,6 +43,7 @@ async function getAuthorArticles(authorId: string) {
             slug: true,
             title: true,
             summary: true,
+            excerpt: true,
             image: true,
             category: true,
             publishedAt: true,
@@ -180,7 +181,7 @@ export default async function AuthorPage({ params }: Props) {
                                         {article.title}
                                     </h3>
                                     <p className="text-sm text-slate-400 mt-2 line-clamp-2">
-                                        {article.summary}
+                                        {article.summary || article.excerpt}
                                     </p>
                                     <div className="flex items-center gap-4 mt-3 text-xs text-slate-500">
                                         <span className="flex items-center gap-1">

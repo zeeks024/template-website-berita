@@ -41,7 +41,7 @@ function SearchResults() {
         if (queryParam) {
             results = results.filter(item =>
                 item.title.toLowerCase().includes(queryParam) ||
-                item.summary.toLowerCase().includes(queryParam) ||
+                (item.summary || item.excerpt || '').toLowerCase().includes(queryParam) ||
                 item.category.toLowerCase().includes(queryParam)
             );
         }
@@ -199,7 +199,7 @@ function SearchResults() {
                                                 {item.title}
                                             </h2>
                                             <p className="text-sm text-muted-foreground line-clamp-3 mb-6 font-light">
-                                                {item.summary}
+                                                {item.summary || item.excerpt || item.content?.replace(/<[^>]*>/g, '').substring(0, 200)}
                                             </p>
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground group-hover:text-foreground transition-colors">

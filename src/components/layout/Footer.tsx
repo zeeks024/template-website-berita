@@ -101,7 +101,7 @@ export default function Footer() {
                     <div className="lg:col-span-2 space-y-8">
                         <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Rubrik</h4>
                         <ul className="space-y-4">
-                            {['Cerita', 'Opini', 'Sosok Inspiratif', 'Sudut Kota', 'Potensi', 'Galeri Foto'].map((item) => (
+                            {['Cerita', 'Opini', 'Sosok Inspiratif', 'Sudut Kota', 'Potensi'].map((item) => (
                                 <li key={item}>
                                     <Link href={`/category/${item.toLowerCase().replace(' ', '-')}`} className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors flex items-center gap-2 group">
                                         <span className="w-1 h-1 rounded-full bg-border group-hover:bg-primary transition-colors"></span>
