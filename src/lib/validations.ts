@@ -67,7 +67,7 @@ export const articleSchema = z.object({
         .min(1, 'Kategori wajib diisi'),
     author: z.string().optional(),
     status: z
-        .enum(['draft', 'published'], { message: 'Status harus draft atau published' })
+        .enum(['draft', 'pending_review', 'published', 'rejected', 'scheduled', 'archived'], { message: 'Status tidak valid' })
         .optional()
         .default('draft'),
     featured: z.boolean().optional().default(false),
@@ -105,3 +105,67 @@ export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
 export type ArticleInput = z.infer<typeof articleSchema>;
 export type CommentInput = z.infer<typeof commentSchema>;
 export type CategoryInput = z.infer<typeof categorySchema>;
+
+// --- Article Status Transition Logic ---
+
+type Role = 'ADMIN' | 'WRITER' | 'READER';
+
+const STATUS_TRANSITIONS: Record<string, { to: string[]; roles: Role[] }[]> = {
+    draft: [
+        { to: ['pending_review'], roles: ['WRITER', 'ADMIN'] },
+        { to: ['published'], roles: ['ADMIN'] },
+    ],
+    pending_review: [
+        { to: ['published'], roles: ['ADMIN'] },
+        { to: ['rejected'], roles: ['ADMIN'] },
+        { to: ['draft'], roles: ['ADMIN'] },
+    ],
+    rejected: [
+        { to: ['draft'], roles: ['WRITER', 'ADMIN'] },
+        { to: ['pending_review'], roles: ['WRITER', 'ADMIN'] },
+    ],
+    published: [
+        { to: ['archived'], roles: ['WRITER', 'ADMIN'] },
+        { to: ['draft'], roles: ['ADMIN'] },
+    ],
+    archived: [
+        { to: ['draft'], roles: ['ADMIN'] },
+    ],
+    scheduled: [
+        { to: ['draft'], roles: ['WRITER', 'ADMIN'] },
+        { to: ['published'], roles: ['ADMIN'] },
+    ],
+};
+
+export function validateStatusTransition(
+    fromStatus: string,
+    toStatus: string,
+    role: Role
+): { valid: boolean; message?: string } {
+    if (fromStatus === toStatus) return { valid: true };
+
+    const transitions = STATUS_TRANSITIONS[fromStatus];
+    if (!transitions) {
+        return { valid: false, message: `Status "${fromStatus}" tidak dikenali` };
+    }
+
+    const allowed = transitions.find(t => t.to.includes(toStatus));
+    if (!allowed) {
+        return { valid: false, message: `Tidak dapat mengubah status dari "${fromStatus}" ke "${toStatus}"` };
+    }
+
+    if (!allowed.roles.includes(role)) {
+        return { valid: false, message: `Role ${role} tidak memiliki izin untuk mengubah status dari "${fromStatus}" ke "${toStatus}"` };
+    }
+
+    return { valid: true };
+}
+
+export function getAllowedStatuses(currentStatus: string, role: Role): string[] {
+    const transitions = STATUS_TRANSITIONS[currentStatus];
+    if (!transitions) return [];
+
+    return transitions
+        .filter(t => t.roles.includes(role))
+        .flatMap(t => t.to);
+}

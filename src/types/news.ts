@@ -1,3 +1,5 @@
+export type ArticleStatus = 'draft' | 'pending_review' | 'published' | 'rejected' | 'scheduled' | 'archived';
+
 export type NewsItem = {
   id: string;
   slug: string;
@@ -13,7 +15,7 @@ export type NewsItem = {
   views?: number;
   featured?: boolean;
   trendingRank?: number;
-  status?: 'draft' | 'published' | 'archived';
+  status?: ArticleStatus;
   excerpt?: string;
   imageCaption?: string;
   imageCredit?: string;
@@ -23,4 +25,7 @@ export type NewsItem = {
   editor?: string;
   lastUpdatedBy?: string;
   createdAt?: string | Date;
+  reviewedBy?: string;
+  reviewedAt?: string | Date;
+  rejectionNote?: string;
 };

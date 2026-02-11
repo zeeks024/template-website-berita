@@ -66,6 +66,9 @@ model Article {
   authorId      String?
   publishedAt   DateTime?
   scheduledAt   DateTime?
+  reviewedBy    String?
+  reviewedAt    DateTime?
+  rejectionNote String?
   authorUser    User?     @relation(fields: [authorId], references: [id])
 
   @@index([category])
