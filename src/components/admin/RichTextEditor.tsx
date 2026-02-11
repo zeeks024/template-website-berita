@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { uploadImage } from '@/lib/imageUtils';
+import Portal from '@/components/ui/Portal';
 import {
     Undo2, Redo2, Heading2, Heading3, Pilcrow,
     Bold, Italic, Underline, Strikethrough,
@@ -133,10 +134,17 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
 
     const [showColorPicker, setShowColorPicker] = useState(false);
     const colorPickerRef = useRef<HTMLDivElement>(null);
+    const paletteButtonRef = useRef<HTMLButtonElement>(null);
+    const portalDropdownRef = useRef<HTMLDivElement>(null);
+    const [colorPickerPos, setColorPickerPos] = useState({ top: 0, left: 0 });
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
-            if (colorPickerRef.current && !colorPickerRef.current.contains(e.target as Node)) {
+            const target = e.target as Node;
+            if (
+                colorPickerRef.current && !colorPickerRef.current.contains(target) &&
+                portalDropdownRef.current && !portalDropdownRef.current.contains(target)
+            ) {
                 setShowColorPicker(false);
             }
         };
@@ -179,30 +187,44 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
 
                 <div className="relative" ref={colorPickerRef}>
                     <button
+                        ref={paletteButtonRef}
                         type="button"
-                        onMouseDown={(e) => { e.preventDefault(); setShowColorPicker(!showColorPicker); }}
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                            if (!showColorPicker && paletteButtonRef.current) {
+                                const rect = paletteButtonRef.current.getBoundingClientRect();
+                                setColorPickerPos({ top: rect.bottom + 4, left: rect.left });
+                            }
+                            setShowColorPicker(!showColorPicker);
+                        }}
                         className="p-1.5 rounded hover:bg-muted active:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center min-w-[28px]"
                         title="Warna Teks"
                     >
                         <Palette size={16} />
                     </button>
                     {showColorPicker && (
-                        <div className="absolute top-full left-0 mt-1 p-2 bg-popover border border-border rounded-lg shadow-lg z-50 grid grid-cols-5 gap-1 min-w-[140px]">
-                            {TEXT_COLORS.map((color) => (
-                                <button
-                                    key={color.value}
-                                    type="button"
-                                    onMouseDown={(e) => {
-                                        e.preventDefault();
-                                        exec('foreColor', color.value);
-                                        setShowColorPicker(false);
-                                    }}
-                                    className="w-6 h-6 rounded border border-border hover:scale-110 transition-transform"
-                                    style={{ backgroundColor: color.value }}
-                                    title={color.label}
-                                />
-                            ))}
-                        </div>
+                        <Portal>
+                            <div
+                                ref={portalDropdownRef}
+                                className="fixed p-2 bg-popover border border-border rounded-lg shadow-lg z-[200] grid grid-cols-5 gap-1 min-w-[140px]"
+                                style={{ top: colorPickerPos.top, left: colorPickerPos.left }}
+                            >
+                                {TEXT_COLORS.map((color) => (
+                                    <button
+                                        key={color.value}
+                                        type="button"
+                                        onMouseDown={(e) => {
+                                            e.preventDefault();
+                                            exec('foreColor', color.value);
+                                            setShowColorPicker(false);
+                                        }}
+                                        className="w-6 h-6 rounded border border-border hover:scale-110 transition-transform"
+                                        style={{ backgroundColor: color.value }}
+                                        title={color.label}
+                                    />
+                                ))}
+                            </div>
+                        </Portal>
                     )}
                 </div>
                 <ToolbarDivider />
@@ -259,21 +281,21 @@ export default function RichTextEditor({ value, onChange, autosaveKey = 'editor_
                         onPaste={handlePaste}
                         spellCheck={false}
                         suppressHydrationWarning
-                        className="min-h-[400px] max-w-3xl mx-auto p-8 md:p-12 bg-white dark:bg-card shadow-lg rounded-sm outline-none prose prose-gray dark:prose-invert prose-lg max-w-none text-foreground
-                            [&_h2]:font-sans [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-6 [&_h2]:mb-3 [&_h2]:text-foreground dark:[&_h2]:text-foreground [&_h2]:border-b [&_h2]:border-border [&_h2]:pb-2
-                            [&_h3]:font-sans [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mt-5 [&_h3]:mb-2 [&_h3]:text-foreground dark:[&_h3]:text-foreground
+                        className="min-h-[400px] max-w-3xl mx-auto p-8 md:p-12 bg-white shadow-lg rounded-sm outline-none prose prose-gray prose-lg max-w-none text-gray-900
+                            [&_h2]:font-sans [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-6 [&_h2]:mb-3 [&_h2]:text-gray-900 [&_h2]:border-b [&_h2]:border-gray-200 [&_h2]:pb-2
+                            [&_h3]:font-sans [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mt-5 [&_h3]:mb-2 [&_h3]:text-gray-900
                             [&_p]:mb-4 [&_p]:leading-relaxed
                             [&_ul]:ml-6 [&_ul]:mb-4 [&_ul]:list-disc
                             [&_ol]:ml-6 [&_ol]:mb-4 [&_ol]:list-decimal
                             [&_li]:mb-1
-                            [&_blockquote]:border-l-4 [&_blockquote]:border-cyan-500 [&_blockquote]:my-5 [&_blockquote]:py-2 [&_blockquote]:px-5 [&_blockquote]:bg-muted dark:[&_blockquote]:bg-muted [&_blockquote]:text-muted-foreground [&_blockquote]:italic
+                            [&_blockquote]:border-l-4 [&_blockquote]:border-cyan-500 [&_blockquote]:my-5 [&_blockquote]:py-2 [&_blockquote]:px-5 [&_blockquote]:bg-gray-50 [&_blockquote]:text-gray-600 [&_blockquote]:italic
                             [&_a]:text-cyan-600 [&_a]:underline [&_a]:cursor-pointer
                             [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4 [&_img]:rounded [&_img]:shadow-md
-                            [&_hr]:border-none [&_hr]:border-t [&_hr]:border-border [&_hr]:my-6"
+                            [&_hr]:border-none [&_hr]:border-t [&_hr]:border-gray-200 [&_hr]:my-6"
                         style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
                     />
                 ) : (
-                    <div className="min-h-[400px] max-w-3xl mx-auto p-8 md:p-12 bg-white dark:bg-card shadow-lg rounded-sm animate-pulse text-foreground">
+                    <div className="min-h-[400px] max-w-3xl mx-auto p-8 md:p-12 bg-white shadow-lg rounded-sm animate-pulse">
                         <div className="h-4 bg-muted rounded w-3/4 mb-4"></div>
                         <div className="h-4 bg-muted rounded w-1/2 mb-4"></div>
                         <div className="h-4 bg-muted rounded w-5/6"></div>
