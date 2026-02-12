@@ -89,7 +89,7 @@ export function getClientIP(request: Request): string {
 export const RATE_LIMIT_CONFIGS = {
     login: {
         maxRequests: 5,
-        windowMs: 15 * 60 * 1000
+        windowMs: 30 * 1000
     },
     register: {
         maxRequests: 3,

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
-import { X, ChevronLeft, ChevronRight, ImageOff } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 
 interface GalleryLightboxProps {

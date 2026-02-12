@@ -11,6 +11,13 @@ export type AuthUser = {
 
 import { auth } from "@/auth";
 
+type SessionUserWithRole = {
+  id?: string | null;
+  email?: string | null;
+  name?: string | null;
+  role?: string;
+};
+
 /**
  * Get current authenticated user from JWT token in cookies OR NextAuth session
  * Returns user object if valid, null otherwise
@@ -22,11 +29,12 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     // 1. Check NextAuth Session first (Google Login)
     const session = await auth();
     if (session?.user) {
+      const sessionUser = session.user as SessionUserWithRole;
       return {
-        userId: session.user.id || '',
-        email: session.user.email || '',
-        name: session.user.name || '',
-        role: (session.user as any).role || 'READER', // Default role for OAuth users
+        userId: sessionUser.id || '',
+        email: sessionUser.email || '',
+        name: sessionUser.name || '',
+        role: sessionUser.role || 'READER', // Default role for OAuth users
       };
     }
 

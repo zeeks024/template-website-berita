@@ -10,14 +10,6 @@ interface PaginationState {
     totalPages: number;
 }
 
-interface UseNewsOptions {
-    filterStatus?: string;
-    myArticlesOnly?: boolean;
-    paginate?: boolean;
-    initialPage?: number;
-    pageSize?: number;
-}
-
 interface UseNewsReturn {
     allNews: NewsItem[];
     loading: boolean;

@@ -52,6 +52,7 @@ const colorMap = {
 
 export const StatCard = ({ icon, iconColor, value, label, trend, loading = false }: StatCardProps) => {
   const colors = colorMap[iconColor] || colorMap.cyan;
+  const iconElement = icon as React.ReactElement<{ size?: number; strokeWidth?: number }>;
 
   if (loading) {
     return (
@@ -91,7 +92,7 @@ export const StatCard = ({ icon, iconColor, value, label, trend, loading = false
       </div>
 
       <div className={`absolute -right-6 -bottom-6 opacity-0 group-hover:opacity-[0.03] dark:group-hover:opacity-[0.07] transition-all duration-500 transform group-hover:scale-110 group-hover:-rotate-12 ${colors.text}`}>
-        {React.cloneElement(icon as React.ReactElement<any>, { size: 120, strokeWidth: 1 })}
+        {React.cloneElement(iconElement, { size: 120, strokeWidth: 1 })}
       </div>
     </Card>
   );

@@ -23,7 +23,6 @@ export default function SearchModal({ isOpen, onClose }: Props) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'unset';
-            // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting query on modal close
             setQuery('');
         }
         return () => {

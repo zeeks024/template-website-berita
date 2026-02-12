@@ -6,8 +6,8 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
     FileText, Eye, Grid, Search, Plus,
-    Edit, Trash2, ExternalLink, PenTool, 
-    FolderOpen, Clock, Activity, Users,
+    Edit, Trash2, ExternalLink, PenTool,
+    FolderOpen, Clock, Users,
     Globe, Archive, AlertCircle
 } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
@@ -73,8 +73,8 @@ function AdminDashboardInner() {
                         Selamat Datang, <span className="text-cyan-600 dark:text-cyan-400">{user.name || 'User'}</span>
                     </h1>
                     <p className="text-muted-foreground text-sm font-medium">
-                        {isAdmin 
-                            ? 'Pantau performa portal berita dan kelola konten hari ini.' 
+                        {isAdmin
+                            ? 'Pantau performa portal berita dan kelola konten hari ini.'
                             : `Kamu memiliki ${stats.draftCount} artikel draft yang perlu diselesaikan.`}
                     </p>
                 </div>
@@ -91,21 +91,21 @@ function AdminDashboardInner() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 mb-10">
-                <StatCard 
+                <StatCard
                     icon={<FileText size={24} />}
                     iconColor="cyan"
                     value={stats.totalArticles}
                     label="Total Artikel"
                     loading={statsLoading}
                 />
-                <StatCard 
+                <StatCard
                     icon={<Eye size={24} />}
                     iconColor="emerald"
                     value={stats.totalViews.toLocaleString()}
                     label="Total Pembaca"
                     loading={statsLoading}
                 />
-                <StatCard 
+                <StatCard
                     icon={<Grid size={24} />}
                     iconColor="purple"
                     value={stats.topCategory}
@@ -117,7 +117,6 @@ function AdminDashboardInner() {
             <Card className="mb-10 overflow-hidden border-l-4 border-l-cyan-500">
                 <div className="flex items-center justify-between mb-6">
                     <h3 className="font-bold text-foreground uppercase tracking-widest text-sm flex items-center gap-2">
-                        <Activity size={18} className="text-cyan-500 animate-pulse" />
                         Aktivitas Terbaru
                     </h3>
                 </div>
@@ -130,14 +129,13 @@ function AdminDashboardInner() {
                             </div>
                         ))
                     ) : stats.recentArticles.length > 0 ? (
-                        stats.recentArticles.map((article, i) => (
+                        stats.recentArticles.map((article) => (
                             <div key={article.id} className="group flex items-center justify-between p-4 bg-muted/20 hover:bg-muted/60 dark:bg-white/5 dark:hover:bg-white/10 rounded-xl transition-all duration-300 border border-transparent hover:border-cyan-500/20 hover:shadow-lg hover:-translate-y-0.5">
                                 <div className="flex items-center gap-4 min-w-0">
-                                    <div className={`p-2 rounded-lg flex-shrink-0 ${
-                                        (article.status || 'published') === 'published' 
-                                            ? 'bg-emerald-500/10 text-emerald-500' 
-                                            : 'bg-amber-500/10 text-amber-500'
-                                    }`}>
+                                    <div className={`p-2 rounded-lg flex-shrink-0 ${(article.status || 'published') === 'published'
+                                        ? 'bg-emerald-500/10 text-emerald-500'
+                                        : 'bg-amber-500/10 text-amber-500'
+                                        }`}>
                                         {getStatusIcon(article.status || 'published')}
                                     </div>
                                     <div className="flex flex-col min-w-0">
@@ -166,9 +164,6 @@ function AdminDashboardInner() {
             <Card className="p-0 overflow-hidden border-t-4 border-t-cyan-500">
                 <div className="p-6 border-b border-border/50 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-muted/10">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-cyan-500/10 rounded-lg text-cyan-600 dark:text-cyan-400">
-                            <FileText size={20} />
-                        </div>
                         <div>
                             <h3 className="font-bold text-foreground uppercase tracking-wider text-sm">
                                 {isAdmin ? 'Semua Artikel' : 'Artikel Saya'}
@@ -190,16 +185,16 @@ function AdminDashboardInner() {
                                     pending_review: 'Review', rejected: 'Ditolak', archived: 'Arsip'
                                 };
                                 return (
-                                <button
-                                    key={status}
-                                    onClick={() => setFilterStatus(status)}
-                                    className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${filterStatus === status
-                                        ? 'bg-white dark:bg-black/40 text-foreground shadow-sm'
-                                        : 'text-muted-foreground hover:text-foreground hover:bg-white/50 dark:hover:bg-white/5'
-                                        }`}
-                                >
-                                    {statusLabels[status] || status}
-                                </button>
+                                    <button
+                                        key={status}
+                                        onClick={() => setFilterStatus(status)}
+                                        className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${filterStatus === status
+                                            ? 'bg-white dark:bg-black/40 text-foreground shadow-sm'
+                                            : 'text-muted-foreground hover:text-foreground hover:bg-white/50 dark:hover:bg-white/5'
+                                            }`}
+                                    >
+                                        {statusLabels[status] || status}
+                                    </button>
                                 );
                             })}
                         </div>
@@ -263,8 +258,8 @@ function AdminDashboardInner() {
                                     <td className="p-6">
                                         <Badge variant={
                                             (item.status || 'published') === 'published' ? 'success' :
-                                            item.status === 'pending_review' ? 'info' :
-                                            item.status === 'rejected' ? 'danger' : 'warning'
+                                                item.status === 'pending_review' ? 'info' :
+                                                    item.status === 'rejected' ? 'danger' : 'warning'
                                         } dot>
                                             {{
                                                 published: 'Terbit', draft: 'Draft',

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { requireAdmin, getCurrentUser } from '@/lib/auth';
+import { requireAdmin } from '@/lib/auth';
 
 type RouteParams = { params: Promise<{ id: string }> };
 

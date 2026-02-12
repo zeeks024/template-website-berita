@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '../UserContext';
 import { Card, SectionHeader } from '@/components/admin/ui';
-import { Settings, Save, Loader2, Upload, X, Image as ImageIcon } from 'lucide-react';
+import { Settings, Save, Loader2, Upload, X } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
 import Image from 'next/image';
 
@@ -158,11 +158,10 @@ export default function SettingsPage() {
                 />
 
                 {message && (
-                    <div className={`mb-6 p-4 rounded-xl text-sm font-medium ${
-                        message.type === 'success' 
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
-                            : 'bg-red-500/10 text-red-400 border border-red-500/20'
-                    }`}>
+                    <div className={`mb-6 p-4 rounded-xl text-sm font-medium ${message.type === 'success'
+                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                        : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                        }`}>
                         {message.text}
                     </div>
                 )}
@@ -324,7 +323,7 @@ export default function SettingsPage() {
                         </h3>
                         <div className="space-y-4">
                             <div>
-                                <label className={labelClass}>Gambar Sosok</label>
+                                <label className={labelClass}>Gambar Section Sosok</label>
                                 <p className="text-xs text-muted-foreground mb-2">Format: JPG, PNG, WebP, GIF. Maksimal 5MB.</p>
                                 <div className="space-y-3">
                                     <div className="flex gap-3">

@@ -168,7 +168,7 @@ export default function CreateArticlePage() {
                 <div className="lg:col-span-2 space-y-6">
                     <SectionHeader
                         title="Tulis Berita Baru"
-                        subtitle="Buat narasi menarik untuk pembaca Serayu."
+                        subtitle="Buat narasi menarik untuk pembaca."
                         action={
                             <div className="flex items-center gap-3">
                                 <div className="flex items-center gap-2 text-xs text-muted-foreground">

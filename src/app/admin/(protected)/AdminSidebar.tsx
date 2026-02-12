@@ -8,12 +8,12 @@ import { LayoutDashboard, PenTool, FolderOpen, Users, ExternalLink, LogOut, Menu
 import { UserProvider, type AuthUser } from './UserContext';
 import { useAdminStats } from '@/hooks/useAdminStats';
 
-export default function AdminSidebar({ 
-  children,
-  user 
-}: { 
-  children: React.ReactNode;
-  user: AuthUser;
+export default function AdminSidebar({
+    children,
+    user
+}: {
+    children: React.ReactNode;
+    user: AuthUser;
 }) {
     const pathname = usePathname();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -40,7 +40,7 @@ export default function AdminSidebar({
     const isAdmin = user.role === 'ADMIN';
     const { stats } = useAdminStats(isAdmin);
     const pendingReviewCount = stats.pendingReviewCount;
-    
+
     const menuItems: Array<{ label: string; href: string; icon: React.ReactNode; badge?: number }> = [
         { label: 'Dashboard', href: '/admin', icon: <LayoutDashboard size={20} /> },
         { label: 'Tulis Artikel', href: '/admin/create', icon: <PenTool size={20} /> },
@@ -120,18 +120,17 @@ export default function AdminSidebar({
                 <div className="p-6 border-t border-border">
                     <div className="mb-4 p-4 bg-gradient-to-br from-muted to-muted/50 rounded-2xl border border-border hover:border-muted-foreground/20 transition-all duration-300">
                         <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold transition-transform duration-300 hover:scale-110 ${
-                                isAdmin 
-                                    ? 'bg-gradient-to-br from-cyan-500 to-cyan-600 text-white' 
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold transition-transform duration-300 hover:scale-110 ${isAdmin
+                                    ? 'bg-gradient-to-br from-cyan-500 to-cyan-600 text-white'
                                     : 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white'
-                            }`}>
+                                }`}>
                                 {user.name?.charAt(0).toUpperCase() || 'U'}
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="text-sm font-bold text-foreground truncate">{user.name}</p>
                                 <div className="flex items-center gap-2 mt-0.5">
                                     <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${isAdmin ? 'bg-cyan-400' : 'bg-emerald-400'}`} />
-                                    <span className="text-2xs font-medium text-muted-foreground lowercase tracking-wider">
+                                    <span className="text-2xs font-medium text-muted-foreground tracking-wider">
                                         {isAdmin ? 'Administrator' : 'Penulis'}
                                     </span>
                                 </div>

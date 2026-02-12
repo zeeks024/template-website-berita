@@ -42,6 +42,15 @@ export default function ArticleDetail({ article, relatedArticles }: Props) {
     }, [article.slug]);
 
     const articleUrl = `https://websiteberitademo.vercel.app/article/${article.slug}`;
+    const articleContentClassName = [
+        'prose prose-lg dark:prose-invert max-w-none break-words overflow-hidden min-w-0',
+        'prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight prose-headings:text-foreground',
+        'prose-p:leading-8 prose-p:font-light',
+        'prose-blockquote:border-l-cyan-500 prose-blockquote:bg-muted prose-blockquote:p-6 prose-blockquote:rounded-r-2xl prose-blockquote:not-italic',
+        'prose-strong:font-bold',
+        'prose-a:text-cyan-600 dark:prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline',
+        'prose-img:rounded-[2rem] prose-img:border prose-img:border-border',
+    ].join(' ');
 
     return (
         <article className="min-h-screen pb-20 bg-background">
@@ -111,7 +120,7 @@ export default function ArticleDetail({ article, relatedArticles }: Props) {
                                     <User size={14} className="text-cyan-400" /> {article.author}
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <Calendar size={14} className="text-cyan-400" /> {article.createdAt ? formatTimeAgo(article.createdAt) : article.publishedAt}
+                                    <Calendar size={14} className="text-cyan-400" /> <span suppressHydrationWarning>{article.createdAt ? formatTimeAgo(article.createdAt) : article.publishedAt}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Clock size={14} className="text-cyan-400" /> {article.readTime}
@@ -138,13 +147,7 @@ export default function ArticleDetail({ article, relatedArticles }: Props) {
 
                         <div
                             dangerouslySetInnerHTML={{ __html: article.content }}
-                            className="prose prose-lg dark:prose-invert max-w-none break-words overflow-hidden min-w-0
-                                prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight prose-headings:text-foreground
-                                prose-p:leading-8 prose-p:font-light
-                                prose-blockquote:border-l-cyan-500 prose-blockquote:bg-muted prose-blockquote:p-6 prose-blockquote:rounded-r-2xl prose-blockquote:not-italic
-                                prose-strong:font-bold
-                                prose-a:text-cyan-600 dark:prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline
-                                prose-img:rounded-[2rem] prose-img:border prose-img:border-border"
+                            className={articleContentClassName}
                         />
 
                         {galleryImages.length > 0 && (

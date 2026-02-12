@@ -1,6 +1,51 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Role } from '@prisma/client'
 
 const SOURCE_URL = process.argv[2] || process.env.SOURCE_DATABASE_URL
+
+type SourceColumn = { column_name: string }
+
+type SourceUser = {
+  id: string
+  email: string
+  password: string | null
+  name: string | null
+  role: string | null
+  isVerified: boolean | null
+  verificationToken: string | null
+  resetToken: string | null
+  resetTokenExpiry: Date | null
+  createdAt: Date
+  updatedAt: Date
+  verificationTokenExpiry: Date | null
+  avatar: string | null
+  bio: string | null
+  socialLinks: unknown
+}
+
+const VALID_ROLES: Role[] = ['ADMIN', 'WRITER', 'READER']
+
+function toRole(value: string | null): Role {
+  if (value && VALID_ROLES.includes(value as Role)) {
+    return value as Role
+  }
+  return 'READER'
+}
+
+function toSocialLinks(value: unknown): string | null {
+  if (typeof value === 'string') {
+    return value
+  }
+
+  if (value == null) {
+    return null
+  }
+
+  try {
+    return JSON.stringify(value)
+  } catch {
+    return null
+  }
+}
 
 async function migrateUsers(): Promise<void> {
   console.log('═══════════════════════════════════════════════════════════')
@@ -23,7 +68,7 @@ async function migrateUsers(): Promise<void> {
     console.log('✅ Both databases connected')
 
     console.log('\n📋 Checking source User table columns...')
-    const columns: any[] = await sourceDb.$queryRaw`
+    const columns: SourceColumn[] = await sourceDb.$queryRaw`
       SELECT column_name FROM information_schema.columns 
       WHERE table_name = 'User' ORDER BY ordinal_position
     `
@@ -31,7 +76,7 @@ async function migrateUsers(): Promise<void> {
 
     console.log('\n📦 Fetching users with available columns only...')
     
-    const users: any[] = await sourceDb.$queryRaw`
+    const users: SourceUser[] = await sourceDb.$queryRaw`
       SELECT 
         id, email, password, name, role, 
         "isVerified", "verificationToken", "resetToken", "resetTokenExpiry",
@@ -52,8 +97,8 @@ async function migrateUsers(): Promise<void> {
               id: user.id,
               email: user.email,
               password: user.password,
-              name: user.name,
-              role: user.role,
+              name: user.name || user.email,
+              role: toRole(user.role),
               isVerified: user.isVerified ?? false,
               verificationToken: user.verificationToken,
               resetToken: user.resetToken,
@@ -63,7 +108,7 @@ async function migrateUsers(): Promise<void> {
               verificationTokenExpiry: user.verificationTokenExpiry,
               avatar: user.avatar,
               bio: user.bio,
-              socialLinks: user.socialLinks,
+              socialLinks: toSocialLinks(user.socialLinks),
               emailVerified: null,
               image: null,
             }

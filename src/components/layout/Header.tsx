@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { Search, Menu, X, LogIn, LogOut, User, Bookmark, ChevronDown, LayoutDashboard, Sun, Moon, Type, Eye, Settings } from 'lucide-react';
+import { Search, Menu, LogIn, LogOut, Bookmark, ChevronDown, LayoutDashboard, Sun, Moon, Type, Eye, Settings } from 'lucide-react';
 import SettingsMenu from '@/components/ui/SettingsMenu';
 import { useAccessibility } from '@/components/providers/AccessibilityProvider';
 import { useTheme } from 'next-themes';
@@ -20,7 +20,6 @@ export default function Header() {
     const [scrolled, setScrolled] = useState(false);
 const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     
     const { user, isLoading: loading, logout } = useAuth();

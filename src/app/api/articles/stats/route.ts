@@ -6,7 +6,7 @@ export async function GET() {
     try {
         const user = await getCurrentUser();
         
-        let whereClause: Record<string, unknown> = {};
+        const whereClause: Record<string, unknown> = {};
         
         if (!user) {
             whereClause.status = 'published';

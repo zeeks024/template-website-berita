@@ -35,7 +35,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         async session({ session, token }) {
             if (session.user) {
                 session.user.id = token.id as string
-                // @ts-ignore
+                // @ts-expect-error NextAuth session user type has no custom role field by default
                 session.user.role = token.role as string || "READER"
             }
             return session

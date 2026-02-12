@@ -14,7 +14,7 @@ export async function GET(request: Request) {
         const limit = parseInt(searchParams.get('limit') || '10', 10);
         const paginate = searchParams.get('paginate') === 'true';
 
-        let whereClause: Record<string, unknown> = {};
+        const whereClause: Record<string, unknown> = {};
         
         if (status && status !== 'all' && VALID_STATUSES.includes(status)) {
             whereClause.status = status;

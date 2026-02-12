@@ -9,7 +9,6 @@ export function useBookmarks() {
     useEffect(() => {
         const saved = localStorage.getItem('serayu_bookmarks');
         if (saved) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect -- loading from localStorage
             setBookmarks(JSON.parse(saved));
         }
         setIsInitialized(true);

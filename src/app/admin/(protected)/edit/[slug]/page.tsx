@@ -16,7 +16,7 @@ import {
     AlignLeft, Newspaper, ImagePlus, Hash,
     FolderOpen, ChevronDown, ArrowLeft, Sparkles,
     Edit3, Star,
-    Cloud, CheckCircle, CloudOff, Eye, ShieldCheck, XCircle, Send
+    Cloud, CheckCircle, CloudOff, Eye, ShieldCheck, XCircle
 } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
 import { Card, SectionHeader, Badge } from '@/components/admin/ui';
