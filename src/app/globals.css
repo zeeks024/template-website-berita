@@ -17,15 +17,66 @@ html.font-xlarge {
 
 /* ===== ACCESSIBILITY: High Contrast Mode ===== */
 html.high-contrast {
-    --muted-foreground: 215 20% 30%; /* Darker for better contrast */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 8%;
+    --primary: 210 100% 30%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 92%;
+    --secondary-foreground: 0 0% 8%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 20%;
+    --accent: 210 100% 92%;
+    --accent-foreground: 210 100% 24%;
+    --border: 0 0% 30%;
+    --input: 0 0% 30%;
+    --ring: 210 100% 30%;
 }
 
 html.dark.high-contrast {
-    --muted-foreground: 215 20% 80%; /* Lighter for better contrast */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 186 100% 70%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 85%;
+    --accent: 186 100% 20%;
+    --accent-foreground: 0 0% 100%;
+    --border: 0 0% 70%;
+    --input: 0 0% 70%;
+    --ring: 186 100% 70%;
 }
 
 html.high-contrast img {
-    filter: contrast(1.1);
+    filter: contrast(1.2) saturate(1.05);
+}
+
+html.high-contrast a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    font-weight: 600;
+}
+
+html.high-contrast button,
+html.high-contrast [role="button"],
+html.high-contrast input,
+html.high-contrast textarea,
+html.high-contrast select {
+    border-width: 2px;
+}
+
+html.high-contrast *:focus-visible {
+    outline-width: 4px;
+    box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 6px hsl(var(--ring));
 }
 
 /* ===== ACCESSIBILITY: Focus Indicators ===== */
