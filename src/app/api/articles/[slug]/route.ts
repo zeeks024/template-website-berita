@@ -83,16 +83,16 @@ export async function PUT(
             updatedAt: new Date()
         };
 
-        if (newStatus && newStatus !== currentStatus) {
-            if (user.role === 'WRITER' && newStatus === 'published') {
-                updateData.status = 'pending_review';
-            } else {
-                const transition = validateStatusTransition(currentStatus, newStatus, user.role as 'ADMIN' | 'WRITER');
-                if (!transition.valid) {
-                    return NextResponse.json({ error: transition.message }, { status: 403 });
-                }
-                updateData.status = newStatus;
+        const writerPublishRequest = user.role === 'WRITER' && newStatus === 'published';
+
+        if (newStatus && (newStatus !== currentStatus || writerPublishRequest)) {
+            const targetStatus = writerPublishRequest ? 'pending_review' : newStatus;
+            const transition = validateStatusTransition(currentStatus, targetStatus, user.role as 'ADMIN' | 'WRITER');
+            if (!transition.valid) {
+                return NextResponse.json({ error: transition.message }, { status: 403 });
             }
+
+            updateData.status = targetStatus;
 
             const finalStatus = updateData.status as string;
 

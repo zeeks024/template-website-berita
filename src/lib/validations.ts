@@ -125,6 +125,7 @@ const STATUS_TRANSITIONS: Record<string, { to: string[]; roles: Role[] }[]> = {
         { to: ['pending_review'], roles: ['WRITER', 'ADMIN'] },
     ],
     published: [
+        { to: ['pending_review'], roles: ['WRITER'] },
         { to: ['archived'], roles: ['WRITER', 'ADMIN'] },
         { to: ['draft'], roles: ['ADMIN'] },
     ],
